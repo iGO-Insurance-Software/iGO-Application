@@ -8,7 +8,7 @@ public interface PrototypeList {
 
 	public boolean delete(int prototypeID);
 
-	public boolean retrieve(int prototypeID);
+	public Prototype retrieve(int prototypeID);
 
 	public ArrayList<Prototype> retrieveAll();
 

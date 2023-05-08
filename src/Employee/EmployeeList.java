@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface EmployeeList {
 
-	public boolean add();
+	public boolean add(Employee employee);
 
 	public boolean delete(int employeeID);
 

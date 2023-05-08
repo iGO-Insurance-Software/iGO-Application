@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface AccidentList {
 
-	public boolean add();
+	public boolean add(Accident accident);
 
 	public boolean delete(int accident_ID);
 
@@ -12,6 +12,6 @@ public interface AccidentList {
 
 	public boolean update(int accident_ID);
 
-	public ArrayList<Accident> retireveAll();
+	public ArrayList<Accident> retrieveAll();
 
 }

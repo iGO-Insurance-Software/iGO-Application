@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public interface ConstractList {
 
-	public boolean add();
+	public boolean add(Contract contract);
 
 	public boolean delete(int contractID);
 

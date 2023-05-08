@@ -6,6 +6,163 @@ import java.util.HashMap;
 
 public class Accident {
 
+	public Accident(HashMap<String,String> accidentInfo,boolean isUrgent, boolean existOfDestroyer){
+
+	}
+
+
+	public Date getAccidentDate() {
+		return accidentDate;
+	}
+
+	public void setAccidentDate(Date accidentDate) {
+		this.accidentDate = accidentDate;
+	}
+
+	public String getAccidentOutline() {
+		return accidentOutline;
+	}
+
+	public void setAccidentOutline(String accidentOutline) {
+		this.accidentOutline = accidentOutline;
+	}
+
+	public String getAccidentPlace() {
+		return accidentPlace;
+	}
+
+	public void setAccidentPlace(String accidentPlace) {
+		this.accidentPlace = accidentPlace;
+	}
+
+	public String getAccidentType() {
+		return accidentType;
+	}
+
+	public void setAccidentType(String accidentType) {
+		this.accidentType = accidentType;
+	}
+
+	public int getCustomerID() {
+		return customerID;
+	}
+
+	public void setCustomerID(int customerID) {
+		this.customerID = customerID;
+	}
+
+	public String getDestroyerName() {
+		return destroyerName;
+	}
+
+	public void setDestroyerName(String destroyerName) {
+		this.destroyerName = destroyerName;
+	}
+
+	public String getDestroyerPhoneNum() {
+		return destroyerPhoneNum;
+	}
+
+	public void setDestroyerPhoneNum(String destroyerPhoneNum) {
+		this.destroyerPhoneNum = destroyerPhoneNum;
+	}
+
+	public boolean isExistOfDestroyer() {
+		return existOfDestroyer;
+	}
+
+	public void setExistOfDestroyer(boolean existOfDestroyer) {
+		this.existOfDestroyer = existOfDestroyer;
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getContractID() {
+		return contractID;
+	}
+
+	public void setContractID(String contractID) {
+		this.contractID = contractID;
+	}
+
+	public HashMap<String, String> getRelatedDocs() {
+		return relatedDocs;
+	}
+
+	public void setRelatedDocs(HashMap<String, String> relatedDocs) {
+		this.relatedDocs = relatedDocs;
+	}
+
+	public double getCompensationMoney() {
+		return compensationMoney;
+	}
+
+	public void setCompensationMoney(double compensationMoney) {
+		this.compensationMoney = compensationMoney;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public double getIndemnityMoney() {
+		return indemnityMoney;
+	}
+
+	public void setIndemnityMoney(double indemnityMoney) {
+		this.indemnityMoney = indemnityMoney;
+	}
+
+	public boolean isUrgent() {
+		return isUrgent;
+	}
+
+	public void setUrgent(boolean urgent) {
+		isUrgent = urgent;
+	}
+
+	public Date getIndemnityDueDate() {
+		return indemnityDueDate;
+	}
+
+	public void setIndemnityDueDate(Date indemnityDueDate) {
+		this.indemnityDueDate = indemnityDueDate;
+	}
+
+	public boolean isWinLawsuit() {
+		return isWinLawsuit;
+	}
+
+	public void setWinLawsuit(boolean winLawsuit) {
+		isWinLawsuit = winLawsuit;
+	}
+
+	public double getLawsuitCost() {
+		return lawsuitCost;
+	}
+
+	public void setLawsuitCost(double lawsuitCost) {
+		this.lawsuitCost = lawsuitCost;
+	}
+
+	public int getWinOrLoseMoney() {
+		return winOrLoseMoney;
+	}
+
+	public void setWinOrLoseMoney(int winOrLoseMoney) {
+		this.winOrLoseMoney = winOrLoseMoney;
+	}
+
 	private Date accidentDate;
 	private String accidentOutline;
 	private String accidentPlace;

@@ -4,14 +4,15 @@ import java.util.ArrayList;
 public class EmployeeListImpl implements EmployeeList {
 
 	private ArrayList<Employee> employeeList;
-	public Employee m_Employee;
+	public Employee employee;
 
 	public EmployeeListImpl(){
-
+		employeeList = new ArrayList<Employee>();
 	}
 
 
-	public boolean add(){
+	public boolean add(Employee employee){
+		this.employeeList.add(employee);
 		return false;
 	}
 
@@ -28,7 +29,7 @@ public class EmployeeListImpl implements EmployeeList {
 	}
 
 	public ArrayList<Employee> retrieveAll(){
-		return null;
+		return this.employeeList;
 	}
 
 }

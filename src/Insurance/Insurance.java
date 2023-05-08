@@ -4,12 +4,12 @@ import java.util.HashMap;
 
 public class Insurance {
 
-	private String description;
-	private int id;
+	protected String description;
+	protected int id;
 
-	private String name;
+	protected String name;
 
-	private double price;
+	protected double price;
 	private String detailedCategory;
 
 	public Insurance(){

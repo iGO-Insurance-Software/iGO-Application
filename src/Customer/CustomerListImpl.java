@@ -5,20 +5,26 @@ import java.util.ArrayList;
 public class CustomerListImpl implements CustomerList {
 
 	private ArrayList<Customer> customerList;
-	public Customer m_Customer;
-	public CustomerListImpl(){
-
+	public Customer customer;
+	public CustomerListImpl(){customerList = new ArrayList<Customer>();
 	}
 
-	public boolean add(){
-		return false;
+	public boolean add(Customer customer){
+		customer.setId(customerList.size()+1);
+		customerList.add(customer);
+		return true;
 	}
 
 	public boolean delete(int customerID){
 		return false;
 	}
 
-	public Customer retireve(int customerID){
+	public Customer retrieve(int customerID){
+		for(Customer cust : this.customerList){
+			if(cust.getId()==customerID){
+				return cust;
+			}
+		}
 		return null;
 	}
 
@@ -27,7 +33,7 @@ public class CustomerListImpl implements CustomerList {
 	}
 
 	public ArrayList<Customer> retrieveAll(){
-		return null;
+		return customerList;
 	}
 
 }
