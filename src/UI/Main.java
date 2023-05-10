@@ -1,16 +1,12 @@
 package UI;
 
-import Accident.Accident;
-import Customer.Customer;
-import Customer.InsuredCustomer;
-import Customer.CustomerList;
+import Employee.ProductDevelopmentTeam;
 import Customer.CustomerListImpl;
 import Employee.EmployeeListImpl;
-import Employee.Employee;
+import Prototype.Prototype;
 import Employee.AccidentReceiptionTeam;
-import Accident.Accident;
-import Accident.AccidentListImpl;
-
+import Employee.ComplianceTeam;
+import Employee.Employee;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -20,6 +16,11 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import Accident.Accident;
+import Accident.AccidentListImpl;
+import Customer.Customer;
+import Customer.CustomerList;
+import Customer.InsuredCustomer;
 
 
 public class Main {
@@ -32,6 +33,8 @@ public class Main {
 	public static EmployeeListImpl employeeList = new EmployeeListImpl();
 	public static Employee employee;
 	public static AccidentReceiptionTeam accidentReceiptionEmployee = new AccidentReceiptionTeam();
+	public static ProductDevelopmentTeam productDevelopmentEmployee = new ProductDevelopmentTeam();
+	public static ComplianceTeam complianceEmployee = new ComplianceTeam();
 
 	public static AccidentListImpl accidentList = new AccidentListImpl();
 	public static Accident accident;
@@ -52,11 +55,24 @@ public class Main {
 					login(inputReader);
 					break;
 				case "2":
-//					printAllData(server.getAllCourseData());
-					registerCustomer(inputReader);
-					break;
+//					case "2":
+					Prototype prototype = new Prototype();
+                    prototype.setName("Example Insurance");
+                    prototype.setCategory("Life Insurance");
+                    prototype.setDetailedCategory("Life Insurance Subcategory 1");
+                    prototype.setPrice(1000.00);
+                    prototype.setDeveloperID(1234);
+                    boolean isLaunched = prototype.launch();
+                    if (isLaunched) {
+                        System.out.println("Insurance launched successfully.");
+                    } else {
+                        System.out.println("Failed to launch insurance.");
+                    }
+                 break;
+					
 				case "3":
 //					printRegisteredCourse(server, inputReader);
+					showCustomerMenu(inputReader);
 					break;
 				case "4":
 //					if (user.equals("admin")) addStudent(server, inputReader);
@@ -95,6 +111,11 @@ public class Main {
 		return true;
 	}
 
+
+	
+		
+	}
+
 	private static boolean registerEmployeeData(){
 		//사고접수직원
 		accidentReceiptionEmployee.setId(1);
@@ -105,9 +126,37 @@ public class Main {
 		accidentReceiptionEmployee.setEmail("receiptionman@naver.com");
 		accidentReceiptionEmployee.setRank("주임");
 		employeeList.add(accidentReceiptionEmployee);
+		
+		
+	
+		// Creating a ProductDevelopmentTeam employee
+	    Employee productDevelopmentTeam = new Employee();
+	    productDevelopmentTeam.setId(2);
+	    productDevelopmentTeam.setName("ProductDevelopmentTeam");
+	    productDevelopmentTeam.setAge(30);
+	    productDevelopmentTeam.setGender("Male");
+	    productDevelopmentTeam.setPhoneNum(01022223334);
+	    productDevelopmentTeam.setEmail("pdteam@naver.com");
+	    productDevelopmentTeam.setRank("Manager");
+	    employeeList.add(productDevelopmentTeam);
+	    
+	    // ComplianceTeam
+	    Employee complianceTeam = new Employee();
+	    complianceEmployee.setId(3);
+	    complianceEmployee.setName("ComplianceTeam");
+	    complianceEmployee.setAge(35);
+	    complianceEmployee.setGender("Male");
+	    complianceEmployee.setPhoneNum(01066667777);
+	    complianceEmployee.setEmail("complianceteam@naver.com");
+	    complianceEmployee.setRank("Director");
+	    employeeList.add(complianceEmployee);
+
 
 		return true;
 	}
+	
+
+	
 
 	private static boolean login(BufferedReader inputReader) throws IOException {
 		System.out.println("____________Login____________");
@@ -207,7 +256,34 @@ public class Main {
 						break;
 				}
 			}
-
+			
+			 // Product Development Employee
+	        else if (employee instanceof ProductDevelopmentTeam) {
+	            System.out.println("2. Product development status");
+	            userChoiceValue = inputReader.readLine().trim();
+	            switch (userChoiceValue) {
+	                case "2":
+	                    break;
+	                case "x":
+	                    isRemain = false;
+	                    break;
+	            }
+	        }
+			// Compliance Employee
+	        else if (employee instanceof ComplianceTeam) {
+	            System.out.println("3. Compliance Checklist");
+	            userChoiceValue = inputReader.readLine().trim();
+	            switch (userChoiceValue) {
+	                case "3":
+	                    break;
+	                case "x":
+	                    isRemain = false;
+	                    break;
+	            }
+	        }
+	    }
+	    return isRemain;
+	}
 			//~ 직원일 경우
 
 
