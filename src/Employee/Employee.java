@@ -77,7 +77,9 @@ public class Employee {
 	}
 
 	public boolean receiveMessage(String message){
-		return false;
+		System.out.println("\n******** "+this.name+"의 화면 ********");
+		System.out.println(message);
+		return true;
 	}
 
 }

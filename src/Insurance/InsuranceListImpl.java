@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 public class InsuranceListImpl implements InsuranceList {
 
+
+
 	private ArrayList<Insurance> insuranceList;
 	public Insurance m_Insurance;
 
@@ -11,7 +13,9 @@ public class InsuranceListImpl implements InsuranceList {
 
 	}
 
-
+	public ArrayList<Insurance> getInsuranceList() {
+		return insuranceList;
+	}
 	public boolean add(){
 		return false;
 	}

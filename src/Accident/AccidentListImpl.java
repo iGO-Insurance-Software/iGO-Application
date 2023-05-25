@@ -1,10 +1,15 @@
 package Accident;
 
 import Customer.Customer;
+import Employee.Employee;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class AccidentListImpl implements AccidentList {
+
 
 	private ArrayList<Accident> accidentList;
 	public Accident accident;
@@ -28,7 +33,7 @@ public class AccidentListImpl implements AccidentList {
 		return true;
 	}
 
-	public boolean update(int accidentID){
+	public boolean update(){
 		return false;
 	}
 

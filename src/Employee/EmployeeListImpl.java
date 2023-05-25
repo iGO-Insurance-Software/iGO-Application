@@ -3,6 +3,8 @@ package Employee;
 import java.util.ArrayList;
 public class EmployeeListImpl implements EmployeeList {
 
+
+
 	private ArrayList<Employee> employeeList;
 	public Employee employee;
 
@@ -28,7 +30,7 @@ public class EmployeeListImpl implements EmployeeList {
 		return null;
 	}
 
-	public ArrayList<Employee> retrieveAll(){
+	public ArrayList<Employee> retrieveAll() {
 		return this.employeeList;
 	}
 

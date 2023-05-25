@@ -8,20 +8,24 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
-public class Customer {
 
+public class Customer {
 	protected int age;
 	protected String bankAccount;
 	protected Date birthDate;
 	protected String gender;
-	protected int id;
+	protected String id;
 	protected String name;
 	protected String phoneNum;
-
 	protected String occupation;
-
 	protected String rrn;
-
+	protected String type;
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public int getAge() {
 		return age;
 	}
@@ -54,11 +58,11 @@ public class Customer {
 		this.gender = gender;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -155,7 +159,7 @@ public class Customer {
 	}
 
 	public boolean receiveMessage(String message){
-		System.out.println("******** "+this.getName()+" 고객의 화면 ********");
+		System.out.println("\n******** "+this.getName()+" 고객의 화면 ********");
 		System.out.println(message);
 		return true;
 	}

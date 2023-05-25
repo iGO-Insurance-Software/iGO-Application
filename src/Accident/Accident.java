@@ -1,12 +1,50 @@
 package Accident;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
 
 public class Accident {
 
-	public Accident(HashMap<String,String> accidentInfo,boolean isUrgent, boolean existOfDestroyer){
+	private Date accidentDate;
+	private String accidentOutline;
+	private String accidentPlace;
+	private String accidentType;
+	private String customerID;
+	private String destroyerName;
+	private String destroyerPhoneNum;
+	private boolean existOfDestroyer;
+	private int id;
+	private String contractID;
+	private HashMap<String,String> relatedDocs;
+	private double compensationMoney;
+	private String status;
+	private double indemnityMoney;
+	private boolean isUrgent;
+	private Date indemnityDueDate;
+	private boolean isWinLawsuit;
+	private double lawsuitCost;
+	private int winOrLoseMoney;
+
+	public Accident(HashMap<String,String> accidentInfo,boolean isUrgent, boolean existOfDestroyer) {
+		this.customerID = accidentInfo.get("customerID");
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		this.accidentType = accidentInfo.get("사고 유형");
+		this.accidentOutline = accidentInfo.get("사고 개요");
+		try {
+			this.accidentDate = formatter.parse(accidentInfo.get("사고 일시"));
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+		this.accidentPlace = accidentInfo.get("사고 장소");
+		this.isUrgent = isUrgent;
+		this.existOfDestroyer = existOfDestroyer;
+		if(existOfDestroyer){
+			this.destroyerName = accidentInfo.get("손괴자 이름");
+			this.destroyerPhoneNum = accidentInfo.get("손괴자 전화번호");
+		}
 
 	}
 
@@ -43,11 +81,11 @@ public class Accident {
 		this.accidentType = accidentType;
 	}
 
-	public int getCustomerID() {
+	public String getCustomerID() {
 		return customerID;
 	}
 
-	public void setCustomerID(int customerID) {
+	public void setCustomerID(String customerID) {
 		this.customerID = customerID;
 	}
 
@@ -163,25 +201,6 @@ public class Accident {
 		this.winOrLoseMoney = winOrLoseMoney;
 	}
 
-	private Date accidentDate;
-	private String accidentOutline;
-	private String accidentPlace;
-	private String accidentType;
-	private int customerID;
-	private String destroyerName;
-	private String destroyerPhoneNum;
-	private boolean existOfDestroyer;
-	private int id;
-	private String contractID;
-	private HashMap<String,String> relatedDocs;
-	private double compensationMoney;
-	private String status;
-	private double indemnityMoney;
-	private boolean isUrgent;
-	private Date indemnityDueDate;
-	private boolean isWinLawsuit;
-	private double lawsuitCost;
-	private int winOrLoseMoney;
 
 	public Accident(){
 

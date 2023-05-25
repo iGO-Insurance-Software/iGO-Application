@@ -6,13 +6,15 @@ public interface CustomerList {
 
 	public boolean add(Customer customer);
 
-	public boolean delete(int customerID);
+	public boolean delete(String customerID);
 
 
-	public Customer retrieve(int customerID);
+	public Customer retrieve(String customerID);
 
-	public boolean update(int customerID);
+	public boolean update(String customerID);
 
 	public ArrayList<Customer> retrieveAll();
+
+	public ArrayList<Customer> retrieveAllCustomer();
 
 }

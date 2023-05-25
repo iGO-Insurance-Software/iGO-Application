@@ -6,11 +6,11 @@ public interface AccidentList {
 
 	public boolean add(Accident accident);
 
-	public boolean delete(int accident_ID);
+	public boolean delete(int accidentID);
 
-	public Accident retrieve(int accident_ID);
+	public Accident retrieve(int accidentID);
 
-	public boolean update(int accident_ID);
+	public boolean update();
 
 	public ArrayList<Accident> retrieveAll();
 

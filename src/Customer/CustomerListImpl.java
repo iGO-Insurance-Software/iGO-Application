@@ -1,39 +1,42 @@
 package Customer;
 
+import Dao.CustomerDao;
+import Employee.Employee;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class CustomerListImpl implements CustomerList {
-
-	private ArrayList<Customer> customerList;
+	private CustomerDao customerDao;
 	public Customer customer;
-	public CustomerListImpl(){customerList = new ArrayList<Customer>();
+	public CustomerListImpl(){
+		 customerDao = new CustomerDao();
 	}
 
 	public boolean add(Customer customer){
-		customer.setId(customerList.size()+1);
-		customerList.add(customer);
+		customerDao.create(customer);
 		return true;
 	}
 
-	public boolean delete(int customerID){
-		return false;
+	public boolean delete(String customerID){
+		customerDao.deleteById(customerID);
+		return true;
 	}
 
-	public Customer retrieve(int customerID){
-		for(Customer cust : this.customerList){
-			if(cust.getId()==customerID){
-				return cust;
-			}
-		}
-		return null;
+	public Customer retrieve(String customerID){
+		return customerDao.retrieveById(customerID);
 	}
 
-	public boolean update(int customerID){
+	public boolean update(String customerID){
 		return false;
 	}
 
 	public ArrayList<Customer> retrieveAll(){
-		return customerList;
+		return customerDao.retrieveAll();
+	}
+
+	public ArrayList<Customer> retrieveAllCustomer(){
+		return customerDao.retrieveAllCustomer();
 	}
 
 }
