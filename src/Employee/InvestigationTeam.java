@@ -6,7 +6,7 @@ import java.util.HashMap;
 import static UI.Main.accidentList;
 import static UI.Main.customerList;
 
-public class InvestigationTeam {
+public class InvestigationTeam extends Employee {
 
 	public InvestigationTeam(){
 

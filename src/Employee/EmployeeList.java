@@ -6,12 +6,12 @@ public interface EmployeeList {
 
 	public boolean add(Employee employee);
 
-	public boolean delete(int employeeID);
+	public boolean delete(String employeeID);
 
-	public boolean update(int employeeID);
+	public boolean update(String employeeID);
 
 
-	public Employee retrieve(int employeeID);
+	public Employee retrieve(String employeeID);
 
 	public ArrayList<Employee> retrieveAll();
 

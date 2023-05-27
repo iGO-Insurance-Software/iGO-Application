@@ -28,24 +28,17 @@ public class Accident {
 	private double lawsuitCost;
 	private int winOrLoseMoney;
 
-	public Accident(HashMap<String,String> accidentInfo,boolean isUrgent, boolean existOfDestroyer) {
+	public Accident(HashMap<String,String> accidentInfo) {
 		this.customerID = accidentInfo.get("customerID");
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		this.accidentType = accidentInfo.get("사고 유형");
-		this.accidentOutline = accidentInfo.get("사고 개요");
+		this.accidentType = accidentInfo.get("accidentType");
+		this.accidentOutline = accidentInfo.get("accidentOutline");
 		try {
-			this.accidentDate = formatter.parse(accidentInfo.get("사고 일시"));
+			this.accidentDate = formatter.parse(accidentInfo.get("accidentDate"));
 		} catch (ParseException e) {
 			throw new RuntimeException(e);
 		}
-		this.accidentPlace = accidentInfo.get("사고 장소");
-		this.isUrgent = isUrgent;
-		this.existOfDestroyer = existOfDestroyer;
-		if(existOfDestroyer){
-			this.destroyerName = accidentInfo.get("손괴자 이름");
-			this.destroyerPhoneNum = accidentInfo.get("손괴자 전화번호");
-		}
-
+		this.accidentPlace = accidentInfo.get("accidentPlace");
 	}
 
 
@@ -161,11 +154,11 @@ public class Accident {
 		this.indemnityMoney = indemnityMoney;
 	}
 
-	public boolean isUrgent() {
+	public boolean getIsUrgent() {
 		return isUrgent;
 	}
 
-	public void setUrgent(boolean urgent) {
+	public void setIsUrgent(boolean urgent) {
 		isUrgent = urgent;
 	}
 

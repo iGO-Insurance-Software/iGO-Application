@@ -37,24 +37,26 @@ public class Dao {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-
     }
 
     public ResultSet retrieve(String query) throws SQLException {
         try {
             statement = connect.createStatement();
             resultSet = statement.executeQuery(query);
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return resultSet;
     }
-
     public void update(String query) {
-
+        try {
+            statement = connect.createStatement();
+            if(!statement.execute(query))
+                System.out.println("update completed");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
-
     public void delete(String query) {
         try {
             statement = connect.createStatement();
@@ -69,11 +71,8 @@ public class Dao {
         statement = connect.createStatement();
         if (!statement.execute(query))
             System.out.println("deleteAll completed");
-    } catch(
-    SQLException e)
-    {
-        e.printStackTrace();
+        } catch(SQLException e) {
+         e.printStackTrace();
+        }
     }
-
-}
 }

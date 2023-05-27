@@ -26,6 +26,7 @@ public class CustomerDao extends Dao{
                 "'"+customer.getOccupation()+"'"+
                 ");";
         super.create(query);
+        if(customer.getType().equals("InsuredCustomer")) insuredCustomerDao.create(customer);
     }
     public Customer retrieveById(String customerID) {
         String query = "SELECT * FROM Customer WHERE id  = '"+
@@ -33,9 +34,9 @@ public class CustomerDao extends Dao{
         Customer cust = null;
         try {
             ResultSet resultSet = super.retrieve(query);
-            if(resultSet!=null) {
+            while(resultSet.next()) {
                 cust = new Customer();
-                cust.setId(resultSet.getString("customerId"));
+                cust.setId(resultSet.getString("id"));
                 cust.setType(resultSet.getString("type"));
                 cust.setName(resultSet.getString("name"));
                 cust.setRrn(resultSet.getString("rrn"));
@@ -83,7 +84,7 @@ public class CustomerDao extends Dao{
             customerList = new ArrayList<Customer>();
             while(resultSet.next()) {
                 String type = resultSet.getString("type");
-                if(type.equals("InsuredCustomer")||type.equals("Contractor")) continue;//하위 테이블일 경우 여기서 조회 하지 않고 하위Dao로 넘김
+                if(!type.equals("Customer")) continue;//하위 테이블일 경우 여기서 조회 하지 않고 하위Dao로 넘김
                 Customer cust = new Customer();
                 cust.setId(resultSet.getString("id"));
                 cust.setType(resultSet.getString("type"));
@@ -103,7 +104,17 @@ public class CustomerDao extends Dao{
         return customerList;
     }
     public void update(Customer customer){
-
+        String query = "UPDATE Customer SET " +
+                "type = '" + customer.getType() + "', " +
+                "name = '" + customer.getName() + "', " +
+                "rrn = " + customer.getRrn() + ", " +
+                "age = " + customer.getAge() + ", " +
+                "gender = '" + customer.getGender() + "', " +
+                "phoneNum = '" + customer.getPhoneNum() + "', " +
+                "occupation = '" + customer.getOccupation() + "' " +
+                "WHERE id = '" + customer.getId() + "';";
+        super.update(query);
+        if(customer.getType().equals("InsuredCustomer")) insuredCustomerDao.update(customer);
     }
     public void deleteById(String customerID){
         String query = "DELETE FROM Customer WHERE id = '"+customerID+"';";
