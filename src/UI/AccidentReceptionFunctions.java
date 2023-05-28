@@ -3,7 +3,7 @@ package UI;
 import Accident.Accident;
 import Customer.InsuredCustomer;
 import Employee.Employee;
-import Employee.AccidentReceiptionTeam;
+import Employee.AccidentReceptionTeam;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
@@ -11,7 +11,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import static UI.Main.*;
 
-public class AccidentReceiptionFunctions {
+public class AccidentReceptionFunctions {
     public static HashMap<String,String> sendReceiption(BufferedReader inputReader) throws IOException {
         HashMap accidentInfo = new HashMap<String, String>();
         System.out.println("<사고 정보 입력창>");
@@ -122,7 +122,7 @@ public class AccidentReceiptionFunctions {
                 if (userChoiceValue.equals("x")) ;
                 else if (userChoiceValue.equals("1")) {
                     if (choicedAccident.getStatus().contains("긴급")) {
-                        if (((AccidentReceiptionTeam) currentEmployee).getInvestigationTeam().getIsDispatching()) {
+                        if (((AccidentReceptionTeam) currentEmployee).getInvestigationTeam().getIsDispatching()) {
                             //이미 출동중이면
                             System.out.println("\n이미 현장 조사 직원이 출발하여 취소시 수수료가 발생합니다.");
                             System.out.println("1.확인");
@@ -132,7 +132,7 @@ public class AccidentReceiptionFunctions {
                                 currentEmployee.receiveMessage("사건번호 " + choicedAccident.getId() + "의 긴급 접수가 취소되었습니다.");
                                 currentCustomer.receiveMessage("사건번호 " + choicedAccident.getId() + "의 긴급 접수가 취소되었습니다.");
                                 //customer.cancelReceiption이 위의 로직들임 - 생략
-                                ((AccidentReceiptionTeam) currentEmployee).cancelUrgentReceiption(choicedAccident.getId());
+                                ((AccidentReceptionTeam) currentEmployee).cancelUrgentReceiption(choicedAccident.getId());
                                 //Contract 객체에다 수수료 30000원 부과하는 로직 작성
                                 //해당 사건 삭제
                                 accidentDao.deleteById(choicedAccident.getId());
@@ -163,7 +163,7 @@ public class AccidentReceiptionFunctions {
         InsuredCustomer senderCustomer = insuredCustomerDao.retrieveById(senderCustomerID);
         //무작위의 접수직원에게 접수를 전송
         Random random = new Random();
-        Employee arEmployee = accidentReceiptionTeamDao.retrieveAll().get(random.nextInt(accidentReceiptionTeamDao.retrieveAll().size()));
+        Employee arEmployee = accidentReceptionTeamDao.retrieveAll().get(random.nextInt(accidentReceptionTeamDao.retrieveAll().size()));
         //사건 생성
         Accident acdt = new Accident(accidentInfo);
         acdt.setReceiptionEmployeeID(arEmployee.getId());

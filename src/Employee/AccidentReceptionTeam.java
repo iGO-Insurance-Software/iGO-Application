@@ -4,14 +4,13 @@ import Accident.Accident;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 import static UI.Main.*;
 
-public class AccidentReceiptionTeam extends Employee {
+public class AccidentReceptionTeam extends Employee {
 	private InvestigationTeam investigationTeam;
-	public AccidentReceiptionTeam(){
+	public AccidentReceptionTeam(){
 		this.investigationTeam = new InvestigationTeam();
 	}
 	public InvestigationTeam getInvestigationTeam() {

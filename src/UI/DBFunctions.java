@@ -2,9 +2,8 @@ package UI;
 
 import Customer.Customer;
 import Dao.CustomerDao;
-import Employee.AccidentReceiptionTeam;
+import Employee.AccidentReceptionTeam;
 import Customer.InsuredCustomer;
-import Employee.MarketingTeam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -61,7 +60,7 @@ public class DBFunctions {
                             "email VARCHAR(50) UNIQUE," +
                             "`rank` VARCHAR(20)" +
                             ");");
-                    dao.execute("CREATE TABLE AccidentReceiptionTeam(" +
+                    dao.execute("CREATE TABLE AccidentReceptionTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
@@ -73,7 +72,7 @@ public class DBFunctions {
 
                     break;
                 case "2":
-                    dao.execute("DROP TABLE AccidentReceiptionTeam");
+                    dao.execute("DROP TABLE AccidentReceptionTeam");
                     dao.execute("DROP TABLE Employee");
                     dao.execute("DROP TABLE InsuredCustomer");
                     dao.execute("DROP TABLE Customer;");
@@ -126,7 +125,7 @@ public class DBFunctions {
 
     private static boolean registerEmployeeData(){
         //사고접수직원
-        AccidentReceiptionTeam accidentReceiptionEmployee1 = new AccidentReceiptionTeam();
+        AccidentReceptionTeam accidentReceiptionEmployee1 = new AccidentReceptionTeam();
         accidentReceiptionEmployee1.setId("re2023");
         accidentReceiptionEmployee1.setType("AccidentReceiption");
         accidentReceiptionEmployee1.setName("김접수");
@@ -136,7 +135,7 @@ public class DBFunctions {
         accidentReceiptionEmployee1.setEmail("receiptionman@naver.com");
         accidentReceiptionEmployee1.setRank("주임");
         employeeDao.create(accidentReceiptionEmployee1);
-        AccidentReceiptionTeam accidentReceiptionEmployee2 = new AccidentReceiptionTeam();
+        AccidentReceptionTeam accidentReceiptionEmployee2 = new AccidentReceptionTeam();
         accidentReceiptionEmployee2.setId("re2024");
         accidentReceiptionEmployee2.setType("AccidentReceiption");
         accidentReceiptionEmployee2.setName("박사접");

@@ -6,10 +6,10 @@ import Dao.CustomerDao;
 import Dao.Dao;
 import Dao.InsuredCustomerDao;
 import Dao.EmployeeDao;
-import Dao.AccidentReceiptionTeamDao;
 import Dao.AccidentDao;
+import Dao.AccidentReceptionTeamDao;
 import Employee.Employee;
-import Employee.AccidentReceiptionTeam;
+import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import Accident.AccidentListImpl;
 import java.io.BufferedReader;
@@ -17,7 +17,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 
-import static UI.AccidentReceiptionFunctions.*;
+import static UI.AccidentReceptionFunctions.*;
 import static UI.DBFunctions.setDB;
 
 
@@ -26,7 +26,7 @@ public class Main {
 	public static CustomerDao customerDao = new CustomerDao();
 	public static InsuredCustomerDao insuredCustomerDao = new InsuredCustomerDao();
 	public static EmployeeDao employeeDao = new EmployeeDao();
-	public static AccidentReceiptionTeamDao accidentReceiptionTeamDao = new AccidentReceiptionTeamDao();
+	public static AccidentReceptionTeamDao accidentReceptionTeamDao = new AccidentReceptionTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
@@ -187,7 +187,7 @@ public class Main {
 			System.out.println("\n************************ " + currentEmployee.getName() + " 사원님의 MENU ************************");
 			System.out.println("x. 로그아웃하기");
 			//사고접수 직원일 경우 - 우선 고객은 getType으로 switch문으로 분류,
-			if (currentEmployee instanceof AccidentReceiptionTeam) {
+			if (currentEmployee instanceof AccidentReceptionTeam) {
 				System.out.println("1. 사고 조회");
 				userChoiceValue = inputReader.readLine().trim();
 				switch (userChoiceValue) {

@@ -7,9 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class EmployeeDao extends Dao {
-    private AccidentReceiptionTeamDao accidentReceiptionTeamDao;
+    private AccidentReceptionTeamDao accidentReceptionTeamDao;
     public EmployeeDao(){
-        accidentReceiptionTeamDao = new AccidentReceiptionTeamDao();
+        accidentReceptionTeamDao = new AccidentReceptionTeamDao();
         try {
             super.connect();
         } catch (Exception e) {
@@ -28,7 +28,7 @@ public class EmployeeDao extends Dao {
                 "'"+employee.getRank()+"'"+
                 ");";
         super.create(query);
-        if(employee.getType().equals("AccidentReceiption")) accidentReceiptionTeamDao.create(employee);
+        if(employee.getType().equals("AccidentReception")) accidentReceptionTeamDao.create(employee);
     }
     public Employee retrieveById(String employeeID) {
         String query = "SELECT * FROM Employee WHERE id  = '"+
@@ -98,7 +98,7 @@ public class EmployeeDao extends Dao {
                 employeeList.add(emp);
             }
             resultSet.close();
-            employeeList.addAll(accidentReceiptionTeamDao.retrieveAll());
+            employeeList.addAll(accidentReceptionTeamDao.retrieveAll());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -115,7 +115,7 @@ public class EmployeeDao extends Dao {
                 "`rank` = '" + employee.getRank() + "' " +
                 "WHERE id = '" + employee.getId() + "';";
         super.update(query);
-        if(employee.getType().equals("AccidentReceiption")) accidentReceiptionTeamDao.update(employee);
+        if(employee.getType().equals("AccidentReception")) accidentReceptionTeamDao.update(employee);
     }
     public void deleteById(String employeeID){
         String query = "DELETE FROM Employee WHERE id = '"+employeeID+"';";

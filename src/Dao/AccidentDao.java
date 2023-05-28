@@ -126,7 +126,7 @@ public class AccidentDao extends Dao{
         super.update(query);
     }
     public void deleteById(int accidentID){
-        String query = "DELETE FROM Accident WHERE id = "+accidentID+";";
+        String query = "DELETE FROM Accident WHERE id = '"+accidentID+"';";
         super.delete(query);
     }
     public void deleteAll(){
