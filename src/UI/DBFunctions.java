@@ -4,10 +4,10 @@ import Customer.Customer;
 import Dao.CustomerDao;
 import Employee.AccidentReceiptionTeam;
 import Customer.InsuredCustomer;
+import Employee.MarketingTeam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-
 import static UI.Main.*;
 
 
@@ -26,6 +26,8 @@ public class DBFunctions {
                     break;
                 case "1":
                     /*CREATE Tables*/
+                    //Products
+
                     //Customers
                     dao.execute("CREATE TABLE Customer (" +
                             "id VARCHAR(20) PRIMARY KEY," +
@@ -46,7 +48,7 @@ public class DBFunctions {
                             "bankbookCopy VARCHAR(300) NOT NULL," +
                             "accidentCertificate VARCHAR(300)," +
                             "medicalCertificate VARCHAR(300)," +
-                            "FOREIGN KEY (id) REFERENCES Customer (id) ON DELETE CASCADE" +
+                            "FOREIGN KEY (id) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
                             ");");
                     //Employees
                     dao.execute("CREATE TABLE Employee(" +
@@ -61,10 +63,8 @@ public class DBFunctions {
                             ");");
                     dao.execute("CREATE TABLE AccidentReceiptionTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
-                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
-                    //Products
-
 
                     /*Insert Values*/
                     registerEmployeeData();
@@ -77,6 +77,7 @@ public class DBFunctions {
                     dao.execute("DROP TABLE Employee");
                     dao.execute("DROP TABLE InsuredCustomer");
                     dao.execute("DROP TABLE Customer;");
+
 
 
                     break;

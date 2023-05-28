@@ -7,55 +7,84 @@ import java.util.HashMap;
 
 
 public class Accident {
-
+	private int id;
+	private String customerID;
+	private String receiptionEmployeeID;
+	private String compensationEmployeeID;
 	private Date accidentDate;
-	private String accidentOutline;
 	private String accidentPlace;
 	private String accidentType;
-	private String customerID;
+	private String accidentOutline;
+	private boolean existOfDestroyer;
 	private String destroyerName;
 	private String destroyerPhoneNum;
-	private boolean existOfDestroyer;
-	private int id;
-	private String contractID;
-	private HashMap<String,String> relatedDocs;
-	private double compensationMoney;
-	private String status;
-	private double indemnityMoney;
 	private boolean isUrgent;
+	private String status;
+	private double compensationMoney;
+	private double indemnityMoney;
 	private Date indemnityDueDate;
-	private boolean isWinLawsuit;
+	private Boolean isWinLawsuit;
 	private double lawsuitCost;
 	private int winOrLoseMoney;
+	public Accident(){
 
+	}
 	public Accident(HashMap<String,String> accidentInfo) {
-		this.customerID = accidentInfo.get("customerID");
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		this.accidentType = accidentInfo.get("accidentType");
-		this.accidentOutline = accidentInfo.get("accidentOutline");
-		try {
-			this.accidentDate = formatter.parse(accidentInfo.get("accidentDate"));
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
-		}
-		this.accidentPlace = accidentInfo.get("accidentPlace");
+		setCustomerID(accidentInfo.get("customerID"));
+		setAccidentType(accidentInfo.get("accidentType"));
+		setAccidentOutline(accidentInfo.get("accidentOutline"));
+		setAccidentDateStringtoDate((accidentInfo.get("accidentDate")));
+		setAccidentPlace(accidentInfo.get("accidentPlace"));
+
+	}
+	public int getId() {
+		return id;
 	}
 
+	public void setId(int id) {
+		this.id = id;
+	}
 
+	public String getCustomerID() {
+		return customerID;
+	}
+
+	public void setCustomerID(String customerID) {
+		this.customerID = customerID;
+	}
+
+	public String getReceiptionEmployeeID() {
+		return receiptionEmployeeID;
+	}
+
+	public void setReceiptionEmployeeID(String receiptionEmployeeID) {
+		this.receiptionEmployeeID = receiptionEmployeeID;
+	}
+
+	public String getCompensationEmployeeID() {
+		return compensationEmployeeID;
+	}
+
+	public void setCompensationEmployeeID(String compensationEmployeeID) {
+		this.compensationEmployeeID = compensationEmployeeID;
+	}
 	public Date getAccidentDate() {
 		return accidentDate;
 	}
-
 	public void setAccidentDate(Date accidentDate) {
 		this.accidentDate = accidentDate;
 	}
-
-	public String getAccidentOutline() {
-		return accidentOutline;
+	public String getAccidentDateToString(){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return formatter.format(this.accidentDate);
 	}
-
-	public void setAccidentOutline(String accidentOutline) {
-		this.accidentOutline = accidentOutline;
+	public void setAccidentDateStringtoDate(String accidentDate){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
+			this.accidentDate = formatter.parse(accidentDate);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public String getAccidentPlace() {
@@ -74,12 +103,20 @@ public class Accident {
 		this.accidentType = accidentType;
 	}
 
-	public String getCustomerID() {
-		return customerID;
+	public String getAccidentOutline() {
+		return accidentOutline;
 	}
 
-	public void setCustomerID(String customerID) {
-		this.customerID = customerID;
+	public void setAccidentOutline(String accidentOutline) {
+		this.accidentOutline = accidentOutline;
+	}
+
+	public boolean getExistOfDestroyer() {
+		return existOfDestroyer;
+	}
+
+	public void setExistOfDestroyer(boolean existOfDestroyer) {
+		this.existOfDestroyer = existOfDestroyer;
 	}
 
 	public String getDestroyerName() {
@@ -98,44 +135,12 @@ public class Accident {
 		this.destroyerPhoneNum = destroyerPhoneNum;
 	}
 
-	public boolean isExistOfDestroyer() {
-		return existOfDestroyer;
+	public boolean getIsUrgent() {
+		return isUrgent;
 	}
 
-	public void setExistOfDestroyer(boolean existOfDestroyer) {
-		this.existOfDestroyer = existOfDestroyer;
-	}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
-	public String getContractID() {
-		return contractID;
-	}
-
-	public void setContractID(String contractID) {
-		this.contractID = contractID;
-	}
-
-	public HashMap<String, String> getRelatedDocs() {
-		return relatedDocs;
-	}
-
-	public void setRelatedDocs(HashMap<String, String> relatedDocs) {
-		this.relatedDocs = relatedDocs;
-	}
-
-	public double getCompensationMoney() {
-		return compensationMoney;
-	}
-
-	public void setCompensationMoney(double compensationMoney) {
-		this.compensationMoney = compensationMoney;
+	public void setIsUrgent(boolean urgent) {
+		isUrgent = urgent;
 	}
 
 	public String getStatus() {
@@ -146,6 +151,14 @@ public class Accident {
 		this.status = status;
 	}
 
+	public double getCompensationMoney() {
+		return compensationMoney;
+	}
+
+	public void setCompensationMoney(double compensationMoney) {
+		this.compensationMoney = compensationMoney;
+	}
+
 	public double getIndemnityMoney() {
 		return indemnityMoney;
 	}
@@ -154,27 +167,30 @@ public class Accident {
 		this.indemnityMoney = indemnityMoney;
 	}
 
-	public boolean getIsUrgent() {
-		return isUrgent;
-	}
-
-	public void setIsUrgent(boolean urgent) {
-		isUrgent = urgent;
-	}
-
 	public Date getIndemnityDueDate() {
 		return indemnityDueDate;
 	}
-
 	public void setIndemnityDueDate(Date indemnityDueDate) {
 		this.indemnityDueDate = indemnityDueDate;
 	}
+	public String getIndemnityDueDateToString(){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		return formatter.format(this.indemnityDueDate);
+	}
+	public void setIndemnityDueDateStringToDate(String indemnityDueDate){
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+		try {
+			this.indemnityDueDate = formatter.parse(indemnityDueDate);
+		} catch (ParseException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
-	public boolean isWinLawsuit() {
+	public Boolean getIsWinLawsuit() {
 		return isWinLawsuit;
 	}
 
-	public void setWinLawsuit(boolean winLawsuit) {
+	public void setIsWinLawsuit(Boolean winLawsuit) {
 		isWinLawsuit = winLawsuit;
 	}
 
@@ -193,23 +209,4 @@ public class Accident {
 	public void setWinOrLoseMoney(int winOrLoseMoney) {
 		this.winOrLoseMoney = winOrLoseMoney;
 	}
-
-
-	public Accident(){
-
-	}
-
-	public void finalizeAccident() {
-
-	}
-
-	public HashMap<String,String> getInfo(){
-		return null;
-	}
-
-
-	public boolean updateStatus(String status){
-		return false;
-	}
-
 }

@@ -3,7 +3,6 @@ package Employee;
 import java.util.HashMap;
 
 public class MarketingTeam extends Employee {
-
 	private HashMap<Integer, String> adList;
 
 	public MarketingTeam(){

@@ -19,7 +19,7 @@ public class CustomerDao extends Dao{
                 "'"+customer.getId()+"'," +
                 "'"+customer.getType()+"'," +
                 "'"+customer.getName()+"'," +
-                customer.getRrn()+"," +
+                "'"+customer.getRrn()+"'," +
                 customer.getAge()+"," +
                 "'"+customer.getGender()+"'," +
                 "'"+customer.getPhoneNum()+"'," +
@@ -40,7 +40,7 @@ public class CustomerDao extends Dao{
                 cust.setType(resultSet.getString("type"));
                 cust.setName(resultSet.getString("name"));
                 cust.setRrn(resultSet.getString("rrn"));
-                cust.setAge(Integer.parseInt(resultSet.getString("age")));
+                cust.setAge(resultSet.getInt("age"));
                 cust.setGender(resultSet.getString("gender"));
                 cust.setPhoneNum(resultSet.getString("phoneNum"));
                 cust.setOccupation(resultSet.getString("occupation"));
@@ -63,12 +63,11 @@ public class CustomerDao extends Dao{
                 cust.setType(resultSet.getString("type"));
                 cust.setName(resultSet.getString("name"));
                 cust.setRrn(resultSet.getString("rrn"));
-                cust.setAge(Integer.parseInt(resultSet.getString("age")));
+                cust.setAge(resultSet.getInt("age"));
                 cust.setGender(resultSet.getString("gender"));
                 cust.setPhoneNum(resultSet.getString("phoneNum"));
                 cust.setOccupation(resultSet.getString("occupation"));
                 customerList.add(cust);
-
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -90,7 +89,7 @@ public class CustomerDao extends Dao{
                 cust.setType(resultSet.getString("type"));
                 cust.setName(resultSet.getString("name"));
                 cust.setRrn(resultSet.getString("rrn"));
-                cust.setAge(Integer.parseInt(resultSet.getString("age")));
+                cust.setAge(resultSet.getInt("age"));
                 cust.setGender(resultSet.getString("gender"));
                 cust.setPhoneNum(resultSet.getString("phoneNum"));
                 cust.setOccupation(resultSet.getString("occupation"));

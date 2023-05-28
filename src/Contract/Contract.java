@@ -3,87 +3,30 @@ package Contract;
 import java.util.Date;
 
 public class Contract {
+	private int id;
+	private int contractorID;
+	private int insuranceID;
+	private String insuredCustomerID;
+	private String employeeID;
+	private double fee;//수수료(약정 위반 시 등)
+	private double premium;//보험료
+	private double paymentRate;
+	private int period;
+	private Date signedDate;
+	private Date expirationDate;
+	private int paymentTerm;
+	private double lossRatio;
+	private String underwritingState;
+	private String rejectionReasons;
+	public Contract(){
 
-	private int insuredCustomerID;
-
-	public int getInsuredCustomerID() {
-		return insuredCustomerID;
 	}
-
-	public void setInsuredCustomerID(int insuredCustomerID) {
-		this.insuredCustomerID = insuredCustomerID;
-	}
-
-	public int getEmployeeID() {
-		return employeeID;
-	}
-
-	public void setEmployeeID(int employeeID) {
-		this.employeeID = employeeID;
-	}
-
-	public Date getExpirationDate() {
-		return expirationDate;
-	}
-
-	public void setExpirationDate(Date expirationDate) {
-		this.expirationDate = expirationDate;
-	}
-
 	public int getId() {
 		return id;
 	}
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public int getInsuranceID() {
-		return insuranceID;
-	}
-
-	public void setInsuranceID(int insuranceID) {
-		this.insuranceID = insuranceID;
-	}
-
-	public double getLossRatio() {
-		return lossRatio;
-	}
-
-	public void setLossRatio(double lossRatio) {
-		this.lossRatio = lossRatio;
-	}
-
-	public int getPeriod() {
-		return period;
-	}
-
-	public void setPeriod(int period) {
-		this.period = period;
-	}
-
-	public String getUnderwritingState() {
-		return underwritingState;
-	}
-
-	public void setUnderwritingState(String underwritingState) {
-		this.underwritingState = underwritingState;
-	}
-
-	public Date getSignedDate() {
-		return signedDate;
-	}
-
-	public void setSignedDate(Date signedDate) {
-		this.signedDate = signedDate;
-	}
-
-	public String getRejectionReasons() {
-		return rejectionReasons;
-	}
-
-	public void setRejectionReasons(String rejectionReasons) {
-		this.rejectionReasons = rejectionReasons;
 	}
 
 	public int getContractorID() {
@@ -94,28 +37,28 @@ public class Contract {
 		this.contractorID = contractorID;
 	}
 
-	public double getPremium() {
-		return premium;
+	public int getInsuranceID() {
+		return insuranceID;
 	}
 
-	public void setPremium(double premium) {
-		this.premium = premium;
+	public void setInsuranceID(int insuranceID) {
+		this.insuranceID = insuranceID;
 	}
 
-	public int getPaymentTerm() {
-		return paymentTerm;
+	public String getInsuredCustomerID() {
+		return insuredCustomerID;
 	}
 
-	public void setPaymentTerm(int paymentTerm) {
-		this.paymentTerm = paymentTerm;
+	public void setInsuredCustomerID(String insuredCustomerID) {
+		this.insuredCustomerID = insuredCustomerID;
 	}
 
-	public double getPaymentRate() {
-		return paymentRate;
+	public String getEmployeeID() {
+		return employeeID;
 	}
 
-	public void setPaymentRate(double paymentRate) {
-		this.paymentRate = paymentRate;
+	public void setEmployeeID(String employeeID) {
+		this.employeeID = employeeID;
 	}
 
 	public double getFee() {
@@ -126,6 +69,78 @@ public class Contract {
 		this.fee = fee;
 	}
 
+	public double getPremium() {
+		return premium;
+	}
+
+	public void setPremium(double premium) {
+		this.premium = premium;
+	}
+
+	public double getPaymentRate() {
+		return paymentRate;
+	}
+
+	public void setPaymentRate(double paymentRate) {
+		this.paymentRate = paymentRate;
+	}
+
+	public int getPeriod() {
+		return period;
+	}
+
+	public void setPeriod(int period) {
+		this.period = period;
+	}
+
+	public Date getSignedDate() {
+		return signedDate;
+	}
+
+	public void setSignedDate(Date signedDate) {
+		this.signedDate = signedDate;
+	}
+
+	public Date getExpirationDate() {
+		return expirationDate;
+	}
+
+	public void setExpirationDate(Date expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+
+	public int getPaymentTerm() {
+		return paymentTerm;
+	}
+
+	public void setPaymentTerm(int paymentTerm) {
+		this.paymentTerm = paymentTerm;
+	}
+
+	public double getLossRatio() {
+		return lossRatio;
+	}
+
+	public void setLossRatio(double lossRatio) {
+		this.lossRatio = lossRatio;
+	}
+
+	public String getUnderwritingState() {
+		return underwritingState;
+	}
+
+	public void setUnderwritingState(String underwritingState) {
+		this.underwritingState = underwritingState;
+	}
+
+	public String getRejectionReasons() {
+		return rejectionReasons;
+	}
+
+	public void setRejectionReasons(String rejectionReasons) {
+		this.rejectionReasons = rejectionReasons;
+	}
+
 	public int getNumberOfNonPayments() {
 		return numberOfNonPayments;
 	}
@@ -134,25 +149,8 @@ public class Contract {
 		this.numberOfNonPayments = numberOfNonPayments;
 	}
 
-	private int employeeID;
-	private Date expirationDate;
-	private int id;
-	private int insuranceID;
-	private double lossRatio;
-	private int period;
-	private String underwritingState;
-	private Date signedDate;
-	private String rejectionReasons;
-	private int contractorID;
-	private double premium;
-	private int paymentTerm;
-	private double paymentRate;
-	private double fee;
 	private int numberOfNonPayments;
 
-	public Contract(){
-
-	}
 
 	public boolean underwrite(int customerID, int insuranceID, int employeeID, String ffsContact){
 		return false;

@@ -4,13 +4,11 @@ import Accident.Accident;
 import Customer.InsuredCustomer;
 import Employee.Employee;
 import Employee.AccidentReceiptionTeam;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
-
 import static UI.Main.*;
 
 public class AccidentReceiptionFunctions {
@@ -89,10 +87,11 @@ public class AccidentReceiptionFunctions {
         }
         return accidentInfo;
     }
+    //고객의 사고 조회 메소드
     public static boolean searchReception(BufferedReader inputReader) throws IOException {
         String userChoiceValue;
         ArrayList<Accident> myAccidentList = new ArrayList<Accident>();
-        for (Accident acdt : accidentList.retrieveAll()) {
+        for (Accident acdt : accidentDao.retrieveAll()) {
             if (acdt.getCustomerID().equals(currentCustomer.getId())) {
                 myAccidentList.add(acdt);
             }
@@ -107,11 +106,10 @@ public class AccidentReceiptionFunctions {
             userChoiceValue = inputReader.readLine().trim();
             int choice = Integer.parseInt(userChoiceValue);
             Accident choicedAccident = myAccidentList.get(choice - 1);
-            System.out.println("\n사고번호 [" + choicedAccident.getId() + "] 사고 선택.");
             System.out.println("사고 일시: " + choicedAccident.getAccidentDate().toString());
             System.out.println("사고 장소: " + choicedAccident.getAccidentPlace());
             System.out.println("사고 유형: " + choicedAccident.getAccidentType());
-            if (choicedAccident.isExistOfDestroyer()) {
+            if (choicedAccident.getExistOfDestroyer()) {
                 System.out.println("손괴자 이름: " + choicedAccident.getDestroyerName());
                 System.out.println("손괴자 전화번호: " + choicedAccident.getDestroyerPhoneNum());
             }
@@ -137,24 +135,23 @@ public class AccidentReceiptionFunctions {
                                 ((AccidentReceiptionTeam) currentEmployee).cancelUrgentReceiption(choicedAccident.getId());
                                 //Contract 객체에다 수수료 30000원 부과하는 로직 작성
                                 //해당 사건 삭제
-                                accidentList.delete(choicedAccident.getId());
+                                accidentDao.deleteById(choicedAccident.getId());
                                 return true;
                             } else return true; //다른 버튼 클릭시(접수 취소를 취소 시)
                         } else { //아직 출동중이 아니면
                             currentEmployee.receiveMessage("사건번호 " + choicedAccident.getId() + "의 긴급 접수가 취소되었습니다.");
                             currentCustomer.receiveMessage("사건번호 " + choicedAccident.getId() + "의 긴급 접수가 취소되었습니다.");
                             //해당 사건 삭제
-                            accidentList.delete(choicedAccident.getId());
+                            accidentDao.deleteById(choicedAccident.getId());
                         }
                     } else {//일반 접수 취소시
                         currentEmployee.receiveMessage("사건번호 " + choicedAccident.getId() + "의 접수가 취소되었습니다.");
                         currentCustomer.receiveMessage("사건번호 " + choicedAccident.getId() + "의 접수가 취소되었습니다.");
                         //해당 사건 삭제
-                        accidentList.delete(choicedAccident.getId());
+                        accidentDao.deleteById(choicedAccident.getId());
                     }
                 }
             }
-
         } else {
             System.out.println("처리중인 사고가 없습니다.");
         }
@@ -164,13 +161,12 @@ public class AccidentReceiptionFunctions {
         String senderCustomerID = accidentInfo.get("customerID").toString();
         System.out.println(senderCustomerID);
         InsuredCustomer senderCustomer = insuredCustomerDao.retrieveById(senderCustomerID);
-        boolean isAccepted = false;
-        boolean isUrgent = false;
         //무작위의 접수직원에게 접수를 전송
         Random random = new Random();
         Employee arEmployee = accidentReceiptionTeamDao.retrieveAll().get(random.nextInt(accidentReceiptionTeamDao.retrieveAll().size()));
         //사건 생성
         Accident acdt = new Accident(accidentInfo);
+        acdt.setReceiptionEmployeeID(arEmployee.getId());
         System.out.println("******** " + arEmployee.getName() + " 사원님의 화면 ********");
         switch (accidentInfo.get("urgentLevel")) {
             case "normal":
@@ -202,7 +198,6 @@ public class AccidentReceiptionFunctions {
                     showMessageForCustomer(senderCustomer, "고객님의 사고 접수 요청이 거절되었습니다. 거절 사유: " + refusalReason);
                     acdt.setStatus("접수 거절");
                 }
-                //accidentDao.create(acdt);
                 break;
             case "urgent":
                 acdt.setIsUrgent(true);
@@ -211,8 +206,6 @@ public class AccidentReceiptionFunctions {
                 System.out.println("사고 장소: " + accidentInfo.get("accidentPlace"));
                 System.out.println("접수자 이름: " + customerList.retrieve(senderCustomerID).getName());
                 System.out.println("접수자 전화번호: " + customerList.retrieve(senderCustomerID).getPhoneNum());
-
-
                 System.out.println("1. 확인(접수 승인)");
                 System.out.print("Choice: ");
                 userChoiceValue = inputReader.readLine().trim();
@@ -221,7 +214,7 @@ public class AccidentReceiptionFunctions {
                 }
                 break;
         }
-        //AccidentDao.create(acdt)
+        accidentDao.create(acdt);
         return true;
     }
 
