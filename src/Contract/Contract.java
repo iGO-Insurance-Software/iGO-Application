@@ -1,6 +1,10 @@
 package Contract;
 
+import Customer.Customer;
+import Insurance.Insurance;
+
 import java.util.Date;
+import java.util.HashMap;
 
 public class Contract {
 	private int id;
@@ -161,8 +165,16 @@ public class Contract {
 		return false;
 	}
 
-	public boolean calculateLossRatio(int insuranceID, int customerID){
-		return false;
+	public HashMap<String, String> calculateLossRatio(Insurance insurance, Customer customer){
+		HashMap<String, String> result = new HashMap<>();
+		double estimatedEarning, estimatedPayment;
+		estimatedEarning = (this.period/this.paymentTerm) * this.premium;
+		estimatedPayment = this.paymentRate * insurance.getPrice();
+		this.lossRatio = estimatedPayment/estimatedEarning;
+		result.put("estimatedEarning", Double.toString(estimatedEarning));
+		result.put("estimatedPayment", Double.toString(estimatedPayment));
+		result.put("lossRatio", Double.toString(this.lossRatio));
+		return result;
 	}
 
 	public double calculatePremium(int insuranceID, double paymentRate){

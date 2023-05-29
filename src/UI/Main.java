@@ -11,6 +11,7 @@ import Dao.AccidentReceptionTeamDao;
 import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
+import Employee.UWTeam;
 import Accident.AccidentListImpl;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -211,6 +212,10 @@ public class Main {
 			}
 			else if(currentEmployee instanceof InvestigationTeam){
 
+			}
+			else if(currentEmployee instanceof UWTeam){
+				UWMain uwMain = new UWMain(currentEmployee);
+				isRemain = uwMain.showEmployeeMenu(inputReader);
 			}
 		}
 		return true;
