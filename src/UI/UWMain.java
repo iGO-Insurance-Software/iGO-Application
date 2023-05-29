@@ -52,6 +52,8 @@ public class UWMain {
             }
             ////////////////////////////////////////////////////
             switch (userChoiceValue){
+                case "x":
+                    return false;
                 // 1. 고객정보 요청하기
                 case "1":
                     HashMap<String, String> basicCustomerInfo = new HashMap<>();
