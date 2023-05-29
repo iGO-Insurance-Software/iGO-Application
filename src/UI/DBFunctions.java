@@ -26,7 +26,26 @@ public class DBFunctions {
                 case "1":
                     /*CREATE Tables*/
                     //Products
-
+                    dao.execute("CREATE TABLE Accident (" +
+                            "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "customerID VARCHAR(20) NOT NULL," +
+                            "receptionEmployeeID VARCHAR(20) NOT NULL," +
+                            "compensationEmployeeID VARCHAR(20)," +
+                            "accidentDate VARCHAR(20)," +
+                            "accidentPlace VARCHAR(50)," +
+                            "accidentType VARCHAR(30)," +
+                            "accidentOutline VARCHAR(300)," +
+                            "existOfDestroyer BOOLEAN NOT NULL," +
+                            "destroyerName VARCHAR(20)," +
+                            "destroyerPhoneNum VARCHAR(11)," +
+                            "isUrgent BOOLEAN NOT NULL," +
+                            "status VARCHAR(30) NOT NULL," +
+                            "compensationMoney DOUBLE," +
+                            "indemnityMoney DOUBLE," +
+                            "indemnityDueDate VARCHAR(20)," +
+                            "isWinLawsuit BOOLEAN," +
+                            "winOrLoseMoney INT" +
+                            ");");
                     //Customers
                     dao.execute("CREATE TABLE Customer (" +
                             "id VARCHAR(20) PRIMARY KEY," +
@@ -72,10 +91,11 @@ public class DBFunctions {
 
                     break;
                 case "2":
-                    dao.execute("DROP TABLE AccidentReceptionTeam");
-                    dao.execute("DROP TABLE Employee");
-                    dao.execute("DROP TABLE InsuredCustomer");
+                    dao.execute("DROP TABLE AccidentReceptionTeam;");
+                    dao.execute("DROP TABLE Employee;");
+                    dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
+                    dao.execute("DROP TABLE Accident;");
 
 
 
@@ -127,7 +147,7 @@ public class DBFunctions {
         //사고접수직원
         AccidentReceptionTeam accidentReceiptionEmployee1 = new AccidentReceptionTeam();
         accidentReceiptionEmployee1.setId("re2023");
-        accidentReceiptionEmployee1.setType("AccidentReceiption");
+        accidentReceiptionEmployee1.setType("AccidentReception");
         accidentReceiptionEmployee1.setName("김접수");
         accidentReceiptionEmployee1.setAge(30);
         accidentReceiptionEmployee1.setGender("남");
@@ -137,7 +157,7 @@ public class DBFunctions {
         employeeDao.create(accidentReceiptionEmployee1);
         AccidentReceptionTeam accidentReceiptionEmployee2 = new AccidentReceptionTeam();
         accidentReceiptionEmployee2.setId("re2024");
-        accidentReceiptionEmployee2.setType("AccidentReceiption");
+        accidentReceiptionEmployee2.setType("AccidentReception");
         accidentReceiptionEmployee2.setName("박사접");
         accidentReceiptionEmployee2.setAge(35);
         accidentReceiptionEmployee2.setGender("남");
