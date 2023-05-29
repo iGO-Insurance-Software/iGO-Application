@@ -174,6 +174,7 @@ public class Contract {
 		result.put("estimatedEarning", Double.toString(estimatedEarning));
 		result.put("estimatedPayment", Double.toString(estimatedPayment));
 		result.put("lossRatio", Double.toString(this.lossRatio));
+		result.put("isResult", "true");
 		return result;
 	}
 

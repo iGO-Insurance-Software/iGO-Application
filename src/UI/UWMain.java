@@ -1,9 +1,11 @@
 package UI;
 
 import Contract.Contract;
+import Contract.Reinsurance;
 import Customer.Customer;
 import Dao.ContractDao;
 import Dao.CustomerDao;
+import Dao.ReinsuranceDao;
 import Employee.Employee;
 import Employee.UWTeam;
 import Insurance.Insurance;
@@ -18,12 +20,14 @@ public class UWMain {
     private Employee employee;
     private ContractDao contractDao;
     private CustomerDao customerDao;
-   /// private InsuranceDao insuranceDao;
+    // private InsuranceDao insuranceDao;
+    private ReinsuranceDao reinsuranceDao;
     public UWMain(Employee currentEmployee) {
         this.employee = currentEmployee;
         this.contractDao = new ContractDao();
         this.customerDao = new CustomerDao();
         //this.insuranceDao = new InsuranceDao();
+        this.reinsuranceDao = new ReinsuranceDao();
     }
 
 
@@ -110,7 +114,7 @@ public class UWMain {
                                 System.out.print("\n연체내역: "+insuredCustomerInfo.get("overdueDetails"));
                                 System.out.println("\n연대보증 내역: "+insuredCustomerInfo.get("jointWarrantyDetails"));
                             }
-                            // insuranceDao가 생성되면 주석 해제 (에러 떠서 일단 주석으로 처리해 놓음)
+                            // insuranceDao가 생성되면 주석 해제
 //                            Insurance insurance = insuranceDao.retrieveById(contract.getInsuranceID());
 //                            System.out.println("--보험 정보-- ");
 //                            System.out.print("보험 상품 종류: "+insurance.getDetailedCategory());
@@ -120,10 +124,42 @@ public class UWMain {
 //                            System.out.println("\n계약 기간: "+contract.getPeriod());
 //                            System.out.println("1. 손해율 분석 버튼");
 //                            System.out.print("\nChoice: ");
+//                            inputReader.readLine();
 //                            HashMap<String, String> result = contract.calculateLossRatio(insurance, insuredCustomer);
-//                            if(result.get("isresult").equals("true")) {
+//                            if(result.get("isResult").equals("true")) {
 //                                System.out.println("손해율 분석이 완료되었습니다.");
-//                                System.out.print("예상 납부금액: "+result.get("estimatedEarning"));
+//                                System.out.print("예상 고객 납부금액: "+result.get("estimatedEarning"));
+//                                System.out.print("\n예상 지급금액: "+result.get("estimatedPayment"));
+//                                System.out.println("\n손해율: "+result.get("lossRatio"));
+//                            }
+//                            else{
+//                                System.out.println("손해율 측정에 실패하였습니다. 다시 시도해주세요.");
+//                            }
+                            break;
+                        case "2":
+                            System.out.println("손해율을 계산할 재보험 계약 ID를 입력해주세요.");
+                            System.out.print("\nReinsurance Contract ID: ");
+                            userChoiceValue=inputReader.readLine().trim();
+                            int reinsuranceId = Integer.parseInt(userChoiceValue);
+                            Reinsurance reinsurance = reinsuranceDao.retrieveById(reinsuranceId);
+                            System.out.println("--재보험 회사 정보--");
+                            System.out.print("재보험 회사 이름: "+reinsurance.getReinsuranceCompanyName());
+                            System.out.print("\n재보험 회사 담당자 이름: "+reinsurance.getReinsuranceCompanyManagerName());
+                            System.out.print("\n재보험 회사 담당자 연락처: "+reinsurance.getReinsuranceCompanyManagerContract());
+                            System.out.println("--계약 정보--");
+                            System.out.print("계약 금액: "+reinsurance.getPaymentAmount());
+                            System.out.print("\n계약 조건: "+reinsurance.getPeriod());
+                            System.out.println("\n재보험 대상 계약ID: "+reinsurance.getContractID());
+                            System.out.println("1. 손해율 분석 버튼");
+                            System.out.print("\nChoice: ");
+                            inputReader.readLine();
+                            // insuranceDao가 생성되면 주석 해제
+//                            Contract targetContract = contractDao.retrieveById(reinsurance.getContractID());
+//                            Insurance targetInsurance = insuranceDao.retrieveById(targetContract.getInsuranceID());
+//                            HashMap<String, String> result = reinsurance.calculateLossRatio(targetContract, targetInsurance);
+//                            if(result.get("isResult").equals("true")) {
+//                                System.out.println("손해율 분석이 완료되었습니다.");
+//                                System.out.print("예상 고객 납부금액: "+result.get("estimatedEarning"));
 //                                System.out.print("\n예상 지급금액: "+result.get("estimatedPayment"));
 //                                System.out.println("\n손해율: "+result.get("lossRatio"));
 //                            }
