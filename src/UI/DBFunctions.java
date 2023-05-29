@@ -83,7 +83,36 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
-
+                    dao.execute("CREATE TABLE Contract(" +
+                            "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "fee DOUBLE," +
+                            "premium DOUBLE," +
+                            "paymentRate DOUBLE," +
+                            "period INT," +
+                            "signedDate DATE," +
+                            "expirationDate DATE," +
+                            "paymentTerm INT," +
+                            "lossRatio DOUBLE," +
+                            "underwritingState VARCHAR(50) DEFAULT '대기'," +
+                            "rejectionReasons VARCHAR(200)," +
+                            "FOREIGN KEY (contractorId) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+//                            "FOREIGN KEY (insuranceId) REFERENCES Insurance (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                            "FOREIGN KEY (insuredCustomerId) REFERENCES InsuredCustomer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                            "FOREIGN KEY (employeeId) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                            ");");
+                    dao.execute("CREATE TABLE Reinsurance(" +
+                            "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "period INT," +
+                            "paymentAmount DOUBLE," +
+                            "contractRate DOUBLE," +
+                            "lossRatio DOUBLE," +
+                            "reinsuranceCompanyName VARCHAR(200)," +
+                            "reinsuranceCompanyManagerName VARCHAR(200)," +
+                            "reinsuranceCompanyManagerContract VARCHAR(200)," +
+                            "contractResult VARCHAR(200)," +
+                            "rejectionReasons VARCHAR(200)," +
+                            "FOREIGN KEY (contractId) REFERENCES Contract (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                            ");");
                     /*Insert Values*/
                     registerEmployeeData();
                     registerCustomerData();
@@ -96,6 +125,8 @@ public class DBFunctions {
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
                     dao.execute("DROP TABLE Accident;");
+                    dao.execute("DROP TABLE Contract;");
+                    dao.execute("DROP TABLE Reinsurance;");
 
 
 

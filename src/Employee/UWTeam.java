@@ -1,6 +1,8 @@
 package Employee;
 
 import Contract.Contract;
+import util.Banker;
+import util.BaseException;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -11,12 +13,37 @@ public class UWTeam extends Employee {
 	private ArrayList<Integer> responsibleContractIDList;
 	private String bankClerkContact;
 
-	public UWTeam(){
-
+	public String getFfsContact() {
+		return ffsContact;
+	}
+	public void setFfsContact(String ffsContact) {
+		this.ffsContact = ffsContact;
+	}
+	public ArrayList<Integer> getResponsibleContractIDList() {
+		return responsibleContractIDList;
+	}
+	public void setResponsibleContractIDList(ArrayList<Integer> responsibleContractIDList) {
+		this.responsibleContractIDList = responsibleContractIDList;
+	}
+	public String getBankClerkContact() {
+		return bankClerkContact;
+	}
+	public void setBankClerkContact(String bankClerkContact) {
+		this.bankClerkContact = bankClerkContact;
 	}
 
-	public HashMap<String, String> requestCustomerInformation(HashMap<String, String> basicCustomerInfo, String bankClerkContactContact){
-		return null;
+	public UWTeam(){
+	}
+
+	public HashMap<String, String> requestCustomerInformation(HashMap<String, String> basicCustomerInfo, String bankClerkContact) throws BaseException {
+		Banker banker = new Banker(bankClerkContact);
+		HashMap<String, String> responseInfo = null;
+		try {
+			responseInfo = banker.requestInfo(basicCustomerInfo);
+		} catch (BaseException e) {
+			if(e.getMessage().equals("현재 고객 정보 요청에 대한 응답이 없어 재요청 하였습니다.")) responseInfo = banker.requestInfo(basicCustomerInfo);
+		}
+		return responseInfo;
 	}
 
 	public ArrayList<Contract> getWaitStateContract(){
