@@ -9,7 +9,7 @@ import java.util.HashMap;
 public class Accident {
 	private int id;
 	private String customerID;
-	private String receiptionEmployeeID;
+	private String receptionEmployeeID;
 	private String compensationEmployeeID;
 	private Date accidentDate;
 	private String accidentPlace;
@@ -53,12 +53,12 @@ public class Accident {
 		this.customerID = customerID;
 	}
 
-	public String getReceiptionEmployeeID() {
-		return receiptionEmployeeID;
+	public String getReceptionEmployeeID() {
+		return receptionEmployeeID;
 	}
 
-	public void setReceiptionEmployeeID(String receiptionEmployeeID) {
-		this.receiptionEmployeeID = receiptionEmployeeID;
+	public void setReceptionEmployeeID(String receiptionEmployeeID) {
+		this.receptionEmployeeID = receiptionEmployeeID;
 	}
 
 	public String getCompensationEmployeeID() {
@@ -75,8 +75,11 @@ public class Accident {
 		this.accidentDate = accidentDate;
 	}
 	public String getAccidentDateToString(){
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		return formatter.format(this.accidentDate);
+		if(this.accidentDate!=null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			return formatter.format(this.accidentDate);
+		}
+		else return null;
 	}
 	public void setAccidentDateStringtoDate(String accidentDate){
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
@@ -174,16 +177,22 @@ public class Accident {
 		this.indemnityDueDate = indemnityDueDate;
 	}
 	public String getIndemnityDueDateToString(){
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		return formatter.format(this.indemnityDueDate);
+		if(this.indemnityDueDate!=null) {
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			return formatter.format(this.indemnityDueDate);
+		}
+		else return null;
 	}
 	public void setIndemnityDueDateStringToDate(String indemnityDueDate){
-		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-		try {
-			this.indemnityDueDate = formatter.parse(indemnityDueDate);
-		} catch (ParseException e) {
-			throw new RuntimeException(e);
+		if(!indemnityDueDate.equals("null")&&indemnityDueDate!=null){
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			try {
+				this.indemnityDueDate = formatter.parse(indemnityDueDate);
+			} catch (ParseException e) {
+				throw new RuntimeException(e);
+			}
 		}
+		else return;
 	}
 
 	public Boolean getIsWinLawsuit() {
