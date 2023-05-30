@@ -4,6 +4,7 @@ import Customer.Customer;
 import Dao.CustomerDao;
 import Employee.AccidentReceptionTeam;
 import Customer.InsuredCustomer;
+import Employee.UWTeam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -83,8 +84,18 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
+                    dao.execute("CREATE TABLE UWTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "ffsContact VARCHAR(50)," +
+                            "bankClerkContact VARCHAR(50)," +
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
                     dao.execute("CREATE TABLE Contract(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "contractorId VARCHAR(20),"+
+//                            "insuranceId VARCHAR(20),"+
+                            "insuredCustomerId VARCHAR(20),"+
+                            "employeeId VARCHAR(20),"+
                             "fee DOUBLE," +
                             "premium DOUBLE," +
                             "paymentRate DOUBLE," +
@@ -95,13 +106,14 @@ public class DBFunctions {
                             "lossRatio DOUBLE," +
                             "underwritingState VARCHAR(50) DEFAULT '대기'," +
                             "rejectionReasons VARCHAR(200)," +
-                            "FOREIGN KEY (contractorId) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
-//                            "FOREIGN KEY (insuranceId) REFERENCES Insurance (id) ON DELETE CASCADE ON UPDATE CASCADE" +
-                            "FOREIGN KEY (insuredCustomerId) REFERENCES InsuredCustomer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                            "FOREIGN KEY (contractorId) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE," +
+//                            "FOREIGN KEY (insuranceId) REFERENCES Insurance (id) ON DELETE CASCADE ON UPDATE CASCADE," +
+                            "FOREIGN KEY (insuredCustomerId) REFERENCES InsuredCustomer (id) ON DELETE CASCADE ON UPDATE CASCADE," +
                             "FOREIGN KEY (employeeId) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE" +
                             ");");
                     dao.execute("CREATE TABLE Reinsurance(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "contractId INT," +
                             "period INT," +
                             "paymentAmount DOUBLE," +
                             "contractRate DOUBLE," +
@@ -121,12 +133,13 @@ public class DBFunctions {
                     break;
                 case "2":
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
+                    dao.execute("DROP TABLE UWTeam;");
+                    dao.execute("DROP TABLE Reinsurance;");
+                    dao.execute("DROP TABLE Contract;");
                     dao.execute("DROP TABLE Employee;");
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
                     dao.execute("DROP TABLE Accident;");
-                    dao.execute("DROP TABLE Contract;");
-                    dao.execute("DROP TABLE Reinsurance;");
 
 
 
@@ -196,6 +209,18 @@ public class DBFunctions {
         accidentReceiptionEmployee2.setEmail("receiption99@naver.com");
         accidentReceiptionEmployee2.setRank("대리");
         employeeDao.create(accidentReceiptionEmployee2);
+        UWTeam uwEmployee = new UWTeam();
+        uwEmployee.setId("uw01");
+        uwEmployee.setType("UW");
+        uwEmployee.setName("홍길동");
+        uwEmployee.setAge(35);
+        uwEmployee.setGender("남");
+        uwEmployee.setPhoneNum("01012345678");
+        uwEmployee.setEmail("uwuwwuwu@naver.com");
+        uwEmployee.setRank("주임");
+        uwEmployee.setFfsContact("1234");
+        uwEmployee.setBankClerkContact("2345");
+        employeeDao.create(uwEmployee);
         return true;
     }
 
