@@ -45,6 +45,7 @@ public class DBFunctions {
                             "indemnityMoney DOUBLE," +
                             "indemnityDueDate VARCHAR(20)," +
                             "isWinLawsuit BOOLEAN," +
+                            "lawsuitCost DOUBLE, " +
                             "winOrLoseMoney INT" +
                             ");");
                     //Customers
@@ -140,9 +141,6 @@ public class DBFunctions {
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
                     dao.execute("DROP TABLE Accident;");
-
-
-
                     break;
                 default:
                     System.out.println("Please select from the menu");

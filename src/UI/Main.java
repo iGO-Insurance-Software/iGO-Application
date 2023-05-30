@@ -20,8 +20,6 @@ import java.util.*;
 
 import static UI.AccidentReceptionFunctions.*;
 import static UI.DBFunctions.setDB;
-
-
 public class Main {
 	public static Dao dao = new Dao();
 	public static CustomerDao customerDao = new CustomerDao();
@@ -193,14 +191,16 @@ public class Main {
 				userChoiceValue = inputReader.readLine().trim();
 				switch (userChoiceValue) {
 					case "1":
-						if(accidentList.retrieveAll().size()!=0) {//접수된 사고가 존재한다면
+						ArrayList<Accident> accidentsIncharge = accidentDao.retrieveByReceptionEmployeeID(currentEmployee.getId());
+						if(accidentsIncharge.size()!=0) {//접수된 사고가 존재한다면
 							Date currentDate = new Date();
-							for (Accident acdt : accidentList.retrieveAll()) {
+							for (Accident acdt : accidentsIncharge) {
+								//접수 거절 상태로 5년 지난 사건 삭제
 								Date accidentDate = acdt.getAccidentDate();
 								long diffInMillies = Math.abs(currentDate.getTime() - accidentDate.getTime());
 								long diffInYears = diffInMillies / (24 * 60 * 60 * 1000 * 365L);
 								if (diffInYears >= 5 && acdt.getStatus().equals("접수 거절")) {
-									accidentList.delete(acdt.getId());
+									accidentDao.deleteById(acdt.getId());
 								}
 							}
 						}
