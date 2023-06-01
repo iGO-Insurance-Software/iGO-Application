@@ -8,6 +8,8 @@ import Dao.InsuredCustomerDao;
 import Dao.EmployeeDao;
 import Dao.AccidentDao;
 import Dao.AccidentReceptionTeamDao;
+import Dao.InvestigationTeamDao;
+import Customer.InsuredCustomer;
 import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
@@ -26,6 +28,7 @@ public class Main {
 	public static InsuredCustomerDao insuredCustomerDao = new InsuredCustomerDao();
 	public static EmployeeDao employeeDao = new EmployeeDao();
 	public static AccidentReceptionTeamDao accidentReceptionTeamDao = new AccidentReceptionTeamDao();
+	public static InvestigationTeamDao investigationTeamDao = new InvestigationTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
@@ -89,10 +92,10 @@ public class Main {
 			switch (userChoiceValue) {
 				case "1":
 					if (loginCustomer(inputReader)) showCustomerMenu(inputReader);
-					else break;
+					break;
 				case "2":
 					if (loginEmployee(inputReader)) showEmployeeMenu(inputReader);
-					else break;
+					break;
 				case "x":
 					isRemain=false;
 					break;
@@ -159,10 +162,10 @@ public class Main {
 					switch (userChoiceValue) {
 						case "1":
 							HashMap<String,String> accidentInfo = sendReceiption(inputReader);
-							if (accidentInfo != null) receiveReceiption(accidentInfo,inputReader);
+							if (accidentInfo != null) receiveReception(accidentInfo,inputReader);
 							break;
 						case "2":
-							searchReception(inputReader);
+							showAccidentsForCustomer(inputReader);
 							break;
 						case "x":
 							isRemain = false;
@@ -185,25 +188,13 @@ public class Main {
 		while (isRemain) {
 			System.out.println("\n************************ " + currentEmployee.getName() + " 사원님의 MENU ************************");
 			System.out.println("x. 로그아웃하기");
-			//사고접수 직원일 경우 - 우선 고객은 getType으로 switch문으로 분류,
+			//사고접수 직원
 			if (currentEmployee instanceof AccidentReceptionTeam) {
 				System.out.println("1. 사고 조회");
 				userChoiceValue = inputReader.readLine().trim();
 				switch (userChoiceValue) {
 					case "1":
-						ArrayList<Accident> accidentsIncharge = accidentDao.retrieveByReceptionEmployeeID(currentEmployee.getId());
-						if(accidentsIncharge.size()!=0) {//접수된 사고가 존재한다면
-							Date currentDate = new Date();
-							for (Accident acdt : accidentsIncharge) {
-								//접수 거절 상태로 5년 지난 사건 삭제
-								Date accidentDate = acdt.getAccidentDate();
-								long diffInMillies = Math.abs(currentDate.getTime() - accidentDate.getTime());
-								long diffInYears = diffInMillies / (24 * 60 * 60 * 1000 * 365L);
-								if (diffInYears >= 5 && acdt.getStatus().equals("접수 거절")) {
-									accidentDao.deleteById(acdt.getId());
-								}
-							}
-						}
+						showAccidentsForReceptionEmployee(inputReader);
 						break;
 					case "x":
 						isRemain = false;
@@ -211,7 +202,16 @@ public class Main {
 				}
 			}
 			else if(currentEmployee instanceof InvestigationTeam){
-
+				System.out.println("1. 사고 조회");
+				userChoiceValue = inputReader.readLine().trim();
+				switch(userChoiceValue){
+					case "1":
+						showAccidentsForInvestigationEmployee(inputReader);
+						break;
+					case "x":
+						isRemain = false;
+						break;
+				}
 			}
 			else if(currentEmployee instanceof UWTeam){
 				UWMain uwMain = new UWMain(currentEmployee);
@@ -221,12 +221,12 @@ public class Main {
 		return true;
 	}
 	public static boolean showMessageForCustomer(Customer customer, String message){
-		System.out.println("\n******** "+customer.getName()+" 고객님의 화면 ********");
+		System.out.println("\n----- "+customer.getName()+" 고객님에게 전송된 메세지 -----");
 		System.out.println(message);
 		return true;
 	}
 	public static boolean showMessageForEmployee(Employee employee, String message){
-		System.out.println("\n******** "+employee.getName()+" 사원님의 화면 ********");
+		System.out.println("\n----- "+employee.getName()+" 사원님에게 전송된 메세지 -----");
 		System.out.println(message);
 		return true;
 	}
