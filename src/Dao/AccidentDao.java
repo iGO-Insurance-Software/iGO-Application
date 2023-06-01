@@ -14,24 +14,28 @@ public class AccidentDao extends Dao{
         }
     }
     public void create(Accident accident){
-        String query = "INSERT INTO Accident VALUES(" +
+        String query = "INSERT INTO Accident " +
+                "(customerID, receptionEmployeeID, compensationEmployeeID, accidentDate, accidentPlace, accidentType, accidentOutline, " +
+                "existOfDestroyer, destroyerName, destroyerPhoneNum, isUrgent, status, compensationMoney, indemnityMoney, " +
+                "indemnityDueDate, isWinLawsuit, lawsuitCost, winOrLoseMoney) VALUES (" +
                 "'"+accident.getCustomerID()+"'," +
-                "'"+accident.getReceiptionEmployeeID()+"'," +
+                "'"+accident.getReceptionEmployeeID()+"'," +
                 "'"+accident.getCompensationEmployeeID()+"'," +
                 "'"+accident.getAccidentDateToString()+"'," +
-                "'"+accident.getAccidentPlace()+"," +
+                "'"+accident.getAccidentPlace()+"'," +
                 "'"+accident.getAccidentType()+"'," +
                 "'"+accident.getAccidentOutline()+"'," +
                 accident.getExistOfDestroyer()+"," +
                 "'"+accident.getDestroyerName()+"'," +
-                accident.getDestroyerPhoneNum()+"'," +
+                "'"+accident.getDestroyerPhoneNum()+"'," +
                 accident.getIsUrgent()+"," +
-                "'"+accident.getStatus()+"'" +
+                "'"+accident.getStatus()+"'," +
                 accident.getCompensationMoney()+"," +
                 accident.getIndemnityMoney()+"," +
-                "'"+accident.getIndemnityDueDateToString()+"'" +
+                "'"+accident.getIndemnityDueDateToString()+"'," +
                 accident.getIsWinLawsuit()+"," +
-                accident.getWinOrLoseMoney()+"," +
+                accident.getLawsuitCost()+"," +
+                accident.getWinOrLoseMoney()+
                 ");";
         super.create(query);
     }
@@ -45,7 +49,7 @@ public class AccidentDao extends Dao{
                 acdt = new Accident();
                 acdt.setId(resultSet.getInt("id"));
                 acdt.setCustomerID(resultSet.getString("customerID"));
-                acdt.setReceiptionEmployeeID(resultSet.getString("receiptionEmployeeID"));
+                acdt.setReceptionEmployeeID(resultSet.getString("receptionEmployeeID"));
                 acdt.setCompensationEmployeeID(resultSet.getString("compensationEmployeeID"));
                 acdt.setAccidentDateStringtoDate(resultSet.getString("accidentDate"));
                 acdt.setAccidentPlace(resultSet.getString("accidentPlace"));
@@ -60,6 +64,7 @@ public class AccidentDao extends Dao{
                 acdt.setIndemnityMoney(resultSet.getDouble("indemnityMoney"));
                 acdt.setIndemnityDueDateStringToDate(resultSet.getString("indemnityDueDate"));
                 acdt.setIsWinLawsuit(resultSet.getBoolean("isWinLawsuit"));
+                acdt.setLawsuitCost(resultSet.getDouble("lawsuitCost"));
                 acdt.setWinOrLoseMoney(resultSet.getInt("winOrLoseMoney"));
             }
             resultSet.close();
@@ -68,6 +73,42 @@ public class AccidentDao extends Dao{
         }
         return acdt;
     }
+    public ArrayList<Accident> retrieveByReceptionEmployeeID(String receptionEmployeeID) {
+        String query = "SELECT * FROM Accident WHERE receptionEmployeeID = '"+receptionEmployeeID+"';";
+        ArrayList<Accident> accidentList = null;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            accidentList = new ArrayList<Accident>();
+            while(resultSet.next()) {
+                Accident acdt = new Accident();
+                acdt.setId(resultSet.getInt("id"));
+                acdt.setCustomerID(resultSet.getString("customerID"));
+                acdt.setReceptionEmployeeID(resultSet.getString("receptionEmployeeID"));
+                acdt.setCompensationEmployeeID(resultSet.getString("compensationEmployeeID"));
+                acdt.setAccidentDateStringtoDate(resultSet.getString("accidentDate"));
+                acdt.setAccidentPlace(resultSet.getString("accidentPlace"));
+                acdt.setAccidentType(resultSet.getString("accidentType"));
+                acdt.setAccidentOutline(resultSet.getString("accidentOutline"));
+                acdt.setExistOfDestroyer(resultSet.getBoolean("existOfDestroyer"));
+                acdt.setDestroyerName(resultSet.getString("destroyerName"));
+                acdt.setDestroyerPhoneNum(resultSet.getString("destroyerPhoneNum"));
+                acdt.setIsUrgent(resultSet.getBoolean("isUrgent"));
+                acdt.setStatus(resultSet.getString("status"));
+                acdt.setCompensationMoney(resultSet.getDouble("compensationMoney"));
+                acdt.setIndemnityMoney(resultSet.getDouble("indemnityMoney"));
+                acdt.setIndemnityDueDateStringToDate(resultSet.getString("indemnityDueDate"));
+                acdt.setIsWinLawsuit(resultSet.getBoolean("isWinLawsuit"));
+                acdt.setLawsuitCost(resultSet.getDouble("lawsuitCost"));
+                acdt.setWinOrLoseMoney(resultSet.getInt("winOrLoseMoney"));
+                accidentList.add(acdt);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return accidentList;
+    }
+
     public ArrayList<Accident> retrieveAll() {
         String query = "SELECT * FROM Accident;";
         ArrayList<Accident> accidentList = null;
@@ -78,7 +119,7 @@ public class AccidentDao extends Dao{
                 Accident acdt = new Accident();
                 acdt.setId(resultSet.getInt("id"));
                 acdt.setCustomerID(resultSet.getString("customerID"));
-                acdt.setReceiptionEmployeeID(resultSet.getString("receiptionEmployeeID"));
+                acdt.setReceptionEmployeeID(resultSet.getString("receptionEmployeeID"));
                 acdt.setCompensationEmployeeID(resultSet.getString("compensationEmployeeID"));
                 acdt.setAccidentDateStringtoDate(resultSet.getString("accidentDate"));
                 acdt.setAccidentPlace(resultSet.getString("accidentPlace"));
@@ -93,6 +134,7 @@ public class AccidentDao extends Dao{
                 acdt.setIndemnityMoney(resultSet.getDouble("indemnityMoney"));
                 acdt.setIndemnityDueDateStringToDate(resultSet.getString("indemnityDueDate"));
                 acdt.setIsWinLawsuit(resultSet.getBoolean("isWinLawsuit"));
+                acdt.setLawsuitCost(resultSet.getDouble("lawsuitCost"));
                 acdt.setWinOrLoseMoney(resultSet.getInt("winOrLoseMoney"));
                 accidentList.add(acdt);
 
@@ -106,7 +148,7 @@ public class AccidentDao extends Dao{
     public void update(Accident accident){
         String query = "UPDATE Accident SET " +
                 "customerID = '" + accident.getCustomerID() + "', " +
-                "receiptionEmployeeID = '" + accident.getReceiptionEmployeeID() + "', " +
+                "receiptionEmployeeID = '" + accident.getReceptionEmployeeID() + "', " +
                 "compensationEmployeeID = '" + accident.getCompensationEmployeeID() + "', " +
                 "accidentDate = '" + accident.getAccidentDateToString() + "', " +
                 "accidentPlace = '" + accident.getAccidentPlace() + "', " +
@@ -121,6 +163,7 @@ public class AccidentDao extends Dao{
                 "indemnityMoney = " + accident.getIndemnityMoney() + ", " +
                 "indemnityDueDate = '" + accident.getIndemnityDueDateToString() + "', " +
                 "isWinLawsuit = " + accident.getIsWinLawsuit() + ", " +
+                "lawsuitCost = " + accident.getLawsuitCost() + ", " +
                 "winOrLoseMoney = " + accident.getWinOrLoseMoney() + " " +
                 "WHERE id = '" + accident.getId() + "';";
         super.update(query);
@@ -133,5 +176,4 @@ public class AccidentDao extends Dao{
         String query = "DELETE FROM Accident;";
         super.deleteAll(query);
     }
-
 }

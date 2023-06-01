@@ -4,6 +4,7 @@ import Customer.Customer;
 import Dao.CustomerDao;
 import Employee.AccidentReceptionTeam;
 import Customer.InsuredCustomer;
+import Employee.InvestigationTeam;
 import Employee.UWTeam;
 
 import java.io.BufferedReader;
@@ -45,6 +46,7 @@ public class DBFunctions {
                             "indemnityMoney DOUBLE," +
                             "indemnityDueDate VARCHAR(20)," +
                             "isWinLawsuit BOOLEAN," +
+                            "lawsuitCost DOUBLE, " +
                             "winOrLoseMoney INT" +
                             ");");
                     //Customers
@@ -60,7 +62,7 @@ public class DBFunctions {
                             ");");
                     dao.execute("CREATE TABLE InsuredCustomer(" +
                             "id VARCHAR(20) PRIMARY KEY," +
-                            "famililyHistory VARCHAR(300)," +
+                            "familyHistory VARCHAR(300)," +
                             "healthCertificate VARCHAR(300) NOT NULL," +
                             "employmentCertificate VARCHAR(300)," +
                             "inheritanceCertificate VARCHAR(300)," +
@@ -82,6 +84,13 @@ public class DBFunctions {
                             ");");
                     dao.execute("CREATE TABLE AccidentReceptionTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
+                    dao.execute("CREATE TABLE InvestigationTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "accidentID INT DEFAULT NULL,"+
+                            "isDispatching BOOLEAN DEFAULT FALSE,"+
+                            "FOREIGN KEY (accidentID) REFERENCES Accident (id) ON DELETE SET NULL,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
                     dao.execute("CREATE TABLE UWTeam(" +
@@ -132,6 +141,7 @@ public class DBFunctions {
 
                     break;
                 case "2":
+                    dao.execute("DROP TABLE InvestigationTeam");
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
                     dao.execute("DROP TABLE UWTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
@@ -140,9 +150,6 @@ public class DBFunctions {
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
                     dao.execute("DROP TABLE Accident;");
-
-
-
                     break;
                 default:
                     System.out.println("Please select from the menu");
@@ -151,7 +158,7 @@ public class DBFunctions {
         return true;
     }
     private static boolean registerCustomerData(){
-        //일반 고객
+        //Normal Customer
         Customer customer1 = new Customer();
         customer1.setId("cs2023");
         customer1.setType("Customer");
@@ -162,8 +169,7 @@ public class DBFunctions {
         customer1.setPhoneNum("01012345678");
         customer1.setOccupation("대학교수");
         customerDao.create(customer1);
-
-        //피보험자
+        //Insured Customer
         InsuredCustomer insuredCustomer1 = new InsuredCustomer();
         insuredCustomer1.setId("ics2023");
         insuredCustomer1.setType("InsuredCustomer");
@@ -184,11 +190,51 @@ public class DBFunctions {
         insuredCustomer1.setAccidentCertificate(null);
         insuredCustomer1.setMedicalCertificate(null);
         customerDao.create(insuredCustomer1);
+        InsuredCustomer insuredCustomer2 = new InsuredCustomer();
+        insuredCustomer2.setId("ics2024");
+        insuredCustomer2.setType("InsuredCustomer");
+        insuredCustomer2.setName("이아파");
+        insuredCustomer2.setRrn("9501192123424");
+        insuredCustomer2.setAge(29);
+        insuredCustomer2.setGender("여");
+        insuredCustomer2.setPhoneNum("01066339999");
+        insuredCustomer2.setOccupation("회사원");
+        insuredCustomer2.setFamilyHistory("이빠더(부): 질환: 없음, 질병: 고혈압 초기\n오마더(모): 질환: 없음, 질병: 없음");
+        insuredCustomer2.setHealthCertificate("성명 : 이아파\n주민번호: 950119-2123424\n신장: 160cm\n체중: 50kg\n시력: 좌 1.0, 우 1.3" +
+                "\n혈액형: RH+B\n질환: 없음, 질병: 없음\n진단 일자: 2023-05-27\n진단 병원: 명지병원(경기도 서울시 서대문구 거북골로 5-22)");
+        insuredCustomer2.setEmploymentCertificate("성명 : 이아파\n주민번호: 950119-2123424\n" +
+                "직장명: 명지대학교\n직장 주소: 서대문구 거북골로 5-10\n입사일: 2022-12-10\n담당: 교직원\n직책: 사원\n발급일시: 2022-02-10");
+        insuredCustomer2.setInheritanceCertificate("[이아파(본인)] 주민등록번호: 950119-2123424\n[이빠더(부)] 주민등록번호 : 700220-1142342\n" +
+                "[오마더(모)] 주민등록번호: 701215-2333333");
+        insuredCustomer2.setBankbookCopy("2990339229763");
+        insuredCustomer2.setAccidentCertificate(null);
+        insuredCustomer2.setMedicalCertificate(null);
+        customerDao.create(insuredCustomer2);
+        InsuredCustomer insuredCustomer3 = new InsuredCustomer();
+        insuredCustomer3.setId("ics2025");
+        insuredCustomer3.setType("InsuredCustomer");
+        insuredCustomer3.setName("오인커");
+        insuredCustomer3.setRrn("9601191133532");
+        insuredCustomer3.setAge(28);
+        insuredCustomer3.setGender("남");
+        insuredCustomer3.setPhoneNum("01088889999");
+        insuredCustomer3.setOccupation("자영업자");
+        insuredCustomer3.setFamilyHistory("오아빠(부): 질환: 없음, 질병: 없음\n오엄마(모): 질환: 없음, 질병: 없음");
+        insuredCustomer3.setHealthCertificate("성명 : 김피보\n주민번호: 960119-1133532\n신장: 175cm\n체중: 68kg\n시력: 좌 1.0, 우 1.3" +
+                "\n혈액형: RH+B\n질환: 없음, 질병: 없음\n진단 일자: 2023-05-25\n진단 병원: 뉴삼성병원(경기도 서울시 서대문구 거북골로 3-22)");
+        insuredCustomer3.setEmploymentCertificate("성명 : 오인커\n주민번호: 960119-1133532\n" +
+                "직장명: 독채\n직장 주소: 경기도 의정부시 의정부3동 210\n입사일: 2023-01-01\n담당: 요식업\n직책: 사장\n발급일시: 2023-01-10");
+        insuredCustomer3.setInheritanceCertificate("[오인커(본인)] 주민등록번호: 960119-1133532\n[오아빠(부)] 주민등록번호 : 600120-1444342\n" +
+                "[오엄마(모)] 주민등록번호: 720315-2334567");
+        insuredCustomer3.setBankbookCopy("3520116229763");
+        insuredCustomer3.setAccidentCertificate(null);
+        insuredCustomer3.setMedicalCertificate(null);
+        customerDao.create(insuredCustomer3);
         return true;
     }
 
     private static boolean registerEmployeeData(){
-        //사고접수직원
+        //AccidentReception
         AccidentReceptionTeam accidentReceiptionEmployee1 = new AccidentReceptionTeam();
         accidentReceiptionEmployee1.setId("re2023");
         accidentReceiptionEmployee1.setType("AccidentReception");
@@ -209,6 +255,28 @@ public class DBFunctions {
         accidentReceiptionEmployee2.setEmail("receiption99@naver.com");
         accidentReceiptionEmployee2.setRank("대리");
         employeeDao.create(accidentReceiptionEmployee2);
+        //Investigation
+        InvestigationTeam investigationEmployee1 = new InvestigationTeam();
+        investigationEmployee1.setId("ie2023");
+        investigationEmployee1.setType("Investigation");
+        investigationEmployee1.setName("이조사");
+        investigationEmployee1.setAge(27);
+        investigationEmployee1.setGender("여");
+        investigationEmployee1.setPhoneNum("01029478382");
+        investigationEmployee1.setEmail("investigate13@gmail.com");
+        investigationEmployee1.setRank("사원");
+        employeeDao.create(investigationEmployee1);
+        InvestigationTeam investigationEmployee2 = new InvestigationTeam();
+        investigationEmployee2.setId("ie2024");
+        investigationEmployee2.setType("Investigation");
+        investigationEmployee2.setName("김출동");
+        investigationEmployee2.setAge(28);
+        investigationEmployee2.setGender("남");
+        investigationEmployee2.setPhoneNum("01033458111");
+        investigationEmployee2.setEmail("ig30@gmail.com");
+        investigationEmployee2.setRank("사원");
+        employeeDao.create(investigationEmployee2);
+        //UW
         UWTeam uwEmployee = new UWTeam();
         uwEmployee.setId("uw01");
         uwEmployee.setType("UW");
