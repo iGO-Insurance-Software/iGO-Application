@@ -8,9 +8,11 @@ import java.util.ArrayList;
 
 public class EmployeeDao extends Dao {
     private AccidentReceptionTeamDao accidentReceptionTeamDao;
+    private InvestigationTeamDao investigationTeamDao;
     private UWTeamDao uwTeamDao;
     public EmployeeDao(){
         accidentReceptionTeamDao = new AccidentReceptionTeamDao();
+        investigationTeamDao = new InvestigationTeamDao();
         uwTeamDao = new UWTeamDao();
         try {
             super.connect();
@@ -32,29 +34,30 @@ public class EmployeeDao extends Dao {
         super.create(query);
         if(employee.getType().equals("AccidentReception")) accidentReceptionTeamDao.create(employee);
         if(employee.getType().equals("UW")) uwTeamDao.create(employee);
+        if(employee.getType().equals("Investigation")) investigationTeamDao.create(employee);
     }
     public Employee retrieveById(String employeeID) {
         String query = "SELECT * FROM Employee WHERE id  = '"+
                 employeeID+"';";
-        Employee emp = null;
+        Employee employee = null;
         try {
             ResultSet resultSet = super.retrieve(query);
             while(resultSet.next()) {
-                emp = new Employee();
-                emp.setId(resultSet.getString("id"));
-                emp.setType(resultSet.getString("type"));
-                emp.setName(resultSet.getString("name"));
-                emp.setAge(Integer.parseInt(resultSet.getString("age")));
-                emp.setGender(resultSet.getString("gender"));
-                emp.setPhoneNum(resultSet.getString("phoneNum"));
-                emp.setEmail(resultSet.getString("email"));
-                emp.setRank(resultSet.getString("rank"));
+                employee = new Employee();
+                employee.setId(resultSet.getString("id"));
+                employee.setType(resultSet.getString("type"));
+                employee.setName(resultSet.getString("name"));
+                employee.setAge(Integer.parseInt(resultSet.getString("age")));
+                employee.setGender(resultSet.getString("gender"));
+                employee.setPhoneNum(resultSet.getString("phoneNum"));
+                employee.setEmail(resultSet.getString("email"));
+                employee.setRank(resultSet.getString("rank"));
             }
             resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return emp;
+        return employee;
     }
     public ArrayList<Employee> retrieveAll() {
         String query = "SELECT * FROM Employee;";
@@ -63,16 +66,16 @@ public class EmployeeDao extends Dao {
             ResultSet resultSet = super.retrieve(query);
             employeeList = new ArrayList<Employee>();
             while(resultSet.next()) {
-                Employee emp = new Employee();
-                emp.setId(resultSet.getString("id"));
-                emp.setType(resultSet.getString("type"));
-                emp.setName(resultSet.getString("name"));
-                emp.setAge(Integer.parseInt(resultSet.getString("age")));
-                emp.setGender(resultSet.getString("gender"));
-                emp.setPhoneNum(resultSet.getString("phoneNum"));
-                emp.setEmail(resultSet.getString("email"));
-                emp.setRank(resultSet.getString("rank"));
-                employeeList.add(emp);
+                Employee employee = new Employee();
+                employee.setId(resultSet.getString("id"));
+                employee.setType(resultSet.getString("type"));
+                employee.setName(resultSet.getString("name"));
+                employee.setAge(Integer.parseInt(resultSet.getString("age")));
+                employee.setGender(resultSet.getString("gender"));
+                employee.setPhoneNum(resultSet.getString("phoneNum"));
+                employee.setEmail(resultSet.getString("email"));
+                employee.setRank(resultSet.getString("rank"));
+                employeeList.add(employee);
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -89,19 +92,20 @@ public class EmployeeDao extends Dao {
             while(resultSet.next()) {
                 String type = resultSet.getString("type");
                 if(!type.equals("Employee")) continue;//하위 테이블일 경우 여기서 조회하지 않고 하위 Dao로 넘김
-                Employee emp = new Employee();
-                emp.setId(resultSet.getString("id"));
-                emp.setType(resultSet.getString("type"));
-                emp.setName(resultSet.getString("name"));
-                emp.setAge(Integer.parseInt(resultSet.getString("age")));
-                emp.setGender(resultSet.getString("gender"));
-                emp.setPhoneNum(resultSet.getString("phoneNum"));
-                emp.setEmail(resultSet.getString("email"));
-                emp.setRank(resultSet.getString("rank"));
-                employeeList.add(emp);
+                Employee employee = new Employee();
+                employee.setId(resultSet.getString("id"));
+                employee.setType(resultSet.getString("type"));
+                employee.setName(resultSet.getString("name"));
+                employee.setAge(Integer.parseInt(resultSet.getString("age")));
+                employee.setGender(resultSet.getString("gender"));
+                employee.setPhoneNum(resultSet.getString("phoneNum"));
+                employee.setEmail(resultSet.getString("email"));
+                employee.setRank(resultSet.getString("rank"));
+                employeeList.add(employee);
             }
             resultSet.close();
             employeeList.addAll(accidentReceptionTeamDao.retrieveAll());
+            employeeList.addAll(investigationTeamDao.retrieveAll());
             employeeList.addAll(uwTeamDao.retrieveAll());
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -120,6 +124,8 @@ public class EmployeeDao extends Dao {
                 "WHERE id = '" + employee.getId() + "';";
         super.update(query);
         if(employee.getType().equals("AccidentReception")) accidentReceptionTeamDao.update(employee);
+        if(employee.getType().equals("UW")) uwTeamDao.update(employee);
+        if(employee.getType().equals("Investigation")) investigationTeamDao.update(employee);
     }
     public void deleteById(String employeeID){
         String query = "DELETE FROM Employee WHERE id = '"+employeeID+"';";

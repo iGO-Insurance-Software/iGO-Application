@@ -84,22 +84,4 @@ public class InsuredCustomer extends Customer {
 		this.bankbookCopy = bankbookCopy;
 	}
 
-
-	public HashMap<String,String> sendReceiption(BufferedReader inputReader) throws IOException {
-
-		return null;
-	}
-	
-	public boolean filloutInfo(){
-		return false;
-	}
-
-	public boolean cancelReceiption(){
-		return false;
-	}
-
-	public HashMap<String,String> getInfo(){
-		return null;
-	}
-
 }
