@@ -26,52 +26,52 @@ public class AccidentReceptionTeamDao extends Dao{
                 "FROM Employee " +
                 "INNER JOIN AccidentReceptionTeam ON Employee.id = AccidentReceptionTeam.id " +
                 "WHERE AccidentReceptionTeam.id  = '"+ arEmployeeID+"';";
-        AccidentReceptionTeam emp = null;
+        AccidentReceptionTeam arEmployee = null;
         try {
             ResultSet resultSet = super.retrieve(query);
             while(resultSet.next()) {
-                emp = new AccidentReceptionTeam();
-                emp.setId(resultSet.getString("id"));
-                emp.setType(resultSet.getString("type"));
-                emp.setName(resultSet.getString("name"));
-                emp.setAge(Integer.parseInt(resultSet.getString("age")));
-                emp.setGender(resultSet.getString("gender"));
-                emp.setPhoneNum(resultSet.getString("phoneNum"));
-                emp.setEmail(resultSet.getString("email"));
-                emp.setRank(resultSet.getString("rank"));
+                arEmployee = new AccidentReceptionTeam();
+                arEmployee.setId(resultSet.getString("id"));
+                arEmployee.setType(resultSet.getString("type"));
+                arEmployee.setName(resultSet.getString("name"));
+                arEmployee.setAge(Integer.parseInt(resultSet.getString("age")));
+                arEmployee.setGender(resultSet.getString("gender"));
+                arEmployee.setPhoneNum(resultSet.getString("phoneNum"));
+                arEmployee.setEmail(resultSet.getString("email"));
+                arEmployee.setRank(resultSet.getString("rank"));
             }
             resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return emp;
+        return arEmployee;
     }
     public ArrayList<AccidentReceptionTeam> retrieveAll() {
         String query = "SELECT Employee.id, Employee.type, Employee.name, Employee.name, Employee.age, Employee.age, Employee.gender, " +
                 "Employee.phoneNum, Employee.email, Employee.rank " +
                 "FROM Employee " +
                 "INNER JOIN AccidentReceptionTeam ON Employee.id = AccidentReceptionTeam.id;";
-        ArrayList<AccidentReceptionTeam> employeeList = null;
+        ArrayList<AccidentReceptionTeam> arEmployeeList = null;
         try {
             ResultSet resultSet = super.retrieve(query);
-            employeeList = new ArrayList<AccidentReceptionTeam>();
+            arEmployeeList = new ArrayList<AccidentReceptionTeam>();
             while(resultSet.next()) {
-                AccidentReceptionTeam emp = new AccidentReceptionTeam();
-                emp.setId(resultSet.getString("id"));
-                emp.setType(resultSet.getString("type"));
-                emp.setName(resultSet.getString("name"));
-                emp.setAge(Integer.parseInt(resultSet.getString("age")));
-                emp.setGender(resultSet.getString("gender"));
-                emp.setPhoneNum(resultSet.getString("phoneNum"));
-                emp.setEmail(resultSet.getString("email"));
-                emp.setRank(resultSet.getString("rank"));
-                employeeList.add(emp);
+                AccidentReceptionTeam arEmployee = new AccidentReceptionTeam();
+                arEmployee.setId(resultSet.getString("id"));
+                arEmployee.setType(resultSet.getString("type"));
+                arEmployee.setName(resultSet.getString("name"));
+                arEmployee.setAge(Integer.parseInt(resultSet.getString("age")));
+                arEmployee.setGender(resultSet.getString("gender"));
+                arEmployee.setPhoneNum(resultSet.getString("phoneNum"));
+                arEmployee.setEmail(resultSet.getString("email"));
+                arEmployee.setRank(resultSet.getString("rank"));
+                arEmployeeList.add(arEmployee);
             }
             resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return employeeList;
+        return arEmployeeList;
     }
     public void update(Employee employee){
         AccidentReceptionTeam arEmployee = (AccidentReceptionTeam) employee;
