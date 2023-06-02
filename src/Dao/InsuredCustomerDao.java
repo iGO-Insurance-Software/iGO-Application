@@ -65,41 +65,7 @@ public class InsuredCustomerDao extends Dao{
         }
         return isCustomer;
     }
-//    public InsuredCustomer retrieveById(String insuredCustomerID) {
-//        String query = "SELECT Customer.id, Customer.type, Customer.name, Customer.rrn, Customer.age, Customer.gender, " +
-//                "Customer.phoneNum, Customer.occupation, InsuredCustomer.familyHistory, InsuredCustomer.healthCertificate, " +
-//                "InsuredCustomer.employmentCertificate, InsuredCustomer.inheritanceCertificate, InsuredCustomer.accidentCertificate, " +
-//                "InsuredCustomer.medicalCertificate, InsuredCustomer.bankbookCopy " +
-//                "FROM Customer " +
-//                "INNER JOIN InsuredCustomer ON Customer.id = InsuredCustomer.id " +
-//                "WHERE InsuredCustomer.id = '"+insuredCustomerID+"';";
-//        InsuredCustomer isCustomer = null;
-//        try {
-//            ResultSet resultSet = super.retrieve(query);
-//            while(resultSet.next()) {
-//                isCustomer = new InsuredCustomer();
-//                isCustomer.setId(resultSet.getString("id"));
-//                isCustomer.setType(resultSet.getString("type"));
-//                isCustomer.setName(resultSet.getString("name"));
-//                isCustomer.setRrn(resultSet.getString("rrn"));
-//                isCustomer.setAge(Integer.parseInt(resultSet.getString("age")));
-//                isCustomer.setGender(resultSet.getString("gender"));
-//                isCustomer.setPhoneNum(resultSet.getString("phoneNum"));
-//                isCustomer.setOccupation(resultSet.getString("occupation"));
-//                isCustomer.setFamilyHistory(resultSet.getString("famililyHistory"));
-//                isCustomer.setHealthCertificate(resultSet.getString("healthCertificate"));
-//                isCustomer.setEmploymentCertificate(resultSet.getString("employmentCertificate"));
-//                isCustomer.setInheritanceCertificate(resultSet.getString("inheritanceCertificate"));
-//                isCustomer.setAccidentCertificate(resultSet.getString("accidentCertificate"));
-//                isCustomer.setMedicalCertificate(resultSet.getString("medicalCertificate"));
-//                isCustomer.setBankbookCopy(resultSet.getString("bankbookCopy"));
-//            }
-//            resultSet.close();
-//        } catch (SQLException e) {
-//            throw new RuntimeException(e);
-//        }
-//        return isCustomer;
-//    }
+
     public ArrayList<InsuredCustomer> retrieveAll() {
         String query = "SELECT Customer.id, Customer.type, Customer.name, Customer.rrn, Customer.age, Customer.gender, " +
                 "Customer.phoneNum, Customer.occupation, InsuredCustomer.familyHistory, InsuredCustomer.healthCertificate, " +

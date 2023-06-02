@@ -8,7 +8,6 @@ import Dao.ContractDao;
 import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
-import Employee.CompensationTeam;
 import util.BaseException;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -18,12 +17,11 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
-
 import static UI.Main.*;
 
-public class AccidentReceptionFunctions {
+public class AccidentReceptionMain {
     /*Customer's Functions*/
-    public static HashMap<String,String> sendReceiption(BufferedReader inputReader) throws IOException {
+    public static HashMap<String,String> sendReception(BufferedReader inputReader) throws IOException {
         HashMap accidentInfo = new HashMap<String, String>();
         System.out.println("1. 일반 접수하기\n2. 긴급 접수하기\nx. 뒤로가기 ");
         System.out.print("\nChoice: ");
@@ -184,7 +182,7 @@ public class AccidentReceptionFunctions {
                     //이미 출동중이면
                     System.out.println("\n이미 현장 조사 직원이 출발하여 취소시 수수료가 발생합니다.");
                     System.out.println("1.확인");
-                    System.out.println("2.취소");
+                    System.out.println("Others.나가기");
                     String userChoiceValue = inputReader.readLine().trim();
                     if (userChoiceValue.equals("1")) {
                         chargeCancelFee(currentCustomer,choicedAccident);
@@ -209,7 +207,7 @@ public class AccidentReceptionFunctions {
         for(Contract contract: contractDao.retrieveAll()){
             if(accident.getCustomerID().equals(customer.getId()))
             if(contract.getInsuredCustomerID().equals(customer.getId())){
-                contract.setFee(30000);
+                contract.setFee(contract.getFee()+30000);
                 contractDao.update(contract);
                 return;
             }

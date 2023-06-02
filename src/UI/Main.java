@@ -1,7 +1,4 @@
 package UI;
-import Accident.Accident;
-import Customer.Customer;
-import Customer.CustomerListImpl;
 import Dao.CustomerDao;
 import Dao.Dao;
 import Dao.InsuredCustomerDao;
@@ -9,19 +6,24 @@ import Dao.EmployeeDao;
 import Dao.AccidentDao;
 import Dao.AccidentReceptionTeamDao;
 import Dao.InvestigationTeamDao;
-import Customer.InsuredCustomer;
+import Dao.CompensationTeamDao;
+import Dao.ContractDao;
+import Customer.Customer;
 import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
+import Employee.CompensationTeam;
 import Employee.UWTeam;
-import Accident.AccidentListImpl;
+import util.LoadingException;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import static UI.AccidentReceptionMain.*;
+import static util.DBFunctions.setDB;
+import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
-import static UI.AccidentReceptionFunctions.*;
-import static UI.DBFunctions.setDB;
 public class Main {
 	public static Dao dao = new Dao();
 	public static CustomerDao customerDao = new CustomerDao();
@@ -29,13 +31,11 @@ public class Main {
 	public static EmployeeDao employeeDao = new EmployeeDao();
 	public static AccidentReceptionTeamDao accidentReceptionTeamDao = new AccidentReceptionTeamDao();
 	public static InvestigationTeamDao investigationTeamDao = new InvestigationTeamDao();
+	public static CompensationTeamDao compensationTeamDao = new CompensationTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
+	public static ContractDao contractDao = new ContractDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
-
-	//아래의 ListImpl들은 후에 모두 지우고 ~Dao로 대체해야함. -> List x, Dao로 접근
-	public static CustomerListImpl customerList = new CustomerListImpl();
-	public static AccidentListImpl accidentList = new AccidentListImpl();
 
 
 	public static void main(String[] args) throws IOException {
@@ -72,7 +72,7 @@ public class Main {
 					return;
 				default:
 					System.out.println("Please select from the menu");
-				}
+			}
 		}
 	}
 	private static void printMenu() {
@@ -110,9 +110,9 @@ public class Main {
 		System.out.print("ID: ");
 		String id = inputReader.readLine().trim();
 		//System.out.print("Password: "); String password = inputReader.readLine().trim();
-		for(Customer cust : customerDao.retrieveAllCustomer()){
-			if (cust.getId().equals(id)){
-				currentCustomer = cust; //현재 접속중인 고객을 cust로 설정
+		for(Customer customer : customerDao.retrieveAllCustomer()){
+			if (customer.getId().equals(id)){
+				currentCustomer = customer; //현재 접속중인 고객을 cust로 설정
 				System.out.println("# 로그인 성공. 환영합니다 "+currentCustomer.getName()+" 고객님\n");
 				return true;
 			}
@@ -123,9 +123,9 @@ public class Main {
 	private static boolean loginEmployee(BufferedReader inputReader) throws IOException{
 		System.out.print("ID: ");
 		String id = inputReader.readLine().trim();
-		for(Employee emp : employeeDao.retrieveAllEmployee()){
-			if (emp.getId().equals(id)){
-				currentEmployee = emp; //현재 접속중인 직원을 emp로 설정
+		for(Employee employee : employeeDao.retrieveAllEmployee()){
+			if (employee.getId().equals(id)){
+				currentEmployee = employee; //현재 접속중인 직원을 emp로 설정
 				System.out.println("# 로그인 성공. 환영합니다 "+currentEmployee.getName()+" 사원님\n");
 				return true;
 			}
@@ -134,6 +134,14 @@ public class Main {
 		return false;
 	}
 	private static boolean showCustomerMenu(BufferedReader inputReader) throws IOException{
+		//Exception:7초이상의 로딩//
+		/*try {
+			LoadingException.loadingCustomer();
+		} catch (LoadingException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}*/
+		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
 		while(isRemain) {
@@ -161,7 +169,7 @@ public class Main {
 					System.out.println();
 					switch (userChoiceValue) {
 						case "1":
-							HashMap<String,String> accidentInfo = sendReceiption(inputReader);
+							HashMap<String,String> accidentInfo = sendReception(inputReader);
 							if (accidentInfo != null) receiveReception(accidentInfo,inputReader);
 							break;
 						case "2":
@@ -183,6 +191,14 @@ public class Main {
 		return true;
 	}
 	private static boolean showEmployeeMenu(BufferedReader inputReader) throws IOException {
+		//Exception:7초이상의 로딩//
+		/*try {
+			LoadingException.loadingEmployee();
+		} catch (LoadingException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}*/
+		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
 		while (isRemain) {
@@ -199,6 +215,9 @@ public class Main {
 					case "x":
 						isRemain = false;
 						break;
+					default:
+						System.out.println("Please select from the menu");
+						break;
 				}
 			}
 			else if(currentEmployee instanceof InvestigationTeam){
@@ -211,7 +230,30 @@ public class Main {
 					case "x":
 						isRemain = false;
 						break;
+					default:
+						System.out.println("Please select from the menu");
+						break;
 				}
+			}
+			else if (currentEmployee instanceof CompensationTeam){
+					System.out.println("1. 보상 여부 결정하기");
+					System.out.println("2. 보상금 책정하기");
+					System.out.println("3. 보상금 지급하기");
+					System.out.println("4. 구상 신청하기");
+					System.out.println("5. 구상 소송 요청하기");
+					System.out.println("6. 사건 종결하기.");
+					userChoiceValue = inputReader.readLine().trim();
+					switch(userChoiceValue){
+						case "1":
+							showAccidentsForDecideCompensation(inputReader);
+							break;
+						case "2":
+							//showAccidentsForDecideCompensation(inputReader);
+							break;
+						default:
+							System.out.println("Please select from the menu");
+							break;
+					}
 			}
 			else if(currentEmployee instanceof UWTeam){
 				UWMain uwMain = new UWMain(currentEmployee);
@@ -230,8 +272,4 @@ public class Main {
 		System.out.println(message);
 		return true;
 	}
-
-
-
-
 }

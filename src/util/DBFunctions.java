@@ -1,9 +1,10 @@
-package UI;
+package util;
 
 import Customer.Customer;
 import Dao.CustomerDao;
 import Employee.AccidentReceptionTeam;
 import Customer.InsuredCustomer;
+import Employee.CompensationTeam;
 import Employee.InvestigationTeam;
 import Employee.UWTeam;
 
@@ -15,7 +16,6 @@ import static UI.Main.*;
 public class DBFunctions {
     public static boolean setDB(BufferedReader inputReader) throws IOException {
         System.out.println("____________DB Manager Mode____________");
-        CustomerDao customerDao = new CustomerDao();
         boolean isRemain = true;
         while(isRemain) {
             System.out.println("x. 관리자모드 종료하기 1.테이블 생성 & 데이터 삽입하기(주의: 처음 1회에만 등록해주세요!), 2.테이블 삭제");
@@ -41,7 +41,7 @@ public class DBFunctions {
                             "destroyerName VARCHAR(20)," +
                             "destroyerPhoneNum VARCHAR(11)," +
                             "isUrgent BOOLEAN NOT NULL," +
-                            "status VARCHAR(30) NOT NULL," +
+                            "status VARCHAR(100) NOT NULL," +
                             "compensationMoney DOUBLE," +
                             "indemnityMoney DOUBLE," +
                             "indemnityDueDate VARCHAR(20)," +
@@ -63,10 +63,10 @@ public class DBFunctions {
                     dao.execute("CREATE TABLE InsuredCustomer(" +
                             "id VARCHAR(20) PRIMARY KEY," +
                             "familyHistory VARCHAR(300)," +
-                            "healthCertificate VARCHAR(300) NOT NULL," +
+                            "healthCertificate VARCHAR(300)," +
                             "employmentCertificate VARCHAR(300)," +
                             "inheritanceCertificate VARCHAR(300)," +
-                            "bankbookCopy VARCHAR(300) NOT NULL," +
+                            "bankbookCopy VARCHAR(300)," +
                             "accidentCertificate VARCHAR(300)," +
                             "medicalCertificate VARCHAR(300)," +
                             "FOREIGN KEY (id) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
@@ -91,6 +91,10 @@ public class DBFunctions {
                             "accidentID INT DEFAULT NULL,"+
                             "isDispatching BOOLEAN DEFAULT FALSE,"+
                             "FOREIGN KEY (accidentID) REFERENCES Accident (id) ON DELETE SET NULL,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
+                    dao.execute("CREATE TABLE CompensationTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
                     dao.execute("CREATE TABLE UWTeam(" +
@@ -138,10 +142,10 @@ public class DBFunctions {
                     registerEmployeeData();
                     registerCustomerData();
                     registerProductData();
-
                     break;
                 case "2":
-                    dao.execute("DROP TABLE InvestigationTeam");
+                    dao.execute("DROP TABLE CompensationTeam;");
+                    dao.execute("DROP TABLE InvestigationTeam;");
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
                     dao.execute("DROP TABLE UWTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
@@ -276,6 +280,17 @@ public class DBFunctions {
         investigationEmployee2.setEmail("ig30@gmail.com");
         investigationEmployee2.setRank("사원");
         employeeDao.create(investigationEmployee2);
+        //Compensation
+        CompensationTeam compensationEmployee = new CompensationTeam();
+        compensationEmployee.setId("ce2023");
+        compensationEmployee.setType("Compensation");
+        compensationEmployee.setName("최보상");
+        compensationEmployee.setAge(26);
+        compensationEmployee.setGender("여");
+        compensationEmployee.setPhoneNum("01015571557");
+        compensationEmployee.setEmail("compman@naver.com");
+        compensationEmployee.setRank("사원");
+        employeeDao.create(compensationEmployee);
         //UW
         UWTeam uwEmployee = new UWTeam();
         uwEmployee.setId("uw01");
