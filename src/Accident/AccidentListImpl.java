@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.Date;
 
 public class AccidentListImpl implements AccidentList {
-
-
 	private ArrayList<Accident> accidentList;
 	public Accident accident;
 
