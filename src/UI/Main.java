@@ -14,13 +14,13 @@ import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import Employee.CompensationTeam;
 import Employee.UWTeam;
-import util.LoadingException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import static UI.AccidentReceptionMain.*;
+import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
 import static util.DBFunctions.setDB;
 import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
@@ -242,13 +242,17 @@ public class Main {
 					System.out.println("4. 구상 신청하기");
 					System.out.println("5. 구상 소송 요청하기");
 					System.out.println("6. 사건 종결하기.");
+					System.out.print("Choice: ");
 					userChoiceValue = inputReader.readLine().trim();
 					switch(userChoiceValue){
 						case "1":
 							showAccidentsForDecideCompensation(inputReader);
 							break;
 						case "2":
-							//showAccidentsForDecideCompensation(inputReader);
+							showAccidentsForCalculateCompensation(inputReader);
+							break;
+						case "x":
+							isRemain=false;
 							break;
 						default:
 							System.out.println("Please select from the menu");

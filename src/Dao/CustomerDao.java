@@ -23,7 +23,8 @@ public class CustomerDao extends Dao{
                 customer.getAge()+"," +
                 "'"+customer.getGender()+"'," +
                 "'"+customer.getPhoneNum()+"'," +
-                "'"+customer.getOccupation()+"'"+
+                "'"+customer.getOccupation()+"'," +
+                "'"+customer.getBankAccount()+"'" +
                 ");";
         super.create(query);
         if(customer.getType().equals("InsuredCustomer")) insuredCustomerDao.create(customer);
@@ -44,6 +45,7 @@ public class CustomerDao extends Dao{
                 customer.setGender(resultSet.getString("gender"));
                 customer.setPhoneNum(resultSet.getString("phoneNum"));
                 customer.setOccupation(resultSet.getString("occupation"));
+                customer.setBankAccount(resultSet.getString("bankAccount"));
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -67,6 +69,7 @@ public class CustomerDao extends Dao{
                 customer.setGender(resultSet.getString("gender"));
                 customer.setPhoneNum(resultSet.getString("phoneNum"));
                 customer.setOccupation(resultSet.getString("occupation"));
+                customer.setBankAccount(resultSet.getString("bankAccount"));
                 customerList.add(customer);
             }
             resultSet.close();
@@ -93,6 +96,7 @@ public class CustomerDao extends Dao{
                 customer.setGender(resultSet.getString("gender"));
                 customer.setPhoneNum(resultSet.getString("phoneNum"));
                 customer.setOccupation(resultSet.getString("occupation"));
+                customer.setBankAccount(resultSet.getString("bankAccount"));
                 customerList.add(customer);
             }
             resultSet.close();
@@ -110,7 +114,8 @@ public class CustomerDao extends Dao{
                 "age = " + customer.getAge() + ", " +
                 "gender = '" + customer.getGender() + "', " +
                 "phoneNum = '" + customer.getPhoneNum() + "', " +
-                "occupation = '" + customer.getOccupation() + "' " +
+                "occupation = '" + customer.getOccupation() + "', " +
+                "bankAccount = '" + customer.getBankAccount() + "' " +
                 "WHERE id = '" + customer.getId() + "';";
         super.update(query);
         if(customer.getType().equals("InsuredCustomer")) insuredCustomerDao.update(customer);

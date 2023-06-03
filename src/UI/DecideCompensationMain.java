@@ -5,24 +5,27 @@ import Customer.InsuredCustomer;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 
 import static UI.Main.*;
 
 public class DecideCompensationMain {
     public static boolean showAccidentsForDecideCompensation(BufferedReader inputReader) throws IOException{
-        //아직 보상 직원이 할당되지 않은 "접수 완료"인 상태의 사건들이 목록에 보여짐
+        removeExpiredAccidents();
+        //아직 보상 직원이 할당되지 않은 "접수 완료"인 상태의 사건들 반환
         ArrayList<Accident> accidentList = new ArrayList<Accident>();
         for (Accident accident : accidentDao.retrieveAll()){
             if(accident.getStatus().equals("접수 완료")){
                 accidentList.add(accident);
             }
-            //지급여부 거절/추가서류 요청된 사건들은 현재 접속중인 보상 직원이 처리한 사건들만 보여짐
+            //지급여부 거절/추가서류 요청된 사건들은 현재 접속중인 보상 직원이 처리한 사건들 반환
             if(accident.getStatus().equals("지급여부 거절")||accident.getStatus().contains("추가서류 요청")){
                 if(accident.getCompensationEmployeeID().equals(currentEmployee.getId())){
                     accidentList.add(accident);
                 }
             }
         }
+        //반환된 사건들 목록으로 출력
         if (accidentList.size() != 0) {
             for (int i = 0; i < accidentList.size(); i++) {
                 Accident accident = accidentList.get(i);
@@ -38,6 +41,7 @@ public class DecideCompensationMain {
             System.out.println("사고 번호: "+choicedAccident.getId());
             System.out.println("사고 일시: "+choicedAccident.getAccidentDateToString());
             System.out.println("사고 장소: "+choicedAccident.getAccidentPlace());
+            System.out.println("사고 유형:"+choicedAccident.getAccidentType());
             System.out.println("사고 개요: "+choicedAccident.getAccidentOutline());
             InsuredCustomer insuredCustomer = insuredCustomerDao.retrieveById(choicedAccident.getCustomerID());
             System.out.println("피보험자 이름: "+insuredCustomer.getName());
@@ -81,6 +85,7 @@ public class DecideCompensationMain {
         System.out.println("-재직증명서-");
         System.out.println(senderCustomer.getEmploymentCertificate());
         System.out.println("\n\n<계약 정보>");
+        //고객의 계약 탐색
         ArrayList<Contract> contracts = new ArrayList<Contract>();
         for(Contract contract : contractDao.retrieveAll()){
             if(contract.getInsuredCustomerID().equals(senderCustomer.getId())){
@@ -95,9 +100,9 @@ public class DecideCompensationMain {
 //                System.out.println("보험 id: "+insurance.getId);
 //                System.out.println("보험 상품명: "+insurance.getName());
 //                System.out.println("보험 설명: "+insurance.getDescription());
-                System.out.println("--------------------");
             }
         }
+        System.out.println("--------------------");
         System.out.println("1.보상금 지급 여부 승인하기");
         System.out.println("2.보상금 지급 여부 거절하기");
         System.out.println("3.추가 서류 요쳥하기");
@@ -106,7 +111,7 @@ public class DecideCompensationMain {
         String userChoice = inputReader.readLine().trim();
         switch(userChoice){
             case "1":
-                showMessageForCustomer(senderCustomer,"고객님이 접수하신 사고번호 : ["+choicedAccident.getId()+"] 의 보상금 지급여부가 승인되었습니다. 이제 보상금 책정 절차에 들어갑니다.");
+                showMessageForCustomer(senderCustomer,"고객님이 접수하신 사고번호 ["+choicedAccident.getId()+"] 의 보상금 지급여부가 승인되었습니다. 이제 보상금 책정 절차에 들어갑니다.");
                 approveCompensation(choicedAccident);
                 break;
             case "2":
@@ -168,6 +173,19 @@ public class DecideCompensationMain {
         status = status+"]";
         choicedAccident.setStatus(status);
         accidentDao.update(choicedAccident);
+        return true;
+    }
+    public static boolean removeExpiredAccidents() {
+        Date currentDate = new Date();
+        for (Accident accident : accidentDao.retrieveAll()) {
+            //접수 거절 상태로 5년 지난 사건 삭제
+            Date accidentDate = accident.getAccidentDate();
+            long diffInMillies = Math.abs(currentDate.getTime() - accidentDate.getTime());
+            long diffInYears = diffInMillies / (24 * 60 * 60 * 1000 * 365L);
+            if (diffInYears >= 5 && accident.getStatus().equals("지급여부 거절")) {
+                accidentDao.deleteById(accident.getId());
+            }
+        }
         return true;
     }
 }
