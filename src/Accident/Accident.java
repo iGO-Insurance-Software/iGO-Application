@@ -20,6 +20,8 @@ public class Accident {
 	private String destroyerPhoneNum;
 	private boolean isUrgent;
 	private String status;
+	private String medicalBill;
+	private String damageBill;
 	private double compensationMoney;
 	private double indemnityMoney;
 	private Date indemnityDueDate;
@@ -33,7 +35,7 @@ public class Accident {
 		setCustomerID(accidentInfo.get("customerID"));
 		setAccidentType(accidentInfo.get("accidentType"));
 		setAccidentOutline(accidentInfo.get("accidentOutline"));
-		setAccidentDateStringtoDate((accidentInfo.get("accidentDate")));
+		setAccidentDateStringToDate((accidentInfo.get("accidentDate")));
 		setAccidentPlace(accidentInfo.get("accidentPlace"));
 
 	}
@@ -81,7 +83,7 @@ public class Accident {
 		}
 		else return null;
 	}
-	public void setAccidentDateStringtoDate(String accidentDate){
+	public void setAccidentDateStringToDate(String accidentDate){
 		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
 		try {
 			this.accidentDate = formatter.parse(accidentDate);
@@ -152,6 +154,21 @@ public class Accident {
 
 	public void setStatus(String status) {
 		this.status = status;
+	}
+	public String getMedicalBill() {
+		return medicalBill;
+	}
+
+	public void setMedicalBill(String medicalBill) {
+		this.medicalBill = medicalBill;
+	}
+
+	public String getDamageBill() {
+		return damageBill;
+	}
+
+	public void setDamageBill(String damageBill) {
+		this.damageBill = damageBill;
 	}
 
 	public double getCompensationMoney() {

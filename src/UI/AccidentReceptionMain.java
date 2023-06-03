@@ -18,6 +18,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import static UI.Main.*;
+import static UI.CalculateCompensationMain.submitDocsForCalculateCompensation;
 
 public class AccidentReceptionMain {
     /*Customer's Functions*/
@@ -99,7 +100,7 @@ public class AccidentReceptionMain {
                 Accident duplicatedReception = null;
                 for(Accident accident : accidentDao.retrieveAll()){
                     if(accident.getCustomerID().equals(currentCustomer.getId())){
-                        if(!accident.getStatus().equals("접수 완료")){
+                        if(accident.getStatus().equals("접수 완료(출동 대기)")||accident.getStatus().equals("접수 완료(출동 중)")){
                             showMessageForCustomer(currentCustomer,"고객님이 접수한 긴급 사건번호 "+ accident.getId()
                                     +"에 대한 긴급 접수가 아직 처리 중입니다. 이전의 사건이 접수 완료되면 긴급 접수해주세요.");
                             return null;
@@ -144,7 +145,10 @@ public class AccidentReceptionMain {
             Accident choicedAccident = myAccidentList.get(choice - 1);
             System.out.println("사고 일시: " + choicedAccident.getAccidentDate().toString());
             System.out.println("사고 장소: " + choicedAccident.getAccidentPlace());
-            System.out.println("사고 유형: " + choicedAccident.getAccidentType());
+            if(!choicedAccident.getIsUrgent()) {
+                System.out.println("사고 유형: " + choicedAccident.getAccidentType());
+                System.out.println("사고 개요: " + choicedAccident.getAccidentOutline());
+            }
             if (choicedAccident.getExistOfDestroyer()) {
                 System.out.println("손괴자 이름: " + choicedAccident.getDestroyerName());
                 System.out.println("손괴자 전화번호: " + choicedAccident.getDestroyerPhoneNum());
@@ -158,6 +162,15 @@ public class AccidentReceptionMain {
                 if (userChoiceValue.equals("x")) return true;
                 else if (userChoiceValue.equals("1")) {
                     cancelReception(choicedAccident,inputReader);
+                }
+            }
+            else if (choicedAccident.getStatus().equals("책정서류 요청중")){
+                System.out.println("1. 책정 관련 서류 제출하기");
+                System.out.print("Choice: ");
+                userChoiceValue = inputReader.readLine().trim();
+                if (userChoiceValue.equals("x")) return true;
+                else if (userChoiceValue.equals("1")) {
+                    submitDocsForCalculateCompensation(choicedAccident,inputReader);
                 }
             }
         } else {
@@ -247,8 +260,7 @@ public class AccidentReceptionMain {
                 String userChoiceValue = inputReader.readLine().trim();
                 System.out.println();
                 if (userChoiceValue.equals("1")) {
-                    showMessageForCustomer(senderCustomer, "접수가 완료되었습니다. 접수 번호: " + accident.getId() +
-                            ", 담당자 이름: " + arEmployee.getName() + ", 담당자 연락처: " + arEmployee.getPhoneNum() + " / " + arEmployee.getEmail());
+                    showMessageForCustomer(senderCustomer, "고객님의 "+accident.getAccidentDateToString()+"에 발생한 사고의 접수가 완료되었습니다.");
                     accident.setStatus("접수 완료");
                 } else if (userChoiceValue.equals("2")) {
                     System.out.print("거절 사유를 입력하세요: ");
@@ -311,7 +323,10 @@ public class AccidentReceptionMain {
             Accident choicedAccident = accidentsIncharge.get(choice - 1);
             System.out.println("사고 일시: " + choicedAccident.getAccidentDate().toString());
             System.out.println("사고 장소: " + choicedAccident.getAccidentPlace());
-            if(!choicedAccident.getIsUrgent()) System.out.println("사고 유형: " + choicedAccident.getAccidentType());
+            if(!choicedAccident.getIsUrgent()) {
+                System.out.println("사고 유형: " + choicedAccident.getAccidentType());
+                System.out.println("사고 개요: " + choicedAccident.getAccidentOutline());
+            }
             if (choicedAccident.getExistOfDestroyer()) {
                 System.out.println("손괴자 이름: " + choicedAccident.getDestroyerName());
                 System.out.println("손괴자 전화번호: " + choicedAccident.getDestroyerPhoneNum());
@@ -426,6 +441,7 @@ public class AccidentReceptionMain {
                 System.out.println("\n Please select from the menu");
                 break;
         }
+        accident.setIsUrgent(false);
         accident.setStatus("접수 완료");
         accidentDao.update(accident);
         ((InvestigationTeam) currentEmployee).setAccidentID(null);

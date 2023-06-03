@@ -16,7 +16,7 @@ public class AccidentDao extends Dao{
     public void create(Accident accident){
         String query = "INSERT INTO Accident " +
                 "(customerID, receptionEmployeeID, compensationEmployeeID, accidentDate, accidentPlace, accidentType, accidentOutline, " +
-                "existOfDestroyer, destroyerName, destroyerPhoneNum, isUrgent, status, compensationMoney, indemnityMoney, " +
+                "existOfDestroyer, destroyerName, destroyerPhoneNum, isUrgent, status, medicalBill, damageBill, compensationMoney, indemnityMoney, " +
                 "indemnityDueDate, isWinLawsuit, lawsuitCost, winOrLoseMoney) VALUES (" +
                 "'"+accident.getCustomerID()+"'," +
                 "'"+accident.getReceptionEmployeeID()+"'," +
@@ -30,6 +30,8 @@ public class AccidentDao extends Dao{
                 "'"+accident.getDestroyerPhoneNum()+"'," +
                 accident.getIsUrgent()+"," +
                 "'"+accident.getStatus()+"'," +
+                "'"+accident.getMedicalBill()+"'," +
+                "'"+accident.getDamageBill()+"'," +
                 accident.getCompensationMoney()+"," +
                 accident.getIndemnityMoney()+"," +
                 "'"+accident.getIndemnityDueDateToString()+"'," +
@@ -51,7 +53,7 @@ public class AccidentDao extends Dao{
                 accident.setCustomerID(resultSet.getString("customerID"));
                 accident.setReceptionEmployeeID(resultSet.getString("receptionEmployeeID"));
                 accident.setCompensationEmployeeID(resultSet.getString("compensationEmployeeID"));
-                accident.setAccidentDateStringtoDate(resultSet.getString("accidentDate"));
+                accident.setAccidentDateStringToDate(resultSet.getString("accidentDate"));
                 accident.setAccidentPlace(resultSet.getString("accidentPlace"));
                 accident.setAccidentType(resultSet.getString("accidentType"));
                 accident.setAccidentOutline(resultSet.getString("accidentOutline"));
@@ -60,6 +62,8 @@ public class AccidentDao extends Dao{
                 accident.setDestroyerPhoneNum(resultSet.getString("destroyerPhoneNum"));
                 accident.setIsUrgent(resultSet.getBoolean("isUrgent"));
                 accident.setStatus(resultSet.getString("status"));
+                accident.setMedicalBill(resultSet.getString("medicalBill"));
+                accident.setDamageBill(resultSet.getString("damageBill"));
                 accident.setCompensationMoney(resultSet.getDouble("compensationMoney"));
                 accident.setIndemnityMoney(resultSet.getDouble("indemnityMoney"));
                 accident.setIndemnityDueDateStringToDate(resultSet.getString("indemnityDueDate"));
@@ -85,7 +89,7 @@ public class AccidentDao extends Dao{
                 accident.setCustomerID(resultSet.getString("customerID"));
                 accident.setReceptionEmployeeID(resultSet.getString("receptionEmployeeID"));
                 accident.setCompensationEmployeeID(resultSet.getString("compensationEmployeeID"));
-                accident.setAccidentDateStringtoDate(resultSet.getString("accidentDate"));
+                accident.setAccidentDateStringToDate(resultSet.getString("accidentDate"));
                 accident.setAccidentPlace(resultSet.getString("accidentPlace"));
                 accident.setAccidentType(resultSet.getString("accidentType"));
                 accident.setAccidentOutline(resultSet.getString("accidentOutline"));
@@ -94,6 +98,8 @@ public class AccidentDao extends Dao{
                 accident.setDestroyerPhoneNum(resultSet.getString("destroyerPhoneNum"));
                 accident.setIsUrgent(resultSet.getBoolean("isUrgent"));
                 accident.setStatus(resultSet.getString("status"));
+                accident.setMedicalBill(resultSet.getString("medicalBill"));
+                accident.setDamageBill(resultSet.getString("damageBill"));
                 accident.setCompensationMoney(resultSet.getDouble("compensationMoney"));
                 accident.setIndemnityMoney(resultSet.getDouble("indemnityMoney"));
                 accident.setIndemnityDueDateStringToDate(resultSet.getString("indemnityDueDate"));
@@ -121,7 +127,7 @@ public class AccidentDao extends Dao{
                 accident.setCustomerID(resultSet.getString("customerID"));
                 accident.setReceptionEmployeeID(resultSet.getString("receptionEmployeeID"));
                 accident.setCompensationEmployeeID(resultSet.getString("compensationEmployeeID"));
-                accident.setAccidentDateStringtoDate(resultSet.getString("accidentDate"));
+                accident.setAccidentDateStringToDate(resultSet.getString("accidentDate"));
                 accident.setAccidentPlace(resultSet.getString("accidentPlace"));
                 accident.setAccidentType(resultSet.getString("accidentType"));
                 accident.setAccidentOutline(resultSet.getString("accidentOutline"));
@@ -130,6 +136,8 @@ public class AccidentDao extends Dao{
                 accident.setDestroyerPhoneNum(resultSet.getString("destroyerPhoneNum"));
                 accident.setIsUrgent(resultSet.getBoolean("isUrgent"));
                 accident.setStatus(resultSet.getString("status"));
+                accident.setMedicalBill(resultSet.getString("medicalBill"));
+                accident.setDamageBill(resultSet.getString("damageBill"));
                 accident.setCompensationMoney(resultSet.getDouble("compensationMoney"));
                 accident.setIndemnityMoney(resultSet.getDouble("indemnityMoney"));
                 accident.setIndemnityDueDateStringToDate(resultSet.getString("indemnityDueDate"));
@@ -158,6 +166,8 @@ public class AccidentDao extends Dao{
                 "destroyerPhoneNum = '" + accident.getDestroyerPhoneNum() + "', " +
                 "isUrgent = " + accident.getIsUrgent() + ", " +
                 "status = '" + accident.getStatus() + "', " +
+                "medicalBill = '" + accident.getMedicalBill() + "', " +
+                "damageBill = '" + accident.getDamageBill() + "', " +
                 "compensationMoney = " + accident.getCompensationMoney() + ", " +
                 "indemnityMoney = " + accident.getIndemnityMoney() + ", " +
                 "indemnityDueDate = '" + accident.getIndemnityDueDateToString() + "', " +

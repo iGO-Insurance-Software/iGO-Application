@@ -42,13 +42,15 @@ public class DBFunctions {
                             "destroyerPhoneNum VARCHAR(11)," +
                             "isUrgent BOOLEAN NOT NULL," +
                             "status VARCHAR(100) NOT NULL," +
+                            "medicalBill VARCHAR(500) DEFAULT NULL," +
+                            "damageBill VARCHAR(500) DEFAULT NULL," +
                             "compensationMoney DOUBLE," +
                             "indemnityMoney DOUBLE," +
                             "indemnityDueDate VARCHAR(20)," +
                             "isWinLawsuit BOOLEAN," +
                             "lawsuitCost DOUBLE, " +
                             "winOrLoseMoney INT" +
-                            ");");
+                            ") AUTO_INCREMENT = 1;");
                     //Customers
                     dao.execute("CREATE TABLE Customer (" +
                             "id VARCHAR(20) PRIMARY KEY," +
@@ -58,7 +60,8 @@ public class DBFunctions {
                             "age INT," +
                             "gender VARCHAR(1)," +
                             "phoneNum VARCHAR(11) UNIQUE," +
-                            "occupation VARCHAR(20)" +
+                            "occupation VARCHAR(20)," +
+                            "bankAccount VARCHAR(20)" +
                             ");");
                     dao.execute("CREATE TABLE InsuredCustomer(" +
                             "id VARCHAR(20) PRIMARY KEY," +
@@ -66,9 +69,6 @@ public class DBFunctions {
                             "healthCertificate VARCHAR(300)," +
                             "employmentCertificate VARCHAR(300)," +
                             "inheritanceCertificate VARCHAR(300)," +
-                            "bankbookCopy VARCHAR(300)," +
-                            "accidentCertificate VARCHAR(300)," +
-                            "medicalCertificate VARCHAR(300)," +
                             "FOREIGN KEY (id) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
                             ");");
                     //Employees
@@ -183,6 +183,7 @@ public class DBFunctions {
         insuredCustomer1.setGender("남");
         insuredCustomer1.setPhoneNum("01013579999");
         insuredCustomer1.setOccupation("회사원");
+        insuredCustomer1.setBankAccount("3520339229763");
         insuredCustomer1.setFamilyHistory("김빠더(부): 질환: 없음, 질병: 고혈압 초기\n박마더(모): 질환: 없음, 질병: 없음");
         insuredCustomer1.setHealthCertificate("성명 : 김피보\n주민번호: 960119-1123424\n신장: 170cm\n체중: 65kg\n시력: 좌 1.0, 우 1.3" +
                 "\n혈액형: RH+B\n질환: 없음, 질병: 없음\n진단 일자: 2023-05-25\n진단 병원: 뉴삼성병원(경기도 서울시 서대문구 거북골로 3-22)");
@@ -190,9 +191,6 @@ public class DBFunctions {
                 "직장명: 한국수자원공사\n직장 주소: 대전광역시 중구 둔산동 225-10\n입사일: 2023-01-10\n담당: R&D연구\n직책: 사원\n발급일시: 2023-02-10");
         insuredCustomer1.setInheritanceCertificate("[김피보(본인)] 주민등록번호: 960119-1123424\n[김빠더(부)] 주민등록번호 : 670220-1242342\n" +
                 "[김마더(모)] 주민등록번호: 700315-2500030\n[김브라더(형제)] 주민등록번호 : 950725-1311232");
-        insuredCustomer1.setBankbookCopy("3520339229763");
-        insuredCustomer1.setAccidentCertificate(null);
-        insuredCustomer1.setMedicalCertificate(null);
         customerDao.create(insuredCustomer1);
         InsuredCustomer insuredCustomer2 = new InsuredCustomer();
         insuredCustomer2.setId("ics2024");
@@ -203,6 +201,7 @@ public class DBFunctions {
         insuredCustomer2.setGender("여");
         insuredCustomer2.setPhoneNum("01066339999");
         insuredCustomer2.setOccupation("회사원");
+        insuredCustomer2.setBankAccount("2990339229763");
         insuredCustomer2.setFamilyHistory("이빠더(부): 질환: 없음, 질병: 고혈압 초기\n오마더(모): 질환: 없음, 질병: 없음");
         insuredCustomer2.setHealthCertificate("성명 : 이아파\n주민번호: 950119-2123424\n신장: 160cm\n체중: 50kg\n시력: 좌 1.0, 우 1.3" +
                 "\n혈액형: RH+B\n질환: 없음, 질병: 없음\n진단 일자: 2023-05-27\n진단 병원: 명지병원(경기도 서울시 서대문구 거북골로 5-22)");
@@ -210,9 +209,6 @@ public class DBFunctions {
                 "직장명: 명지대학교\n직장 주소: 서대문구 거북골로 5-10\n입사일: 2022-12-10\n담당: 교직원\n직책: 사원\n발급일시: 2022-02-10");
         insuredCustomer2.setInheritanceCertificate("[이아파(본인)] 주민등록번호: 950119-2123424\n[이빠더(부)] 주민등록번호 : 700220-1142342\n" +
                 "[오마더(모)] 주민등록번호: 701215-2333333");
-        insuredCustomer2.setBankbookCopy("2990339229763");
-        insuredCustomer2.setAccidentCertificate(null);
-        insuredCustomer2.setMedicalCertificate(null);
         customerDao.create(insuredCustomer2);
         InsuredCustomer insuredCustomer3 = new InsuredCustomer();
         insuredCustomer3.setId("ics2025");
@@ -223,6 +219,7 @@ public class DBFunctions {
         insuredCustomer3.setGender("남");
         insuredCustomer3.setPhoneNum("01088889999");
         insuredCustomer3.setOccupation("자영업자");
+        insuredCustomer3.setBankAccount("3520116229763");
         insuredCustomer3.setFamilyHistory("오아빠(부): 질환: 없음, 질병: 없음\n오엄마(모): 질환: 없음, 질병: 없음");
         insuredCustomer3.setHealthCertificate("성명 : 김피보\n주민번호: 960119-1133532\n신장: 175cm\n체중: 68kg\n시력: 좌 1.0, 우 1.3" +
                 "\n혈액형: RH+B\n질환: 없음, 질병: 없음\n진단 일자: 2023-05-25\n진단 병원: 뉴삼성병원(경기도 서울시 서대문구 거북골로 3-22)");
@@ -230,9 +227,6 @@ public class DBFunctions {
                 "직장명: 독채\n직장 주소: 경기도 의정부시 의정부3동 210\n입사일: 2023-01-01\n담당: 요식업\n직책: 사장\n발급일시: 2023-01-10");
         insuredCustomer3.setInheritanceCertificate("[오인커(본인)] 주민등록번호: 960119-1133532\n[오아빠(부)] 주민등록번호 : 600120-1444342\n" +
                 "[오엄마(모)] 주민등록번호: 720315-2334567");
-        insuredCustomer3.setBankbookCopy("3520116229763");
-        insuredCustomer3.setAccidentCertificate(null);
-        insuredCustomer3.setMedicalCertificate(null);
         customerDao.create(insuredCustomer3);
         return true;
     }

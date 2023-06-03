@@ -21,10 +21,7 @@ public class InsuredCustomerDao extends Dao{
                 "'"+insuredCustomer.getFamilyHistory()+"'," +
                 "'"+insuredCustomer.getHealthCertificate()+"'," +
                 "'"+insuredCustomer.getEmploymentCertificate()+"'," +
-                "'"+insuredCustomer.getInheritanceCertificate()+"'," +
-                "'"+insuredCustomer.getBankbookCopy()+"',"+
-                "'"+insuredCustomer.getAccidentCertificate()+"',"+
-                "'"+insuredCustomer.getMedicalCertificate()+"'"+
+                "'"+insuredCustomer.getInheritanceCertificate()+"'" +
                 ");";
         super.create(query);
     }
@@ -46,6 +43,7 @@ public class InsuredCustomerDao extends Dao{
                 isCustomer.setGender(resultSet.getString("gender"));
                 isCustomer.setPhoneNum(resultSet.getString("phoneNum"));
                 isCustomer.setOccupation(resultSet.getString("occupation"));
+                isCustomer.setBankAccount(resultSet.getString("bankAccount"));
             }
         query = "SELECT * FROM InsuredCustomer " +
                 "WHERE id = '"+insuredCustomerID+"';";
@@ -55,9 +53,6 @@ public class InsuredCustomerDao extends Dao{
                 isCustomer.setHealthCertificate(resultSet.getString("healthCertificate"));
                 isCustomer.setEmploymentCertificate(resultSet.getString("employmentCertificate"));
                 isCustomer.setInheritanceCertificate(resultSet.getString("inheritanceCertificate"));
-                isCustomer.setAccidentCertificate(resultSet.getString("accidentCertificate"));
-                isCustomer.setMedicalCertificate(resultSet.getString("medicalCertificate"));
-                isCustomer.setBankbookCopy(resultSet.getString("bankbookCopy"));
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -68,9 +63,8 @@ public class InsuredCustomerDao extends Dao{
 
     public ArrayList<InsuredCustomer> retrieveAll() {
         String query = "SELECT Customer.id, Customer.type, Customer.name, Customer.rrn, Customer.age, Customer.gender, " +
-                "Customer.phoneNum, Customer.occupation, InsuredCustomer.familyHistory, InsuredCustomer.healthCertificate, " +
-                "InsuredCustomer.employmentCertificate, InsuredCustomer.inheritanceCertificate, InsuredCustomer.accidentCertificate, " +
-                "InsuredCustomer.medicalCertificate, InsuredCustomer.bankbookCopy " +
+                "Customer.phoneNum, Customer.occupation, Customer.bankAccount, InsuredCustomer.familyHistory, InsuredCustomer.healthCertificate, " +
+                "InsuredCustomer.employmentCertificate, InsuredCustomer.inheritanceCertificate " +
                 "FROM Customer " +
                 "INNER JOIN InsuredCustomer ON Customer.id = InsuredCustomer.id;";
         ArrayList<InsuredCustomer> insuredCustomerList = null;
@@ -87,13 +81,11 @@ public class InsuredCustomerDao extends Dao{
                 isCustomer.setGender(resultSet.getString("gender"));
                 isCustomer.setPhoneNum(resultSet.getString("phoneNum"));
                 isCustomer.setOccupation(resultSet.getString("occupation"));
+                isCustomer.setBankAccount(resultSet.getString("bankAccount"));
                 isCustomer.setFamilyHistory(resultSet.getString("familyHistory"));
                 isCustomer.setHealthCertificate(resultSet.getString("healthCertificate"));
                 isCustomer.setEmploymentCertificate(resultSet.getString("employmentCertificate"));
                 isCustomer.setInheritanceCertificate(resultSet.getString("inheritanceCertificate"));
-                isCustomer.setAccidentCertificate(resultSet.getString("accidentCertificate"));
-                isCustomer.setMedicalCertificate(resultSet.getString("medicalCertificate"));
-                isCustomer.setBankbookCopy(resultSet.getString("bankbookCopy"));
                 insuredCustomerList.add(isCustomer);
             }
             resultSet.close();
@@ -109,10 +101,7 @@ public class InsuredCustomerDao extends Dao{
                 "familyHistory = '" + insuredCustomer.getFamilyHistory() + "', " +
                 "healthCertificate = '" + insuredCustomer.getHealthCertificate() + "', " +
                 "employmentCertificate = '" + insuredCustomer.getEmploymentCertificate() + "', " +
-                "inheritanceCertificate = '" + insuredCustomer.getInheritanceCertificate() + "', " +
-                "bankbookCopy = '" + insuredCustomer.getBankbookCopy() + "', " +
-                "accidentCertificate = '" + insuredCustomer.getAccidentCertificate() + "', " +
-                "medicalCertificate = '" + insuredCustomer.getMedicalCertificate() + "' " +
+                "inheritanceCertificate = '" + insuredCustomer.getInheritanceCertificate() + "' " +
                 "WHERE id = '" + insuredCustomer.getId() + "';";
         super.update(query);
     }
