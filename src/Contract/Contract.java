@@ -1,6 +1,7 @@
 package Contract;
 
 import Customer.Customer;
+import Customer.InsuredCustomer;
 import Insurance.Insurance;
 
 import java.util.Date;
@@ -156,13 +157,17 @@ public class Contract {
 	private int numberOfNonPayments;
 
 
-	public boolean underwrite(int customerID, int insuranceID, int employeeID, String ffsContact){
-		return false;
+	public HashMap<String, String> underwrite(Contract contract, Insurance insurance, InsuredCustomer insuredCustomer){
+		HashMap<String, String> result = new HashMap<>();
+		
+		return result;
 	}
 
 
-	public boolean reexamine(String underwritingState, int employeeID, int insuranceID, int customerID, String ffsContact){
-		return false;
+	public HashMap<String, String> reexamine(Contract contract, Insurance insurance, InsuredCustomer insuredCustomer, String reUnderwriteReason){
+		HashMap<String, String> result = new HashMap<>();
+
+		return result;
 	}
 
 	public HashMap<String, String> calculateLossRatio(Insurance insurance, Customer customer){

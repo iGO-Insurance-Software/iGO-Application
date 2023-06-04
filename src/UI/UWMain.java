@@ -3,8 +3,10 @@ package UI;
 import Contract.Contract;
 import Contract.Reinsurance;
 import Customer.Customer;
+import Customer.InsuredCustomer;
 import Dao.ContractDao;
 import Dao.CustomerDao;
+import Dao.InsuredCustomerDao;
 import Dao.ReinsuranceDao;
 import Employee.Employee;
 import Employee.UWTeam;
@@ -13,21 +15,25 @@ import util.BaseException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class UWMain {
 
-    private Employee employee;
+    private UWTeam employee;
     private ContractDao contractDao;
     private CustomerDao customerDao;
+    private InsuredCustomerDao insuredCustomerDao;
     // private InsuranceDao insuranceDao;
     private ReinsuranceDao reinsuranceDao;
+
     public UWMain(Employee currentEmployee) {
-        this.employee = currentEmployee;
+        this.employee = (UWTeam) currentEmployee;
         this.contractDao = new ContractDao();
         this.customerDao = new CustomerDao();
         //this.insuranceDao = new InsuranceDao();
         this.reinsuranceDao = new ReinsuranceDao();
+        this.insuredCustomerDao = new InsuredCustomerDao();
     }
 
 
@@ -62,7 +68,7 @@ public class UWMain {
                     System.out.print("\n주민등록번호: "); basicCustomerInfo.put("ssn", inputReader.readLine().trim());
                     System.out.print("\n요청 사유: "); basicCustomerInfo.put("requestReason", inputReader.readLine().trim());
                     try {
-                        responseInfo = ((UWTeam) employee).requestCustomerInformation(basicCustomerInfo, ((UWTeam) employee).getBankClerkContact());
+                        responseInfo = employee.requestCustomerInformation(basicCustomerInfo, ((UWTeam) employee).getBankClerkContact());
                     } catch (BaseException e) {throw new RuntimeException(e);}
                     if(responseInfo.get("rejectReason") != null) System.out.println("고객 정보 요청이 거절되었습니다\n거절 사유: "+responseInfo.get("rejectReason"));
                     else{
@@ -170,6 +176,121 @@ public class UWMain {
 //                            }
                             break;
                     }
+                    break;
+                // 3. 인수심사
+                case "3":
+                    ArrayList<Contract> waitStateContractList = contractDao.retrieveAllWaitStateContract();
+                    System.out.println("--인수 심사 대기 리스트--");
+                    for(Contract contract : waitStateContractList) {
+                        System.out.print("계약 ID: " + contract.getId() +
+                                ", 보험 ID: " + contract.getInsuranceID() +
+                                ", 담당 영업팀 직원 ID: " + contract.getEmployeeID() +
+                                ", 보험계약자 ID: " + contract.getContractorID() +
+                                ", 피보험자 ID: " + contract.getInsuredCustomerID() +
+                                ", 인수 심사 상태: " + contract.getUnderwritingState()+"\n");
+                    }
+                    System.out.println("인수 심사를 진행할 계약 ID를 선택해주세요.");
+                    System.out.print("\nChoice: ");
+                    userChoiceValue=inputReader.readLine().trim();
+                    int contractId = Integer.parseInt(userChoiceValue);
+                    Contract uwTargetContract = null;
+                    for(Contract contract : waitStateContractList) {
+                        if(contract.getId() == contractId) uwTargetContract = contract;
+                    }
+                    if(uwTargetContract == null){
+                        userChoiceValue = "3";
+                        continue;
+                    }
+                    // insuranceDao가 생성되면 주석 해제
+                    Insurance uwTargetInsurance = insuranceDao.retrieveById(uwTargetContract.getInsuranceID());
+                    InsuredCustomer uwTargetInsuredCustomer = insuredCustomerDao.retrieveById(uwTargetContract.getInsuredCustomerID());
+                    System.out.println("--인수 심사 계약 정보--");
+                    System.out.println("-피보험자 정보");
+                    System.out.println("고객 ID: " + uwTargetInsuredCustomer.getId() +
+                            ", 이름: " + uwTargetInsuredCustomer.getName() +
+                            ", 주민등록번호: " + uwTargetInsuredCustomer.getRrn());
+                    System.out.println("-보험 정보");
+                    System.out.println("보험 ID: " + uwTargetInsurance.getId() +
+                            ", 이름: " + uwTargetInsurance.getName() +
+                            ", 지급 금액: " + uwTargetInsurance.getPrice());
+                    System.out.println("-계약 내용");
+                    System.out.println("계약 금액: " + uwTargetContract.getId() +
+                            ", 계약 기간: " + uwTargetContract.getPeriod());
+                    System.out.println("1.손해율 측정 버튼");
+                    System.out.print("\nChoice: ");
+                    inputReader.readLine().trim();
+                    HashMap<String, String> result = uwTargetContract.calculateLossRatio(uwTargetInsurance, uwTargetInsuredCustomer);
+                    if(result.get("isResult").equals("true")) {
+                        System.out.println("손해율 분석이 완료되었습니다.");
+                        System.out.print("예상 고객 납부금액: "+result.get("estimatedEarning"));
+                        System.out.print("\n예상 지급금액: "+result.get("estimatedPayment"));
+                        System.out.println("\n손해율: "+result.get("lossRatio"));
+                    }
+                    else{
+                        System.out.println("손해율 측정에 실패하였습니다. 다시 시도해주세요.");
+                        break;
+                    }
+                    System.out.println("1.인수심사 버튼 2.인수심사 거절 버튼");
+                    System.out.print("\nChoice: ");
+                    userChoiceValue=inputReader.readLine().trim();
+                    if(userChoiceValue.equals("1")) {
+                        result = uwTargetContract.underwrite(uwTargetContract, uwTargetInsurance, uwTargetInsuredCustomer);
+                        if (result.get("isResult").equals("true")) {
+                            System.out.println("인수 심사가 완료되었습니다.\n심사 대상자");
+                            System.out.print("-이름: " + result.get("estimatedEarning"));
+                            System.out.print("\n-주민등록번호: " + result.get("estimatedPayment"));
+                            System.out.print("\n가입 보험 이름: " + result.get("lossRatio"));
+                            System.out.print("\n가입 기간: " + result.get("lossRatio"));
+                            System.out.println("\n가입 유무: " + result.get("lossRatio"));
+                            System.out.println("1.확인");
+                            System.out.print("\nChoice: ");
+                            inputReader.readLine().trim();
+                            break;
+                        } else {
+                            System.out.println("인수 심사가 거절되었습니다.");
+                            System.out.print("-이름: " + result.get("estimatedEarning"));
+                            System.out.print("\n-주민등록번호: " + result.get("estimatedPayment"));
+                            System.out.print("\n가입 보험 이름: " + result.get("lossRatio"));
+                            System.out.print("\n가입 기간: " + result.get("lossRatio"));
+                            System.out.println("\n가입 유무: " + result.get("lossRatio"));
+                            System.out.println("1.확인 2.재심사");
+                            System.out.print("\nChoice: ");
+                            userChoiceValue = inputReader.readLine().trim();
+                            if(userChoiceValue.equals("1")) break;
+                            if(userChoiceValue.equals("2")) {
+                                System.out.println("재심사 사유란\n->");
+                                String reUnderwriteReason = inputReader.readLine().trim();
+                                System.out.println("1.재심사");
+                                System.out.print("\nChoice: ");
+                                inputReader.readLine().trim();
+                                result = uwTargetContract.reexamine(uwTargetContract, uwTargetInsurance, uwTargetInsuredCustomer, reUnderwriteReason);
+                                if (result.get("isResult").equals("true")) {
+                                    System.out.println("인수 재심사가 완료되었습니다.\n재심사 대상자");
+                                    System.out.print("-이름: " + result.get("estimatedEarning"));
+                                    System.out.print("\n-주민등록번호: " + result.get("estimatedPayment"));
+                                    System.out.print("\n가입 보험 이름: " + result.get("lossRatio"));
+                                    System.out.print("\n가입 기간: " + result.get("lossRatio"));
+                                    System.out.println("\n가입 유무: " + result.get("lossRatio"));
+                                    System.out.println("1.확인");
+                                    System.out.print("\nChoice: ");
+                                    inputReader.readLine().trim();
+                                    break;
+                                } else {
+                                    System.out.println("인수 심사가 거절되었습니다.");
+                                    System.out.print("-이름: " + result.get("estimatedEarning"));
+                                    System.out.print("\n-주민등록번호: " + result.get("estimatedPayment"));
+                                    System.out.print("\n가입 보험 이름: " + result.get("lossRatio"));
+                                    System.out.print("\n가입 기간: " + result.get("lossRatio"));
+                                    System.out.println("\n가입 유무: " + result.get("lossRatio"));
+                                    System.out.println("1.확인 2.재심사");
+                                    System.out.print("\nChoice: ");
+                                    inputReader.readLine().trim();
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    break;
             }
         }
         return true;
