@@ -4,15 +4,27 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CompensationTeam extends Employee {
-
 	private double accountBalances;
-	private ArrayList<Integer> accidentsInCharge;
 
-	private String indemnityBill;
 	private String bankAccount;
 
 	public CompensationTeam(){
 
+	}
+	public double getAccountBalances() {
+		return accountBalances;
+	}
+
+	public void setAccountBalances(double accountBalances) {
+		this.accountBalances = accountBalances;
+	}
+
+	public String getBankAccount() {
+		return bankAccount;
+	}
+
+	public void setBankAccount(String bankAccount) {
+		this.bankAccount = bankAccount;
 	}
 
 	public HashMap<String,String> requestDocs(int accidentID){

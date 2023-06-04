@@ -23,7 +23,8 @@ public class CustomerDao extends Dao{
                 customer.getAge()+"," +
                 "'"+customer.getGender()+"'," +
                 "'"+customer.getPhoneNum()+"'," +
-                "'"+customer.getOccupation()+"'"+
+                "'"+customer.getOccupation()+"'," +
+                "'"+customer.getBankAccount()+"'" +
                 ");";
         super.create(query);
         if(customer.getType().equals("InsuredCustomer")) insuredCustomerDao.create(customer);
@@ -31,25 +32,26 @@ public class CustomerDao extends Dao{
     public Customer retrieveById(String customerID) {
         String query = "SELECT * FROM Customer WHERE id  = '"+
                 customerID+"';";
-        Customer cust = null;
+        Customer customer = null;
         try {
             ResultSet resultSet = super.retrieve(query);
             while(resultSet.next()) {
-                cust = new Customer();
-                cust.setId(resultSet.getString("id"));
-                cust.setType(resultSet.getString("type"));
-                cust.setName(resultSet.getString("name"));
-                cust.setRrn(resultSet.getString("rrn"));
-                cust.setAge(resultSet.getInt("age"));
-                cust.setGender(resultSet.getString("gender"));
-                cust.setPhoneNum(resultSet.getString("phoneNum"));
-                cust.setOccupation(resultSet.getString("occupation"));
+                customer = new Customer();
+                customer.setId(resultSet.getString("id"));
+                customer.setType(resultSet.getString("type"));
+                customer.setName(resultSet.getString("name"));
+                customer.setRrn(resultSet.getString("rrn"));
+                customer.setAge(resultSet.getInt("age"));
+                customer.setGender(resultSet.getString("gender"));
+                customer.setPhoneNum(resultSet.getString("phoneNum"));
+                customer.setOccupation(resultSet.getString("occupation"));
+                customer.setBankAccount(resultSet.getString("bankAccount"));
             }
             resultSet.close();
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        return cust;
+        return customer;
     }
     public ArrayList<Customer> retrieveAll() {
         String query = "SELECT * FROM Customer;";
@@ -58,16 +60,17 @@ public class CustomerDao extends Dao{
             ResultSet resultSet = super.retrieve(query);
             customerList = new ArrayList<Customer>();
             while(resultSet.next()) {
-                Customer cust = new Customer();
-                cust.setId(resultSet.getString("id"));
-                cust.setType(resultSet.getString("type"));
-                cust.setName(resultSet.getString("name"));
-                cust.setRrn(resultSet.getString("rrn"));
-                cust.setAge(resultSet.getInt("age"));
-                cust.setGender(resultSet.getString("gender"));
-                cust.setPhoneNum(resultSet.getString("phoneNum"));
-                cust.setOccupation(resultSet.getString("occupation"));
-                customerList.add(cust);
+                Customer customer = new Customer();
+                customer.setId(resultSet.getString("id"));
+                customer.setType(resultSet.getString("type"));
+                customer.setName(resultSet.getString("name"));
+                customer.setRrn(resultSet.getString("rrn"));
+                customer.setAge(resultSet.getInt("age"));
+                customer.setGender(resultSet.getString("gender"));
+                customer.setPhoneNum(resultSet.getString("phoneNum"));
+                customer.setOccupation(resultSet.getString("occupation"));
+                customer.setBankAccount(resultSet.getString("bankAccount"));
+                customerList.add(customer);
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -84,16 +87,17 @@ public class CustomerDao extends Dao{
             while(resultSet.next()) {
                 String type = resultSet.getString("type");
                 if(!type.equals("Customer")) continue;//하위 테이블일 경우 여기서 조회 하지 않고 하위Dao로 넘김
-                Customer cust = new Customer();
-                cust.setId(resultSet.getString("id"));
-                cust.setType(resultSet.getString("type"));
-                cust.setName(resultSet.getString("name"));
-                cust.setRrn(resultSet.getString("rrn"));
-                cust.setAge(resultSet.getInt("age"));
-                cust.setGender(resultSet.getString("gender"));
-                cust.setPhoneNum(resultSet.getString("phoneNum"));
-                cust.setOccupation(resultSet.getString("occupation"));
-                customerList.add(cust);
+                Customer customer = new Customer();
+                customer.setId(resultSet.getString("id"));
+                customer.setType(resultSet.getString("type"));
+                customer.setName(resultSet.getString("name"));
+                customer.setRrn(resultSet.getString("rrn"));
+                customer.setAge(resultSet.getInt("age"));
+                customer.setGender(resultSet.getString("gender"));
+                customer.setPhoneNum(resultSet.getString("phoneNum"));
+                customer.setOccupation(resultSet.getString("occupation"));
+                customer.setBankAccount(resultSet.getString("bankAccount"));
+                customerList.add(customer);
             }
             resultSet.close();
             customerList.addAll(insuredCustomerDao.retrieveAll());
@@ -110,7 +114,8 @@ public class CustomerDao extends Dao{
                 "age = " + customer.getAge() + ", " +
                 "gender = '" + customer.getGender() + "', " +
                 "phoneNum = '" + customer.getPhoneNum() + "', " +
-                "occupation = '" + customer.getOccupation() + "' " +
+                "occupation = '" + customer.getOccupation() + "', " +
+                "bankAccount = '" + customer.getBankAccount() + "' " +
                 "WHERE id = '" + customer.getId() + "';";
         super.update(query);
         if(customer.getType().equals("InsuredCustomer")) insuredCustomerDao.update(customer);

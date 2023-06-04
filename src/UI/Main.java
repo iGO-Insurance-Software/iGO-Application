@@ -1,26 +1,28 @@
 package UI;
-import Accident.Accident;
-import Customer.Customer;
-import Customer.CustomerListImpl;
 import Dao.CustomerDao;
 import Dao.Dao;
 import Dao.InsuredCustomerDao;
 import Dao.EmployeeDao;
 import Dao.AccidentDao;
 import Dao.AccidentReceptionTeamDao;
+import Dao.InvestigationTeamDao;
+import Dao.CompensationTeamDao;
+import Dao.ContractDao;
+import Customer.Customer;
 import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
+import Employee.CompensationTeam;
 import Employee.UWTeam;
-import Accident.AccidentListImpl;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
-
-import static UI.AccidentReceptionFunctions.*;
-import static UI.DBFunctions.setDB;
-
+import static UI.AccidentReceptionMain.*;
+import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
+import static util.DBFunctions.setDB;
+import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
 public class Main {
 	public static Dao dao = new Dao();
@@ -28,13 +30,12 @@ public class Main {
 	public static InsuredCustomerDao insuredCustomerDao = new InsuredCustomerDao();
 	public static EmployeeDao employeeDao = new EmployeeDao();
 	public static AccidentReceptionTeamDao accidentReceptionTeamDao = new AccidentReceptionTeamDao();
+	public static InvestigationTeamDao investigationTeamDao = new InvestigationTeamDao();
+	public static CompensationTeamDao compensationTeamDao = new CompensationTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
+	public static ContractDao contractDao = new ContractDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
-
-	//아래의 ListImpl들은 후에 모두 지우고 ~Dao로 대체해야함. -> List x, Dao로 접근
-	public static CustomerListImpl customerList = new CustomerListImpl();
-	public static AccidentListImpl accidentList = new AccidentListImpl();
 
 
 	public static void main(String[] args) throws IOException {
@@ -71,7 +72,7 @@ public class Main {
 					return;
 				default:
 					System.out.println("Please select from the menu");
-				}
+			}
 		}
 	}
 	private static void printMenu() {
@@ -91,10 +92,10 @@ public class Main {
 			switch (userChoiceValue) {
 				case "1":
 					if (loginCustomer(inputReader)) showCustomerMenu(inputReader);
-					else break;
+					break;
 				case "2":
 					if (loginEmployee(inputReader)) showEmployeeMenu(inputReader);
-					else break;
+					break;
 				case "x":
 					isRemain=false;
 					break;
@@ -109,9 +110,9 @@ public class Main {
 		System.out.print("ID: ");
 		String id = inputReader.readLine().trim();
 		//System.out.print("Password: "); String password = inputReader.readLine().trim();
-		for(Customer cust : customerDao.retrieveAllCustomer()){
-			if (cust.getId().equals(id)){
-				currentCustomer = cust; //현재 접속중인 고객을 cust로 설정
+		for(Customer customer : customerDao.retrieveAllCustomer()){
+			if (customer.getId().equals(id)){
+				currentCustomer = customer; //현재 접속중인 고객을 cust로 설정
 				System.out.println("# 로그인 성공. 환영합니다 "+currentCustomer.getName()+" 고객님\n");
 				return true;
 			}
@@ -122,9 +123,9 @@ public class Main {
 	private static boolean loginEmployee(BufferedReader inputReader) throws IOException{
 		System.out.print("ID: ");
 		String id = inputReader.readLine().trim();
-		for(Employee emp : employeeDao.retrieveAllEmployee()){
-			if (emp.getId().equals(id)){
-				currentEmployee = emp; //현재 접속중인 직원을 emp로 설정
+		for(Employee employee : employeeDao.retrieveAllEmployee()){
+			if (employee.getId().equals(id)){
+				currentEmployee = employee; //현재 접속중인 직원을 emp로 설정
 				System.out.println("# 로그인 성공. 환영합니다 "+currentEmployee.getName()+" 사원님\n");
 				return true;
 			}
@@ -133,6 +134,14 @@ public class Main {
 		return false;
 	}
 	private static boolean showCustomerMenu(BufferedReader inputReader) throws IOException{
+		//Exception:7초이상의 로딩//
+		/*try {
+			LoadingException.loadingCustomer();
+		} catch (LoadingException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}*/
+		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
 		while(isRemain) {
@@ -160,11 +169,11 @@ public class Main {
 					System.out.println();
 					switch (userChoiceValue) {
 						case "1":
-							HashMap<String,String> accidentInfo = sendReceiption(inputReader);
-							if (accidentInfo != null) receiveReceiption(accidentInfo,inputReader);
+							HashMap<String,String> accidentInfo = sendReception(inputReader);
+							if (accidentInfo != null) receiveReception(accidentInfo,inputReader);
 							break;
 						case "2":
-							searchReception(inputReader);
+							showAccidentsForCustomer(inputReader);
 							break;
 						case "x":
 							isRemain = false;
@@ -182,36 +191,73 @@ public class Main {
 		return true;
 	}
 	private static boolean showEmployeeMenu(BufferedReader inputReader) throws IOException {
+		//Exception:7초이상의 로딩//
+		/*try {
+			LoadingException.loadingEmployee();
+		} catch (LoadingException e) {
+			System.out.println(e.getMessage());
+			return false;
+		}*/
+		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
 		while (isRemain) {
 			System.out.println("\n************************ " + currentEmployee.getName() + " 사원님의 MENU ************************");
 			System.out.println("x. 로그아웃하기");
-			//사고접수 직원일 경우 - 우선 고객은 getType으로 switch문으로 분류,
+			//사고접수 직원
 			if (currentEmployee instanceof AccidentReceptionTeam) {
 				System.out.println("1. 사고 조회");
 				userChoiceValue = inputReader.readLine().trim();
 				switch (userChoiceValue) {
 					case "1":
-						if(accidentList.retrieveAll().size()!=0) {//접수된 사고가 존재한다면
-							Date currentDate = new Date();
-							for (Accident acdt : accidentList.retrieveAll()) {
-								Date accidentDate = acdt.getAccidentDate();
-								long diffInMillies = Math.abs(currentDate.getTime() - accidentDate.getTime());
-								long diffInYears = diffInMillies / (24 * 60 * 60 * 1000 * 365L);
-								if (diffInYears >= 5 && acdt.getStatus().equals("접수 거절")) {
-									accidentList.delete(acdt.getId());
-								}
-							}
-						}
+						showAccidentsForReceptionEmployee(inputReader);
 						break;
 					case "x":
 						isRemain = false;
 						break;
+					default:
+						System.out.println("Please select from the menu");
+						break;
 				}
 			}
 			else if(currentEmployee instanceof InvestigationTeam){
-
+				System.out.println("1. 사고 조회");
+				userChoiceValue = inputReader.readLine().trim();
+				switch(userChoiceValue){
+					case "1":
+						showAccidentsForInvestigationEmployee(inputReader);
+						break;
+					case "x":
+						isRemain = false;
+						break;
+					default:
+						System.out.println("Please select from the menu");
+						break;
+				}
+			}
+			else if (currentEmployee instanceof CompensationTeam){
+					System.out.println("1. 보상 여부 결정하기");
+					System.out.println("2. 보상금 책정하기");
+					System.out.println("3. 보상금 지급하기");
+					System.out.println("4. 구상 신청하기");
+					System.out.println("5. 구상 소송 요청하기");
+					System.out.println("6. 사건 종결하기.");
+					System.out.print("Choice: ");
+					userChoiceValue = inputReader.readLine().trim();
+					switch(userChoiceValue){
+						case "1":
+							showAccidentsForDecideCompensation(inputReader);
+							break;
+						case "2":
+							showAccidentsForCalculateCompensation(inputReader);
+							break;
+						case "x":
+							isRemain=false;
+							break;
+						default:
+							System.out.println("Please select from the menu");
+							break;
+					}
 			}
 			else if(currentEmployee instanceof UWTeam){
 				UWMain uwMain = new UWMain(currentEmployee);
@@ -221,17 +267,13 @@ public class Main {
 		return true;
 	}
 	public static boolean showMessageForCustomer(Customer customer, String message){
-		System.out.println("\n******** "+customer.getName()+" 고객님의 화면 ********");
+		System.out.println("\n----- "+customer.getName()+" 고객님에게 전송된 메세지 -----");
 		System.out.println(message);
 		return true;
 	}
 	public static boolean showMessageForEmployee(Employee employee, String message){
-		System.out.println("\n******** "+employee.getName()+" 사원님의 화면 ********");
+		System.out.println("\n----- "+employee.getName()+" 사원님에게 전송된 메세지 -----");
 		System.out.println(message);
 		return true;
 	}
-
-
-
-
 }

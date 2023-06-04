@@ -13,13 +13,11 @@ public class InsuredCustomer extends Customer {
 	private String healthCertificate;
 	private String employmentCertificate;
 	private String inheritanceCertificate;
-	private String accidentCertificate;
-	private String judgmentCertificate;
-	private String medicalCertificate;
-	private String bankbookCopy;
+
 	public InsuredCustomer(){
 
 	}
+
 	public String getFamilyHistory() {
 		return familyHistory;
 	}
@@ -51,55 +49,4 @@ public class InsuredCustomer extends Customer {
 	public void setInheritanceCertificate(String inheritanceCertificate) {
 		this.inheritanceCertificate = inheritanceCertificate;
 	}
-
-	public String getAccidentCertificate() {
-		return accidentCertificate;
-	}
-
-	public void setAccidentCertificate(String accidentCertificate) {
-		this.accidentCertificate = accidentCertificate;
-	}
-
-	public String getJudgmentCertificate() {
-		return judgmentCertificate;
-	}
-
-	public void setJudgmentCertificate(String judgmentCertificate) {
-		this.judgmentCertificate = judgmentCertificate;
-	}
-
-	public String getMedicalCertificate() {
-		return medicalCertificate;
-	}
-
-	public void setMedicalCertificate(String medicalCertificate) {
-		this.medicalCertificate = medicalCertificate;
-	}
-
-	public String getBankbookCopy() {
-		return bankbookCopy;
-	}
-
-	public void setBankbookCopy(String bankbookCopy) {
-		this.bankbookCopy = bankbookCopy;
-	}
-
-
-	public HashMap<String,String> sendReceiption(BufferedReader inputReader) throws IOException {
-
-		return null;
-	}
-	
-	public boolean filloutInfo(){
-		return false;
-	}
-
-	public boolean cancelReceiption(){
-		return false;
-	}
-
-	public HashMap<String,String> getInfo(){
-		return null;
-	}
-
 }
