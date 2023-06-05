@@ -1,8 +1,12 @@
 package Employee;
 
 import Contract.Contract;
+import Contract.Reinsurance;
+import Customer.InsuredCustomer;
+import Insurance.Insurance;
 import util.Banker;
 import util.BaseException;
+import util.ReinsuranceCompanyManager;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,8 +50,16 @@ public class UWTeam extends Employee {
 		return responseInfo;
 	}
 
-	public boolean registerReinsurance(HashMap<String, String> contractDetails, HashMap<String, String> reinsuranceCompanyManagerInfo){
-		return false;
+	public HashMap<String, String> registerReinsurance(Reinsurance reinsurance, Contract contract, Insurance insurance, InsuredCustomer insuredCustomer) throws BaseException {
+		ReinsuranceCompanyManager reinsuranceCompanyManager = new ReinsuranceCompanyManager(reinsurance.getReinsuranceCompanyManagerContract());
+		HashMap<String, String> responseInfo = null;
+		try {
+			responseInfo = reinsuranceCompanyManager.requestRegisterReinsurance(reinsurance, contract, insurance, insuredCustomer);
+			if(responseInfo.get("isResult").equals("false")) reinsurance.setRejectionReasons(responseInfo.get("rejectReason"));
+		} catch (BaseException e) {
+			if(e.getMessage().equals("현재 재보험 등록 요청에 대한 응답이 없어 재요청 하였습니다.")) responseInfo = reinsuranceCompanyManager.requestRegisterReinsurance(reinsurance, contract, insurance, insuredCustomer);
+		}
+		return responseInfo;
 	}
 
 }

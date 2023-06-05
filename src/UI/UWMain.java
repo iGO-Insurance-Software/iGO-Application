@@ -323,6 +323,7 @@ public class UWMain {
                     System.out.println("재보험 계약금: "); targetReinsurance.setPaymentAmount(Double.parseDouble(inputReader.readLine().trim()));
                     System.out.println("재보험 계약 비율: "); targetReinsurance.setContractRate(Double.parseDouble(inputReader.readLine().trim()));
                     System.out.println("1.손해율 분석 버튼");
+                    System.out.println("Choice: ");
                     inputReader.readLine().trim();
                     Contract targetContract = contractDao.retrieveById(targetReinsurance.getContractID());
                     Insurance targetInsurance = insuranceDao.retrieveById(targetContract.getInsuranceID());
@@ -338,10 +339,41 @@ public class UWMain {
                     }
                     System.out.println("1.재보험 등록 요청 진행하기 버튼 2.재보험 등록 요청 그만두기 버튼");
                     userChoiceValue=inputReader.readLine().trim();
-                    //재보험 등록 요청 진행하기 버튼을 눌렀을 경우
-                    if(userChoiceValue.equals("1")){
 
-                    }
+                    //재보험 등록 요청 진행하기 버튼을 눌렀을 경우
+                    // insuranceDao가 생성되면 주석 해제
+//                    if(userChoiceValue.equals("1")){
+//                        reinsuranceDao.create(targetReinsurance);
+//                        Contract contractOfTargetReinsurance = contractDao.retrieveById(targetReinsurance.getContractID());
+//                        InsuredCustomer insuredCustomerOfTargetReinsurance = insuredCustomerDao.retrieveById(contractOfTargetReinsurance.getInsuredCustomerID());
+//                        Insurance insuranceOfTargetReinsurance = insuranceDao.retrieveById(contractOfTargetReinsurance.getInsuranceID());
+//                        HashMap<String, String> registerResult = null;
+//                        try {
+//                            registerResult = employee.registerReinsurance(targetReinsurance, contractOfTargetReinsurance, insuranceOfTargetReinsurance, insuredCustomerOfTargetReinsurance);
+//                        }catch (BaseException e) {throw new RuntimeException(e);}
+//                        if(registerResult.get("isResult").equals("true")) {
+//                            System.out.println("재보험 등록이 완료되었습니다.");
+//                            System.out.println("재보험 대상 계약 ID: "); targetReinsurance.getContractID();
+//                            System.out.println("재보험 회사 이름: "); targetReinsurance.getReinsuranceCompanyName();
+//                            System.out.println("재보험 회사 담당자 이름: "); targetReinsurance.getReinsuranceCompanyManagerName();
+//                            System.out.println("재보험 회사 담당자 연락처: "); targetReinsurance.getReinsuranceCompanyManagerContract();
+//                            System.out.println("재보험 계약 기간: "); targetReinsurance.getPeriod();
+//                            System.out.println("재보험 계약금: "); targetReinsurance.getPaymentAmount();
+//                            System.out.println("재보험 계약 비율: "); targetReinsurance.getContractRate();
+//                        }
+//                        else if(registerResult.get("isResult").equals("false")) {
+//                            System.out.println("재보험 신청이 거절되었습니다. \n거절사유: "+registerResult.get("rejectReason"));
+//                        }
+//                    }
+//                    //재보험 등록 요청 그만두기 버튼을 눌렀을 경우
+//                    else if(userChoiceValue.equals("2")){
+//                        System.out.println("재보험 등록 요청을 취소하시겠습니까?");
+//                        System.out.println("1.확인");
+//                        System.out.println("Choice: ");
+//                        inputReader.readLine().trim();
+//                        System.out.println("재보험 등록 요청이 취소되었습니다.");
+//                        break;
+//                    }
                     break;
             }
         }
