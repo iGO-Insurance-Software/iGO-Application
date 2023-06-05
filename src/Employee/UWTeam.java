@@ -46,10 +46,6 @@ public class UWTeam extends Employee {
 		return responseInfo;
 	}
 
-	public ArrayList<Contract> getWaitStateContract(){
-		return null;
-	}
-
 	public boolean registerReinsurance(HashMap<String, String> contractDetails, HashMap<String, String> reinsuranceCompanyManagerInfo){
 		return false;
 	}
