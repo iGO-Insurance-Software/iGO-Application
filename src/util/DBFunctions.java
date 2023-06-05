@@ -119,10 +119,10 @@ public class DBFunctions {
                             "lossRatio DOUBLE," +
                             "underwritingState VARCHAR(50) DEFAULT '대기'," +
                             "rejectionReasons VARCHAR(200)," +
-                            "FOREIGN KEY (contractorId) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE," +
-//                            "FOREIGN KEY (insuranceId) REFERENCES Insurance (id) ON DELETE CASCADE ON UPDATE CASCADE," +
-                            "FOREIGN KEY (insuredCustomerId) REFERENCES InsuredCustomer (id) ON DELETE CASCADE ON UPDATE CASCADE," +
-                            "FOREIGN KEY (employeeId) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                            "FOREIGN KEY (contractorId) REFERENCES Customer (id)," +
+//                            "FOREIGN KEY (insuranceId) REFERENCES Insurance (id)," +
+                            "FOREIGN KEY (insuredCustomerId) REFERENCES InsuredCustomer (id)," +
+                            "FOREIGN KEY (employeeId) REFERENCES Employee (id)" +
                             ");");
                     dao.execute("CREATE TABLE Reinsurance(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -136,7 +136,7 @@ public class DBFunctions {
                             "reinsuranceCompanyManagerContract VARCHAR(200)," +
                             "contractResult VARCHAR(200)," +
                             "rejectionReasons VARCHAR(200)," +
-                            "FOREIGN KEY (contractId) REFERENCES Contract (id) ON DELETE CASCADE ON UPDATE CASCADE" +
+                            "FOREIGN KEY (contractId) REFERENCES Contract (id)" +
                             ");");
                     /*Insert Values*/
                     registerEmployeeData();
