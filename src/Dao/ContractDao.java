@@ -17,8 +17,8 @@ public class ContractDao extends Dao{
     }
     public void create(Contract contract){
         String query = "INSERT INTO Contract VALUES(" +
-                contract.getContractorID()+"," +
-                contract.getInsuranceID()+"," +
+                "'"+contract.getContractorID()+"'," +
+                "'"+contract.getInsuranceID()+"'," +
                 "'"+contract.getInsuredCustomerID()+"'," +
                 "'"+contract.getEmployeeID()+"'," +
                 contract.getFee()+"," +
@@ -43,8 +43,8 @@ public class ContractDao extends Dao{
             while(resultSet.next()) {
                 contract = new Contract();
                 contract.setId(resultSet.getInt("id"));
-                contract.setContractorID(resultSet.getInt("contractorID"));
-                contract.setInsuranceID(resultSet.getInt("insuranceID"));
+                contract.setContractorID(resultSet.getString("contractorID"));
+                contract.setInsuranceID(resultSet.getString("insuranceID"));
                 contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
@@ -73,8 +73,8 @@ public class ContractDao extends Dao{
             while(resultSet.next()) {
                 Contract contract = new Contract();
                 contract.setId(resultSet.getInt("id"));
-                contract.setContractorID(resultSet.getInt("contractorID"));
-                contract.setInsuranceID(resultSet.getInt("insuranceID"));
+                contract.setContractorID(resultSet.getString("contractorID"));
+                contract.setInsuranceID(resultSet.getString("insuranceID"));
                 contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
@@ -96,6 +96,68 @@ public class ContractDao extends Dao{
         }
         return contractList;
     }
+    public ArrayList<Contract> retrieveAllCustomerWait() {
+        String query = "SELECT * FROM Contract WHERE underwritingState = '대기';";
+        ArrayList<Contract> contractList = null;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            contractList = new ArrayList<Contract>();
+            while(resultSet.next()) {
+                Contract contract = new Contract();
+                contract.setId(resultSet.getInt("id"));
+                contract.setContractorID(resultSet.getString("contractorID"));
+                contract.setInsuranceID(resultSet.getString("insuranceID"));
+                contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
+                contract.setEmployeeID(resultSet.getString("employeeID"));
+                contract.setFee(resultSet.getDouble("fee"));
+                contract.setPremium(resultSet.getDouble("premium"));
+                contract.setPaymentRate(resultSet.getDouble("paymentRate"));
+                contract.setPeriod(resultSet.getInt("period"));
+                contract.setSignedDate(resultSet.getDate("signedDate"));
+                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
+                contract.setLossRatio(resultSet.getDouble("lossRatio"));
+                contract.setUnderwritingState(resultSet.getString("underwritingState"));
+                contract.setRejectionReasons(resultSet.getString("rejectionReasons"));
+                contractList.add(contract);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return contractList;
+    }
+    public ArrayList<Contract> retrieveAllCompleteJudge() {
+        String query = "SELECT * FROM Contract WHERE underwritingState = '승인' AND '재심사 가능' AND '재심사 거절';";
+        ArrayList<Contract> contractList = null;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            contractList = new ArrayList<Contract>();
+            while(resultSet.next()) {
+                Contract contract = new Contract();
+                contract.setId(resultSet.getInt("id"));
+                contract.setContractorID(resultSet.getString("contractorID"));
+                contract.setInsuranceID(resultSet.getString("insuranceID"));
+                contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
+                contract.setEmployeeID(resultSet.getString("employeeID"));
+                contract.setFee(resultSet.getDouble("fee"));
+                contract.setPremium(resultSet.getDouble("premium"));
+                contract.setPaymentRate(resultSet.getDouble("paymentRate"));
+                contract.setPeriod(resultSet.getInt("period"));
+                contract.setSignedDate(resultSet.getDate("signedDate"));
+                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
+                contract.setLossRatio(resultSet.getDouble("lossRatio"));
+                contract.setUnderwritingState(resultSet.getString("underwritingState"));
+                contract.setRejectionReasons(resultSet.getString("rejectionReasons"));
+                contractList.add(contract);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return contractList;
+    }
     public ArrayList<Contract> retrieveAllWaitStateContract() {
         String query = "SELECT * FROM Contract WHERE underwritingState='대기';";
         ArrayList<Contract> contractList = null;
@@ -105,8 +167,8 @@ public class ContractDao extends Dao{
             while(resultSet.next()) {
                 Contract contract = new Contract();
                 contract.setId(resultSet.getInt("id"));
-                contract.setContractorID(resultSet.getInt("contractorID"));
-                contract.setInsuranceID(resultSet.getInt("insuranceID"));
+                contract.setContractorID(resultSet.getString("contractorID"));
+                contract.setInsuranceID(resultSet.getString("insuranceID"));
                 contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
@@ -154,8 +216,8 @@ public class ContractDao extends Dao{
 
     public void update(Contract contract){
         String query = "UPDATE Contract SET " +
-                "contractorID = " + contract.getContractorID() + ", " +
-                "insuranceID = " + contract.getInsuranceID() + ", " +
+                "contractorID = '" + contract.getContractorID() + "', " +
+                "insuranceID = '" + contract.getInsuranceID() + "', " +
                 "insuredCustomerID = '" + contract.getInsuredCustomerID() + "', " +
                 "employeeID = '" + contract.getEmployeeID() + "', " +
                 "fee = " + contract.getFee() + ", " +

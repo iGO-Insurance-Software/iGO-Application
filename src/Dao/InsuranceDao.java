@@ -1,5 +1,4 @@
 package Dao;
-
 import Employee.Employee;
 import Insurance.Insurance;
 import java.sql.ResultSet;
@@ -14,7 +13,6 @@ public class InsuranceDao extends Dao {
             throw new RuntimeException(e);
         }
     }
-
     public void create(Insurance insurance){
         String query = "INSERT INTO Insurance VALUES(" +
                 "'"+insurance.getId()+"'," +
@@ -26,7 +24,6 @@ public class InsuranceDao extends Dao {
                 ");";
         super.create(query);
     }
-
     public Insurance retrieveById(int insuranceId) {
         String query = "SELECT * FROM Insurance WHERE id  = '"+
                 insuranceId+"';";
@@ -48,7 +45,6 @@ public class InsuranceDao extends Dao {
         }
         return insurance;
     }
-
     public ArrayList<Insurance> retrieveAll() {
         String query = "SELECT * FROM Insurance;";
         ArrayList<Insurance> insuranceList = null;
@@ -82,12 +78,9 @@ public class InsuranceDao extends Dao {
                 "detailedCategory = '" + insurance.getDetailedCategory() + "', " + "';";
         super.update(query);
     }
-
-    public void deleteById(String insuranceId){
         String query = "DELETE FROM Insurance WHERE id = '"+insuranceId+"';";
         super.delete(query);
     }
-
     public void deleteAll(){
         String query = "DELETE FROM Insurance;";
         super.deleteAll(query);

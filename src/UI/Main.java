@@ -1,6 +1,7 @@
 package UI;
 import Dao.CustomerDao;
 import Dao.Dao;
+import Dao.InsuranceDao;
 import Dao.InsuredCustomerDao;
 import Dao.EmployeeDao;
 import Dao.AccidentDao;
@@ -18,6 +19,8 @@ import Employee.ComplianceTeam;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import Employee.CompensationTeam;
+import Employee.SalesTeam;
+import Employee.MarketingTeam;
 import Employee.ProductDevelopmentTeam;
 import Employee.ComplianceTeam;
 import Employee.UWTeam;
@@ -36,6 +39,7 @@ import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
 public class Main {
 	public static Dao dao = new Dao();
+	public static InsuranceDao insuranceDao = new InsuranceDao();
 	public static CustomerDao customerDao = new CustomerDao();
 	public static InsuredCustomerDao insuredCustomerDao = new InsuredCustomerDao();
 	public static EmployeeDao employeeDao = new EmployeeDao();
@@ -163,6 +167,7 @@ public class Main {
 		////////////////////////
 		while (true) {
 			System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
+      showAdForCustomer();
 			switch (currentCustomer.getType()) {
 				case "Customer":
 					// 일반 고객 메뉴
@@ -194,6 +199,8 @@ public class Main {
 					break;
 			}
 		}
+//    CustomerMain customerMain = new CustomerMain(currentCustomer);
+// 		customerMain.showCustomerMenu(inputReader);
 	}
 
 	private static void printNormalCustomerMenu() {
@@ -239,6 +246,33 @@ public class Main {
 			System.out.println(e.getMessage());
 		}
 		if (accidentInfo != null) receiveReception(accidentInfo, inputReader);
+	}
+  
+  private static void showAdForCustomer(BufferReader inputReader) throws IOException {
+		String userChoiceValue;
+		while (true) {
+			printAd();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "o":
+	        // 자세히 보기
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("번호를 정확하게 입력해주세요.");
+					break;
+			}
+  }
+    
+  private static void printAd() {
+		System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
+			System.out.println("-------------------------------------");
+			System.out.println("|			oo 어린이 보험			|");
+			System.out.println("|만 7세부터 만 21세까지 보장되는 필수 보험의 자세한 설명을 확인하세요|");
+			System.out.println("-------------------------------------");
+			System.out.println("x. 닫기 O. 자세히 보기");
+			System.out.print("\nChoice: ");
 	}
 
 	private static void showEmployeeMenu(BufferedReader inputReader) throws IOException {
@@ -403,6 +437,10 @@ public class Main {
 				default:
 					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
 					break;
+			}
+			else if(currentEmployee instanceof SalesTeam){
+				SalesMain salesMain = new SalesMain(currentEmployee);
+				isRemain = salesMain.showEmployeeMenu(inputReader);
 			}
 		}
 	}
