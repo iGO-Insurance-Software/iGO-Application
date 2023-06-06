@@ -21,6 +21,7 @@ public class Contract {
 	private Date signedDate;
 	private Date expirationDate;
 	private int paymentTerm;
+	private int numberOfNonPayments;
 	private double lossRatio;
 	private String underwritingState;
 	private String rejectionReasons;
@@ -154,8 +155,6 @@ public class Contract {
 	public void setNumberOfNonPayments(int numberOfNonPayments) {
 		this.numberOfNonPayments = numberOfNonPayments;
 	}
-
-	private int numberOfNonPayments;
 
 
 	public HashMap<String, String> underwrite(String ffsContact, Contract contract, Insurance insurance, InsuredCustomer insuredCustomer){

@@ -26,103 +26,105 @@ public class AccidentReceptionMain {
     /*Customer's Functions*/
     public static HashMap<String,String> sendReception(BufferedReader inputReader) throws IOException, BaseException {
         HashMap accidentInfo = new HashMap<String, String>();
-        System.out.println("1. 일반 접수하기\n2. 긴급 접수하기\nx. 뒤로가기 ");
-        System.out.print("\nChoice: ");
-        String userChoiceValue = inputReader.readLine().trim();
-        switch (userChoiceValue) {
-            case "1":
-                accidentInfo.put("customerID", currentCustomer.getId());
-                accidentInfo.put("urgentLevel", "normal");
-                System.out.println("<사고 정보 입력창>");
-                String accidentDateStr = null;
-                Date accidentDate = null;
-                boolean isInCorrect = true;
-                while(isInCorrect){
-                    System.out.print("사고 발생 년-월-일(예시: 2023-01-01): ");
-                    String accidentYMD = inputReader.readLine().trim();
-                    System.out.print("\n사고 발생 시:분 (예시: 17:53): ");
-                    String accidentHM = inputReader.readLine().trim();
-                    accidentDateStr = accidentYMD + " " + accidentHM;
-                    //Exception : 올바르지 않은 날짜 형식인 경우
-                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-                    try {
-                        accidentDate = formatter.parse(accidentDateStr);
-                        isInCorrect=false;
-                    } catch (ParseException e) {
-                        String errorMessage = "날짜 형식이 올바르지 않습니다. 다시 접수해 주세요.";
-                        ParseException customException = new ParseException(errorMessage, e.getErrorOffset());
-                        System.out.println(customException.getMessage());
-                    }
-                }
-                //Exception: 5년이 지난 사고일 경우
-                Calendar calendar = Calendar.getInstance();
-                calendar.setTime(accidentDate);
-                calendar.add(Calendar.YEAR, 5);
-                if (calendar.getTime().before(new Date())) {
-                    throw new BaseException(ErrorCode.ACCIDENTS_MORE_THAN_5YEARS_NOT_BE_ACCEPTED);
-                }
-                accidentInfo.put("accidentDate", accidentDateStr);
-                System.out.print("\n사고 장소 (예시: 거북골로 3-2길 횡단보도): ");
-                String accidentPlace = inputReader.readLine();
-                accidentInfo.put("accidentPlace", accidentPlace);
-                System.out.print("\n사고 유형 (예시: 교통사고): ");
-                String accidentType = inputReader.readLine();
-                accidentInfo.put("accidentType", accidentType);
-                System.out.print("\n사고 개요 (예시: 초록불에 횡단보도를 건너다가 마티즈 차량이 저를 쳤어요): ");
-                String accidentOutline = inputReader.readLine();
-                accidentInfo.put("accidentOutline", accidentOutline);
-                System.out.println("\n<손괴자 여부 체크>\n해당 사고에 손괴자가 존재하나요?\n1.네\n2.아니요");
-                System.out.print("\nChoice: ");
-                userChoiceValue = inputReader.readLine().trim();
-                switch (userChoiceValue) {
-                    case "1":
-                        accidentInfo.put("existOfDestroyer","true");
-                        System.out.print("\n손괴자 이름을 입력하세요 (예시: 홍길동): ");
-                        String destroyerName = inputReader.readLine().trim();
-                        accidentInfo.put("destroyerName", destroyerName);
-                        System.out.print("\n손괴자 전화번호를 입력하세요 (예시: 01012341234): ");
-                        String destroyerPhoneNum = inputReader.readLine().trim();
-                        accidentInfo.put("destroyerPhoneNum", destroyerPhoneNum);
-                        break;
-                    case "2":
-                        accidentInfo.put("existOfDestroyer","false");
-                        break;
-                    default:
-                        System.out.println("\n Please select from the menu");
-                        break;
-                }
-                break;
-            case "2":
-                //한명이 여러개의 긴급접수를 보내는 것을 막음
-                Accident duplicatedReception = null;
-                for(Accident accident : accidentDao.retrieveAll()){
-                    if(accident.getCustomerID().equals(currentCustomer.getId())){
-                        if(accident.getStatus().equals("접수 완료(출동 대기)")||accident.getStatus().equals("접수 완료(출동 중)")){
-                            showMessageForCustomer(currentCustomer,"고객님이 접수한 긴급 사건번호 "+ accident.getId()
-                                    +"에 대한 긴급 접수가 아직 처리 중입니다. 이전의 사건이 접수 완료되면 긴급 접수해주세요.");
-                            return null;
+        while(true) {
+            System.out.println("1. 일반 접수하기\n2. 긴급 접수하기\nx. 뒤로가기 ");
+            System.out.print("\nChoice: ");
+            String userChoiceValue = inputReader.readLine().trim();
+            switch (userChoiceValue) {
+                case "1":
+                    accidentInfo.put("customerID", currentCustomer.getId());
+                    accidentInfo.put("urgentLevel", "normal");
+                    System.out.println("<사고 정보 입력창>");
+                    String accidentDateStr = null;
+                    Date accidentDate = null;
+                    boolean isInCorrect = true;
+                    while(isInCorrect){
+                        System.out.print("사고 발생 년-월-일(예시: 2023-01-01): ");
+                        String accidentYMD = inputReader.readLine().trim();
+                        System.out.print("\n사고 발생 시:분 (예시: 17:53): ");
+                        String accidentHM = inputReader.readLine().trim();
+                        accidentDateStr = accidentYMD + " " + accidentHM;
+                        //Exception : 올바르지 않은 날짜 형식인 경우
+                        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+                        try {
+                            accidentDate = formatter.parse(accidentDateStr);
+                            isInCorrect=false;
+                        } catch (ParseException e) {
+                            String errorMessage = "날짜 형식이 올바르지 않습니다. 다시 접수해 주세요.";
+                            ParseException customException = new ParseException(errorMessage, e.getErrorOffset());
+                            System.out.println(customException.getMessage());
                         }
                     }
-                }
-                accidentInfo.put("customerID", currentCustomer.getId());
-                accidentInfo.put("urgentLevel", "urgent");
-                //현재 시각을 사고 발생 일자로 자동 기입
-                LocalDateTime now = LocalDateTime.now();
-                DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-                String nowTime = now.format(formatter2);
-                accidentInfo.put("accidentDate",nowTime);
-                //GPS 정보 위치로 사고 장소를 자동 기입한다고 가정
-                accidentInfo.put("accidentPlace","[GPS Address]");
-                break;
-            case "x":
-                return null;
-            default:
-                System.out.println("\n Please select from the menu");
-                break;
+                    //Exception: 5년이 지난 사고일 경우
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(accidentDate);
+                    calendar.add(Calendar.YEAR, 5);
+                    if (calendar.getTime().before(new Date())) {
+                        throw new BaseException(ErrorCode.ACCIDENTS_MORE_THAN_5YEARS_NOT_BE_ACCEPTED);
+                    }
+                    accidentInfo.put("accidentDate", accidentDateStr);
+                    System.out.print("\n사고 장소 (예시: 거북골로 3-2길 횡단보도): ");
+                    String accidentPlace = inputReader.readLine();
+                    accidentInfo.put("accidentPlace", accidentPlace);
+                    System.out.print("\n사고 유형 (예시: 교통사고): ");
+                    String accidentType = inputReader.readLine();
+                    accidentInfo.put("accidentType", accidentType);
+                    System.out.print("\n사고 개요 (예시: 초록불에 횡단보도를 건너다가 마티즈 차량이 저를 쳤어요): ");
+                    String accidentOutline = inputReader.readLine();
+                    accidentInfo.put("accidentOutline", accidentOutline);
+                    System.out.println("\n<손괴자 여부 체크>\n해당 사고에 손괴자가 존재하나요?\n1.네\n2.아니요");
+                    System.out.print("\nChoice: ");
+                    userChoiceValue = inputReader.readLine().trim();
+                    switch (userChoiceValue) {
+                        case "1":
+                            accidentInfo.put("existOfDestroyer","true");
+                            System.out.print("\n손괴자 이름을 입력하세요 (예시: 홍길동): ");
+                            String destroyerName = inputReader.readLine().trim();
+                            accidentInfo.put("destroyerName", destroyerName);
+                            System.out.print("\n손괴자 전화번호를 입력하세요 (예시: 01012341234): ");
+                            String destroyerPhoneNum = inputReader.readLine().trim();
+                            accidentInfo.put("destroyerPhoneNum", destroyerPhoneNum);
+                            break;
+                        case "2":
+                            accidentInfo.put("existOfDestroyer","false");
+                            break;
+                        default:
+                            System.out.println("\n Please select from the menu");
+                            break;
+                    }
+                    break;
+                case "2":
+                    //한명이 여러개의 긴급접수를 보내는 것을 막음
+                    Accident duplicatedReception = null;
+                    for(Accident accident : accidentDao.retrieveAll()){
+                        if(accident.getCustomerID().equals(currentCustomer.getId())){
+                            if(accident.getStatus().equals("접수 완료(출동 대기)")||accident.getStatus().equals("접수 완료(출동 중)")){
+                                showMessageForCustomer(currentCustomer,"고객님이 접수한 긴급 사건번호 "+ accident.getId()
+                                        +"에 대한 긴급 접수가 아직 처리 중입니다. 이전의 사건이 접수 완료되면 긴급 접수해주세요.");
+                                return null;
+                            }
+                        }
+                    }
+                    accidentInfo.put("customerID", currentCustomer.getId());
+                    accidentInfo.put("urgentLevel", "urgent");
+                    //현재 시각을 사고 발생 일자로 자동 기입
+                    LocalDateTime now = LocalDateTime.now();
+                    DateTimeFormatter formatter2 = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+                    String nowTime = now.format(formatter2);
+                    accidentInfo.put("accidentDate",nowTime);
+                    //GPS 정보 위치로 사고 장소를 자동 기입한다고 가정
+                    accidentInfo.put("accidentPlace","[GPS Address]");
+                    break;
+                case "x":
+                    return null;
+                default:
+                    System.out.println("\n Please select from the menu");
+                    break;
+            }
+            return accidentInfo;
         }
-        return accidentInfo;
     }
-    public static boolean showAccidentsForCustomer(BufferedReader inputReader) throws IOException {
+    public static boolean getAccident(BufferedReader inputReader) throws IOException {
         String userChoiceValue;
         ArrayList<Accident> myAccidentList = new ArrayList<Accident>();
         for (Accident accident : accidentDao.retrieveAll()) {

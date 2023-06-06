@@ -1,13 +1,12 @@
 package Dao;
-
+import Employee.Employee;
 import Insurance.Insurance;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class InsuranceDao extends Dao {
-    public InsuranceDao(){
+    public InsuranceDao() {
         try {
             super.connect();
         } catch (Exception e) {
@@ -17,11 +16,11 @@ public class InsuranceDao extends Dao {
     public void create(Insurance insurance){
         String query = "INSERT INTO Insurance VALUES(" +
                 "'"+insurance.getId()+"'," +
-                "'"+insurance.getDescription()+"'," +
                 "'"+insurance.getName()+"'," +
+                "'"+insurance.getType()+"'," +
+                "'"+insurance.getDescription()+"'," +
                 "'"+insurance.getPrice()+"'," +
-                "'"+insurance.getDetailedCategory()+"'," +
-                "'"+insurance.getPaymentTerm()+"'" +
+                "'"+insurance.getDetailedCategory()+"'" +
                 ");";
         super.create(query);
     }
@@ -34,11 +33,11 @@ public class InsuranceDao extends Dao {
             while(resultSet.next()) {
                 insurance = new Insurance();
                 insurance.setId(resultSet.getString("id"));
+                insurance.setType(resultSet.getString("type"));
                 insurance.setDescription(resultSet.getString("description"));
                 insurance.setName(resultSet.getString("name"));
                 insurance.setPrice(resultSet.getDouble("price"));
                 insurance.setDetailedCategory(resultSet.getString("detailedCategory"));
-                insurance.setPaymentTerm(resultSet.getInt("paymentTerm"));
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -55,11 +54,11 @@ public class InsuranceDao extends Dao {
             while(resultSet.next()) {
                 Insurance insurance = new Insurance();
                 insurance.setId(resultSet.getString("id"));
+                insurance.setType(resultSet.getString("type"));
                 insurance.setDescription(resultSet.getString("description"));
                 insurance.setName(resultSet.getString("name"));
                 insurance.setPrice(resultSet.getDouble("price"));
                 insurance.setDetailedCategory(resultSet.getString("detailedCategory"));
-                insurance.setPaymentTerm(resultSet.getInt("paymentTerm"));
                 insuranceList.add(insurance);
             }
             resultSet.close();
@@ -72,14 +71,13 @@ public class InsuranceDao extends Dao {
     public void update(Insurance insurance){
         String query = "UPDATE Insurance SET " +
                 "id = '" + insurance.getId() + "', " +
+                "type = '" + insurance.getType() + "', "+
                 "description = '" + insurance.getDescription() + "', " +
                 "name = " + insurance.getName() + ", " +
                 "price = '" + insurance.getPrice() + "', " +
-                "detailedCategory = '" + insurance.getDetailedCategory() + "', " +
-                "paymentTerm = '" + insurance.getPaymentTerm() + "', " + "';";
+                "detailedCategory = '" + insurance.getDetailedCategory() + "', " + "';";
         super.update(query);
     }
-    public void deleteById(String insuranceId){
         String query = "DELETE FROM Insurance WHERE id = '"+insuranceId+"';";
         super.delete(query);
     }

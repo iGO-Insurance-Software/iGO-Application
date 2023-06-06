@@ -13,36 +13,43 @@ public class EmployeeDao extends Dao {
     private UWTeamDao uwTeamDao;
     private CompensationTeamDao compensationTeamDao;
     private MarketingTeamDao marketingTeamDao;
-    public EmployeeDao(){
+    private ComplianceTeamDao complianceTeamDao;
+    private ProductDevelopmentTeamDao productDevelopmentTeamDao;
+
+    public EmployeeDao() {
         accidentReceptionTeamDao = new AccidentReceptionTeamDao();
         investigationTeamDao = new InvestigationTeamDao();
         salesTeamDao = new SalesTeamDao();
         uwTeamDao = new UWTeamDao();
         compensationTeamDao = new CompensationTeamDao();
         marketingTeamDao = new MarketingTeamDao();
+        complianceTeamDao = new ComplianceTeamDao();
+        productDevelopmentTeamDao = new ProductDevelopmentTeamDao();
         try {
             super.connect();
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-    public void create(Employee employee){
+    public void create(Employee employee) {
         String query = "INSERT INTO Employee VALUES(" +
-                "'"+employee.getId()+"'," +
-                "'"+employee.getType()+"'," +
-                "'"+employee.getName()+"'," +
-                employee.getAge()+"," +
-                "'"+employee.getGender()+"'," +
-                "'"+employee.getPhoneNum()+"'," +
-                "'"+employee.getEmail()+"'," +
-                "'"+employee.getRank()+"'"+
+                "'" + employee.getId() + "'," +
+                "'" + employee.getType() + "'," +
+                "'" + employee.getName() + "'," +
+                employee.getAge() + "," +
+                "'" + employee.getGender() + "'," +
+                "'" + employee.getPhoneNum() + "'," +
+                "'" + employee.getEmail() + "'," +
+                "'" + employee.getRank() + "'" +
                 ");";
         super.create(query);
-        if(employee.getType().equals("AccidentReception")) accidentReceptionTeamDao.create(employee);
+        if (employee.getType().equals("AccidentReception")) accidentReceptionTeamDao.create(employee);
         else if(employee.getType().equals("Sales")) salesTeamDao.create(employee);
-        else if(employee.getType().equals("UW")) uwTeamDao.create(employee);
-        else if(employee.getType().equals("Investigation")) investigationTeamDao.create(employee);
-        else if(employee.getType().equals("Compensation")) compensationTeamDao.create(employee);
+        else if (employee.getType().equals("UW")) uwTeamDao.create(employee);
+        else if (employee.getType().equals("Investigation")) investigationTeamDao.create(employee);
+        else if (employee.getType().equals("Compensation")) compensationTeamDao.create(employee);
+        else if (employee.getType().equals("ProductDevelopment")) productDevelopmentTeamDao.create(employee);
+        else if (employee.getType().equals("Compliance")) complianceTeamDao.create(employee);
         else if(employee.getType().equals("Marketing")) marketingTeamDao.create(employee);
     }
     public Employee retrieveById(String employeeID) {
@@ -119,6 +126,8 @@ public class EmployeeDao extends Dao {
             employeeList.addAll(uwTeamDao.retrieveAll());
             employeeList.addAll(compensationTeamDao.retrieveAll());
             employeeList.addAll(marketingTeamDao.retrieveAll());
+            employeeList.addAll(complianceTeamDao.retrieveAll());
+            employeeList.addAll(productDevelopmentTeamDao.retrieveAll());
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -141,6 +150,8 @@ public class EmployeeDao extends Dao {
         else if(employee.getType().equals("Investigation")) investigationTeamDao.update(employee);
         else if(employee.getType().equals("Compensation")) compensationTeamDao.update(employee);
         else if(employee.getType().equals("Marketing")) marketingTeamDao.update(employee);
+        else if (employee.getType().equals("ProductDevelopment")) productDevelopmentTeamDao.update(employee);
+        else if (employee.getType().equals("Compliance")) complianceTeamDao.update(employee);
     }
     public void deleteById(String employeeID){
         String query = "DELETE FROM Employee WHERE id = '"+employeeID+"';";

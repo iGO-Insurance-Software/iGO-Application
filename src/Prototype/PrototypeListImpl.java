@@ -23,11 +23,11 @@ public class PrototypeListImpl implements PrototypeList {
 	}
 
 	public Prototype retrieve(int prototypeID){
-		for(Prototype prototype : prototypeList){
+	/*	for(Prototype prototype : prototypeList){
 			if(prototype.getId()==prototypeID){
 				return prototype;
 			}
-		}
+		}*/
 		return null;
 	}
 

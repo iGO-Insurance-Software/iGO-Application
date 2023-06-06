@@ -1,6 +1,7 @@
 package Dao;
 
 import Contract.Contract;
+import Customer.UnpaidCustomer;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -189,6 +190,30 @@ public class ContractDao extends Dao{
         }
         return contractList;
     }
+
+    public ArrayList<UnpaidCustomer> retrieveNonPaymentInfoList() {
+        String query = "SELECT contractorID, insuranceID, premium, numberOfNonPayments " +
+                "FROM Contract WHERE numberOfNonPayments > 0;";
+        ArrayList<UnpaidCustomer> unpaidCustomerList;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            unpaidCustomerList = new ArrayList<>();
+            while(resultSet.next()) {
+                UnpaidCustomer unpaidCustomer = new UnpaidCustomer();
+                unpaidCustomer.setName("");
+                unpaidCustomer.setPhoneNum("");
+                unpaidCustomer.setNumberOfNonPayments(resultSet.getInt("numberOfNonPayments"));
+                unpaidCustomer.setPremium(resultSet.getDouble("premium"));
+                unpaidCustomer.setInsuranceName("");
+                unpaidCustomerList.add(unpaidCustomer);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return unpaidCustomerList;
+    }
+
     public void update(Contract contract){
         String query = "UPDATE Contract SET " +
                 "contractorID = '" + contract.getContractorID() + "', " +
