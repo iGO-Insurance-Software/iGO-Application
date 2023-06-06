@@ -10,7 +10,7 @@ import java.util.HashMap;
 
 public class Contract {
 	private int id;
-	private int contractorID;
+	private String contractorID;
 	private int insuranceID;
 	private String insuredCustomerID;
 	private String employeeID;
@@ -35,11 +35,11 @@ public class Contract {
 		this.id = id;
 	}
 
-	public int getContractorID() {
+	public String getContractorID() {
 		return contractorID;
 	}
 
-	public void setContractorID(int contractorID) {
+	public void setContractorID(String contractorID) {
 		this.contractorID = contractorID;
 	}
 

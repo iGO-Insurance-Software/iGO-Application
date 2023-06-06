@@ -3,7 +3,6 @@ package Employee;
 public class SalesTeam extends Employee {
 
 	public SalesTeam(){
-
 	}
 
 	public boolean searchCustomer(String String){

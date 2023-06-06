@@ -9,11 +9,13 @@ import java.util.ArrayList;
 public class EmployeeDao extends Dao {
     private AccidentReceptionTeamDao accidentReceptionTeamDao;
     private InvestigationTeamDao investigationTeamDao;
+    private SalesTeamDao salesTeamDao;
     private UWTeamDao uwTeamDao;
     private CompensationTeamDao compensationTeamDao;
     public EmployeeDao(){
         accidentReceptionTeamDao = new AccidentReceptionTeamDao();
         investigationTeamDao = new InvestigationTeamDao();
+        salesTeamDao = new SalesTeamDao();
         uwTeamDao = new UWTeamDao();
         compensationTeamDao = new CompensationTeamDao();
         try {
@@ -35,6 +37,7 @@ public class EmployeeDao extends Dao {
                 ");";
         super.create(query);
         if(employee.getType().equals("AccidentReception")) accidentReceptionTeamDao.create(employee);
+        if(employee.getType().equals("Sales")) salesTeamDao.create(employee);
         else if(employee.getType().equals("UW")) uwTeamDao.create(employee);
         else if(employee.getType().equals("Investigation")) investigationTeamDao.create(employee);
         else if(employee.getType().equals("Compensation")) compensationTeamDao.create(employee);
@@ -109,6 +112,7 @@ public class EmployeeDao extends Dao {
             resultSet.close();
             employeeList.addAll(accidentReceptionTeamDao.retrieveAll());
             employeeList.addAll(investigationTeamDao.retrieveAll());
+            employeeList.addAll(salesTeamDao.retrieveAll());
             employeeList.addAll(uwTeamDao.retrieveAll());
             employeeList.addAll(compensationTeamDao.retrieveAll());
         } catch (SQLException e) {

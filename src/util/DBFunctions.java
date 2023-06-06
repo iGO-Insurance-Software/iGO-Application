@@ -2,15 +2,14 @@ package util;
 
 import Customer.Customer;
 import Dao.CustomerDao;
-import Employee.AccidentReceptionTeam;
+import Employee.*;
 import Customer.InsuredCustomer;
-import Employee.CompensationTeam;
-import Employee.InvestigationTeam;
-import Employee.UWTeam;
+import Insurance.Insurance;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import static UI.Main.*;
+import static UI.Main.insuranceDao;
 
 
 public class DBFunctions {
@@ -28,6 +27,13 @@ public class DBFunctions {
                 case "1":
                     /*CREATE Tables*/
                     //Products
+                    dao.execute("CREATE TABLE Insurance(" +
+                            "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "description VARCHAR(200)," +
+                            "name VARCHAR(200)," +
+                            "price DOUBLE," +
+                            "detailedCategory VARCHAR(200)" +
+                            ");");
                     dao.execute("CREATE TABLE Accident (" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "customerID VARCHAR(20) NOT NULL," +
@@ -97,6 +103,10 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
+                    dao.execute("CREATE TABLE SalesTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
                     dao.execute("CREATE TABLE UWTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "ffsContact VARCHAR(50)," +
@@ -106,7 +116,7 @@ public class DBFunctions {
                     dao.execute("CREATE TABLE Contract(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "contractorId VARCHAR(20),"+
-//                            "insuranceId VARCHAR(20),"+
+                            "insuranceId VARCHAR(20),"+
                             "insuredCustomerId VARCHAR(20),"+
                             "employeeId VARCHAR(20),"+
                             "fee DOUBLE," +
@@ -138,15 +148,38 @@ public class DBFunctions {
                             "rejectionReasons VARCHAR(200)," +
                             "FOREIGN KEY (contractId) REFERENCES Contract (id)" +
                             ");");
+                    //Survey
+                    dao.execute("CREATE TABLE Survey(" +
+                            "questionNum INT AUTO_INCREMENT PRIMARY KEY," +
+                            "questionContent Varchar(200)," +
+                            "total INT" +
+                            ");");
+                    dao.execute("INSERT INTO Survey VALUES(" +
+                            "1," +
+                            "'고객의 나이',"+
+                            "0"+
+                            ");");
+                    dao.execute("INSERT INTO Survey VALUES(" +
+                            "2," +
+                            "'자사 보험에 대해 알게 된 경로',"+
+                            "0"+
+                            ");");
+                    dao.execute("INSERT INTO Survey VALUES(" +
+                            "3," +
+                            "'자사 보험에 가입한 이유',"+
+                            "0"+
+                            ");");
                     /*Insert Values*/
                     registerEmployeeData();
                     registerCustomerData();
                     registerProductData();
                     break;
                 case "2":
+                    dao.execute("DROP TABLE Insurance;");
                     dao.execute("DROP TABLE CompensationTeam;");
                     dao.execute("DROP TABLE InvestigationTeam;");
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
+                    dao.execute("DROP TABLE SalesTeam;");
                     dao.execute("DROP TABLE UWTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
                     dao.execute("DROP TABLE Contract;");
@@ -154,6 +187,7 @@ public class DBFunctions {
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
                     dao.execute("DROP TABLE Accident;");
+                    dao.execute("DROP TABLE Survey;");
                     break;
                 default:
                     System.out.println("Please select from the menu");
@@ -298,10 +332,30 @@ public class DBFunctions {
         uwEmployee.setFfsContact("1234");
         uwEmployee.setBankClerkContact("2345");
         employeeDao.create(uwEmployee);
+        SalesTeam salesEmployee = new SalesTeam();
+        salesEmployee.setId("sales1");
+        salesEmployee.setType("Sales");
+        salesEmployee.setName("김영업");
+        salesEmployee.setAge(32);
+        salesEmployee.setGender("남");
+        salesEmployee.setPhoneNum("01043219876");
+        salesEmployee.setEmail("salesman@naver.com");
+        salesEmployee.setRank("대리");
+        employeeDao.create(salesEmployee);
         return true;
     }
 
     private static boolean registerProductData(){
+        ///////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////// TEST CODE /////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+        Insurance product = new Insurance();
+        product.setId(1);
+        product.setDescription("만 7세부터 만 21세까지 갱신 없이 든든한 어린이 보험");
+        product.setName("oo 어린이 보험");
+        product.setPrice(12000);
+        product.setDetailedCategory("savingInsurance");
+        insuranceDao.create(product);
         return true;
     }
 }

@@ -146,7 +146,12 @@ public class Main {
 		String userChoiceValue;
 		while(isRemain) {
 			System.out.println("\n************************ "+currentCustomer.getName()+" 고객님의 MENU ************************");
-			System.out.println("x. 로그아웃하기");
+			System.out.println("-------------------------------------");
+			System.out.println("|			oo 어린이 보험			|");
+			System.out.println("|만 7세부터 만 21세까지 보장되는 필수 보험|\n|\"광고\"를 입력하여 자세한 설명을 확인하세요|");
+			System.out.println("-------------------------------------");
+			System.out.println("x. 로그아웃하기\n1. 보험 상품 메뉴");
+			System.out.print("\nChoice: ");
 			switch(currentCustomer.getType()){
 				case "Customer":
 					//일반고객일 경우 메뉴
@@ -163,16 +168,16 @@ public class Main {
 					break;
 				case "InsuredCustomer":
 					//피보험자일 경우 메뉴
-					System.out.println("1. 사고 접수\n2. 사고 조회");
+					System.out.println("2. 사고 접수\n3. 사고 조회");
 					System.out.print("Choice: ");
 					userChoiceValue = inputReader.readLine().trim();
 					System.out.println();
 					switch (userChoiceValue) {
-						case "1":
+						case "2":
 							HashMap<String,String> accidentInfo = sendReception(inputReader);
 							if (accidentInfo != null) receiveReception(accidentInfo,inputReader);
 							break;
-						case "2":
+						case "3":
 							showAccidentsForCustomer(inputReader);
 							break;
 						case "x":

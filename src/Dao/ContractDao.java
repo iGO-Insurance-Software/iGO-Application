@@ -42,7 +42,7 @@ public class ContractDao extends Dao{
             while(resultSet.next()) {
                 contract = new Contract();
                 contract.setId(resultSet.getInt("id"));
-                contract.setContractorID(resultSet.getInt("contractorID"));
+                contract.setContractorID(resultSet.getString("contractorID"));
                 contract.setInsuranceID(resultSet.getInt("insuranceID"));
                 contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
                 contract.setEmployeeID(resultSet.getString("employeeID"));
@@ -63,6 +63,38 @@ public class ContractDao extends Dao{
         }
         return contract;
     }
+    public ArrayList<Contract> retrieveAllByState(String state) {
+        String query = "SELECT * FROM Contract WHERE underwritingState = '"+
+                state+"';";
+        ArrayList<Contract> contractList = null;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            contractList = new ArrayList<Contract>();
+            while(resultSet.next()) {
+                Contract contract = new Contract();
+                contract.setId(resultSet.getInt("id"));
+                contract.setContractorID(resultSet.getString("contractorID"));
+                contract.setInsuranceID(resultSet.getInt("insuranceID"));
+                contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
+                contract.setEmployeeID(resultSet.getString("employeeID"));
+                contract.setFee(resultSet.getDouble("fee"));
+                contract.setPremium(resultSet.getDouble("premium"));
+                contract.setPaymentRate(resultSet.getDouble("paymentRate"));
+                contract.setPeriod(resultSet.getInt("period"));
+                contract.setSignedDate(resultSet.getDate("signedDate"));
+                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
+                contract.setLossRatio(resultSet.getDouble("lossRatio"));
+                contract.setUnderwritingState(resultSet.getString("underwritingState"));
+                contract.setRejectionReasons(resultSet.getString("rejectionReasons"));
+                contractList.add(contract);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return contractList;
+    }
     public ArrayList<Contract> retrieveAll() {
         String query = "SELECT * FROM Contract;";
         ArrayList<Contract> contractList = null;
@@ -72,7 +104,7 @@ public class ContractDao extends Dao{
             while(resultSet.next()) {
                 Contract contract = new Contract();
                 contract.setId(resultSet.getInt("id"));
-                contract.setContractorID(resultSet.getInt("contractorID"));
+                contract.setContractorID(resultSet.getString("contractorID"));
                 contract.setInsuranceID(resultSet.getInt("insuranceID"));
                 contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
                 contract.setEmployeeID(resultSet.getString("employeeID"));
@@ -104,7 +136,7 @@ public class ContractDao extends Dao{
             while(resultSet.next()) {
                 Contract contract = new Contract();
                 contract.setId(resultSet.getInt("id"));
-                contract.setContractorID(resultSet.getInt("contractorID"));
+                contract.setContractorID(resultSet.getString("contractorID"));
                 contract.setInsuranceID(resultSet.getInt("insuranceID"));
                 contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
                 contract.setEmployeeID(resultSet.getString("employeeID"));
