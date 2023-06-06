@@ -17,7 +17,7 @@ public class ReinsuranceCompanyManager {
 
     public HashMap<String, String> requestRegisterReinsurance(Reinsurance reinsurance, Contract contract, Insurance insurance, InsuredCustomer insuredCustomer)  throws BaseException{
         int responseTime = (int)Math.random()*10+1;
-        if(responseTime == 10) throw new BaseException("현재 고객 정보 요청에 대한 응답이 없어 재요청 하였습니다.");
+        if(responseTime == 10) throw new BaseException(ErrorCode.NO_RESPONSE_TO_CURRENT_CUSTOMER_INFO_REQ);
         System.out.println("____________재보험 회사 담당자____________");
         System.out.println("재보험 계약 내용");
         System.out.println("-재보험 대상 계약 내용");

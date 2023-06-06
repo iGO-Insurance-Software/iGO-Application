@@ -13,7 +13,7 @@ public class Banker {
 
     public HashMap<String, String> requestInfo(HashMap<String, String> basicCustomerInfo) throws BaseException{
         int responseTime = (int)Math.random()*10+1;
-        if(responseTime == 10) throw new BaseException("현재 고객 정보 요청에 대한 응답이 없어 재요청 하였습니다.");
+        if(responseTime == 10) throw new BaseException(ErrorCode.NO_RESPONSE_TO_CURRENT_CUSTOMER_INFO_REQ);
         System.out.println("____________은행원____________\n요청한 고객 정보" +
                 "\n이름: "+basicCustomerInfo.get("name")+"\n주민등록번호: "+basicCustomerInfo.get("ssn")+"\n요청 사유: "+basicCustomerInfo.get("requestReason")+
                 "\n1. 요청 수락, 2. 요청 거절");
