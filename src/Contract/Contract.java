@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class Contract {
 	private int id;
-	private int contractorID;
-	private int insuranceID;
+	private String contractorID;
+	private String insuranceID;
 	private String insuredCustomerID;
 	private String employeeID;
 	private double fee;//수수료(약정 위반 시 등)
@@ -35,19 +35,19 @@ public class Contract {
 		this.id = id;
 	}
 
-	public int getContractorID() {
+	public String getContractorID() {
 		return contractorID;
 	}
 
-	public void setContractorID(int contractorID) {
+	public void setContractorID(String contractorID) {
 		this.contractorID = contractorID;
 	}
 
-	public int getInsuranceID() {
+	public String getInsuranceID() {
 		return insuranceID;
 	}
 
-	public void setInsuranceID(int insuranceID) {
+	public void setInsuranceID(String insuranceID) {
 		this.insuranceID = insuranceID;
 	}
 

@@ -4,10 +4,12 @@ import Customer.Customer;
 import Dao.CustomerDao;
 import Employee.*;
 import Customer.InsuredCustomer;
+import Insurance.Insurance;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import static UI.Main.*;
+import static UI.Main.insuranceDao;
 
 
 public class DBFunctions {
@@ -25,6 +27,13 @@ public class DBFunctions {
                 case "1":
                     /*CREATE Tables*/
                     //Products
+                    dao.execute("CREATE TABLE Insurance(" +
+                            "id VARCHAR(20) PRIMARY KEY," +
+                            "description VARCHAR(200)," +
+                            "name VARCHAR(200)," +
+                            "price DOUBLE," +
+                            "detailedCategory VARCHAR(200)" +
+                            ");");
                     dao.execute("CREATE TABLE Accident (" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "customerID VARCHAR(20) NOT NULL," +
@@ -94,6 +103,10 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
+                    dao.execute("CREATE TABLE SalesTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
                     dao.execute("CREATE TABLE UWTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "ffsContact VARCHAR(50)," +
@@ -103,7 +116,7 @@ public class DBFunctions {
                     dao.execute("CREATE TABLE Contract(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "contractorId VARCHAR(20),"+
-//                            "insuranceId VARCHAR(20),"+
+                            "insuranceId VARCHAR(20),"+
                             "insuredCustomerId VARCHAR(20),"+
                             "employeeId VARCHAR(20),"+
                             "fee DOUBLE," +
@@ -141,9 +154,11 @@ public class DBFunctions {
                     registerProductData();
                     break;
                 case "2":
+                    dao.execute("DROP TABLE Insurance;");
                     dao.execute("DROP TABLE CompensationTeam;");
                     dao.execute("DROP TABLE InvestigationTeam;");
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
+                    dao.execute("DROP TABLE SalesTeam;");
                     dao.execute("DROP TABLE UWTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
                     dao.execute("DROP TABLE Contract;");
@@ -303,6 +318,16 @@ public class DBFunctions {
     }
 
     private static boolean registerProductData(){
+        ///////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////// TEST CODE /////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+        Insurance product = new Insurance();
+        product.setId("1");
+        product.setDescription("만 7세부터 만 21세까지 갱신 없이 든든한 어린이 보험");
+        product.setName("oo 어린이 보험");
+        product.setPrice(12000);
+        product.setDetailedCategory("savingInsurance");
+        insuranceDao.create(product);
         return true;
     }
 }

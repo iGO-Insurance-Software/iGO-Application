@@ -5,7 +5,7 @@ import java.util.HashMap;
 public class Insurance {
 
 	protected String description;
-	protected int id;
+	protected String id;
 
 	protected String name;
 
@@ -24,11 +24,11 @@ public class Insurance {
 		this.description = description;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

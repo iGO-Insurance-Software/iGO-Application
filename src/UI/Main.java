@@ -1,6 +1,7 @@
 package UI;
 import Dao.CustomerDao;
 import Dao.Dao;
+import Dao.InsuranceDao;
 import Dao.InsuredCustomerDao;
 import Dao.EmployeeDao;
 import Dao.AccidentDao;
@@ -14,6 +15,7 @@ import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import Employee.CompensationTeam;
 import Employee.UWTeam;
+import Insurance.Insurance;
 import util.BaseException;
 import util.ErrorCode;
 
@@ -30,6 +32,7 @@ import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
 public class Main {
 	public static Dao dao = new Dao();
+	public static InsuranceDao insuranceDao = new InsuranceDao();
 	public static CustomerDao customerDao = new CustomerDao();
 	public static InsuredCustomerDao insuredCustomerDao = new InsuredCustomerDao();
 	public static EmployeeDao employeeDao = new EmployeeDao();
