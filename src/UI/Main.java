@@ -15,13 +15,13 @@ import Employee.InvestigationTeam;
 import Employee.CompensationTeam;
 import Employee.UWTeam;
 import util.BaseException;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
 import static UI.AccidentReceptionMain.*;
 import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
+import static UI.PayCompensationMain.showAccidentsForPayCompensation;
 import static util.DBFunctions.setDB;
 import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
@@ -136,12 +136,12 @@ public class Main {
 	}
 	private static boolean showCustomerMenu(BufferedReader inputReader) throws IOException{
 		//Exception:7초이상의 로딩//
-		/*try {
-			LoadingException.loadingCustomer();
-		} catch (LoadingException e) {
-			System.out.println(e.getMessage());
-			return false;
-		}*/
+//		try {
+//			loadingCustomer();
+//		} catch (BaseException e) {
+//			System.out.println(e.getMessage());
+//			return false;
+//		}
 		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
@@ -198,12 +198,12 @@ public class Main {
 	}
 	private static boolean showEmployeeMenu(BufferedReader inputReader) throws IOException {
 		//Exception:7초이상의 로딩//
-		/*try {
-			LoadingException.loadingEmployee();
-		} catch (LoadingException e) {
-			System.out.println(e.getMessage());
-			return false;
-		}*/
+//		try {
+//			loadingEmployee();
+//		} catch (BaseException e) {
+//			System.out.println(e.getMessage());
+//			return false;
+//		}
 		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
@@ -257,6 +257,9 @@ public class Main {
 						case "2":
 							showAccidentsForCalculateCompensation(inputReader);
 							break;
+						case "3":
+							showAccidentsForPayCompensation(inputReader);
+							break;
 						case "x":
 							isRemain=false;
 							break;
@@ -281,5 +284,33 @@ public class Main {
 		System.out.println("\n----- "+employee.getName()+" 사원님에게 전송된 메세지 -----");
 		System.out.println(message);
 		return true;
+	}
+	public static void loadingCustomer() throws BaseException {
+		//Random random = new Random();
+		//int waitTime = random.nextInt(7000); //랜덤 대기 시간 설정
+		int waitTime = 7000;
+		try {
+			Thread.sleep(waitTime); //지정한 시간 동안 대기
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		if (waitTime >= 7000) {
+			throw new BaseException("[Error!] 현재 시스템의 성능 저하로 서비스가 원할하게 진행되지 못하고 있습니다. 잠시후 다시 시도해 주세요." +
+					"\n고객센터 번호: 02-8282-7575");
+		}
+	}
+	public static void loadingEmployee() throws BaseException {
+		//Random random = new Random();
+		//int waitTime = random.nextInt(7000); //랜덤 대기 시간 설정
+		int waitTime = 7000;
+		try {
+			Thread.sleep(waitTime); //지정한 시간 동안 대기
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		if (waitTime >= 7000) {
+			throw new BaseException("[Error!] 현재 시스템의 성능 저하로 서비스가 원할하게 진행되지 못하고 있습니다. 잠시후 다시 시도해 주세요." +
+					"\n전산팀 사내 유선번호: 047");
+		}
 	}
 }

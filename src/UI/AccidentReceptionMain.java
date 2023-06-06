@@ -151,6 +151,9 @@ public class AccidentReceptionMain {
                 System.out.println("손괴자 전화번호: " + choicedAccident.getDestroyerPhoneNum());
             }
             System.out.println("처리 상태: " + choicedAccident.getStatus());
+            if (choicedAccident.getCompensationMoney()!=0){
+                System.out.println("보상금: "+choicedAccident.getCompensationMoney());
+            }
             System.out.println("\nx. 나가기");
             if (choicedAccident.getStatus().contains("접수") || choicedAccident.getStatus().equals("할당 대기중")) {
                 System.out.println("1. 접수 취소하기");
