@@ -67,23 +67,15 @@ public class Main {
 	}
 
 	private static void login(BufferedReader inputReader) throws IOException {
-		boolean isLoginMode = true;
-		while (isLoginMode) {
-
+		while (true) {
 				printLoginMenu();
 				String userChoiceValue = inputReader.readLine().trim();
 				switch (userChoiceValue) {
 					case "1":
-						if (loginCustomer(inputReader)) {
-							showCustomerMenu(inputReader);
-							isLoginMode = false;
-						}
+						if (loginCustomer(inputReader)) showCustomerMenu(inputReader);
 						break;
 					case "2":
-						if (loginEmployee(inputReader)) {
-							showEmployeeMenu(inputReader);
-							isLoginMode = false;
-						}
+						if (loginEmployee(inputReader)) showEmployeeMenu(inputReader);
 						break;
 					case "x":
 						System.out.println("프로그램을 종료합니다.");
@@ -112,7 +104,7 @@ public class Main {
 				for (Customer customer : customerDao.retrieveAllCustomer()) {
 					if (customer.getId().equals(id)) {
 						currentCustomer = customer; // 현재 접속 고객 설정
-						System.out.println("# 로그인 성공!" + currentCustomer.getName() + " 고객님 환영합니다.");
+						System.out.println("-> 로그인 성공! " + currentCustomer.getName() + " 고객님 환영합니다.");
 						return true;
 					}
 				}
@@ -125,21 +117,29 @@ public class Main {
 	}
 
 	private static boolean loginEmployee(BufferedReader inputReader) throws IOException {
-		System.out.print("ID: ");
-		String id = inputReader.readLine().trim();
-		for (Employee employee : employeeDao.retrieveAllEmployee()) {
-			if (employee.getId().equals(id)) {
-				currentEmployee = employee; //현재 접속중인 직원을 emp로 설정
-				System.out.println("# 로그인 성공. 환영합니다 " + currentEmployee.getName() + " 사원님\n");
-				return true;
+		System.out.println("---------직원 로그인---------");
+		while(true) {
+			System.out.print("직원 ID: "); String id = inputReader.readLine().trim();
+			try {
+				// 로그인 정보 확인
+				for (Employee employee : employeeDao.retrieveAllEmployee()) {
+					if (employee.getId().equals(id)) {
+						currentEmployee = employee; // 현재 접속 직원 설정
+						System.out.println("-> 로그인 성공! " + currentEmployee.getName() + " 사원님 환영합니다.");
+						return true;
+					}
+				}
+				// 해당하는 ID가 없을 경우 예외 처리
+				throw new BaseException(ErrorCode.NOT_EXIST_ID);
+			} catch (BaseException e) {
+				System.out.println(e.getMessage());
 			}
 		}
-		System.out.println("# 로그인 실패. ID를 확인하고 다시 로그인 해주세요");
-		return false;
 	}
 
-	private static boolean showCustomerMenu(BufferedReader inputReader) throws IOException {
+	private static void showCustomerMenu(BufferedReader inputReader) throws IOException {
 		//Exception:7초이상의 로딩//
+		// 최초 1회만 실행되도록 하기
 //		try {
 //			loadingCustomer();
 //		} catch (BaseException e) {
@@ -147,61 +147,87 @@ public class Main {
 //			return false;
 //		}
 		////////////////////////
-		boolean isRemain = true;
-		String userChoiceValue;
-		while (isRemain) {
+		while (true) {
 			System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
-			System.out.println("x. 로그아웃하기");
 			switch (currentCustomer.getType()) {
 				case "Customer":
-					//일반고객일 경우 메뉴
-					userChoiceValue = inputReader.readLine().trim();
-					System.out.println();
-					switch (userChoiceValue) {
-						case "x":
-							isRemain = false;
-							break;
-						default:
-							System.out.println("Please select from the menu");
-							break;
-					}
-					break;
+					// 일반 고객 메뉴
+					showNormalCustomerMenu(inputReader);
+					return;
 				case "InsuredCustomer":
-					//피보험자일 경우 메뉴
-					System.out.println("1. 사고 접수\n2. 사고 조회");
-					System.out.print("Choice: ");
-					userChoiceValue = inputReader.readLine().trim();
-					System.out.println();
-					switch (userChoiceValue) {
-						case "1":
-							HashMap<String, String> accidentInfo = null;
-							try {
-								accidentInfo = sendReception(inputReader);
-							} catch (BaseException e) {
-								System.out.println(e.getMessage());
-							}
-							if (accidentInfo != null) receiveReception(accidentInfo, inputReader);
-							break;
-						case "2":
-							showAccidentsForCustomer(inputReader);
-							break;
-						case "x":
-							isRemain = false;
-							break;
-						default:
-							System.out.println("Please select from the menu");
-					}
-					break;
-
+					// 피보험자 메뉴
+					showInsuredCustomerMenu(inputReader);
+					return;
 				case "Contractor":
-					//보험계약자일 경우 메뉴
+					// 보험 계약자 메뉴
+					return;
+			}
+		}
+	}
+
+	private static void showNormalCustomerMenu(BufferedReader inputReader) throws IOException {
+		while(true) {
+			printNormalCustomerMenu();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "1":
+					// TODO: 일반고객 1번 메뉴에 해당하는 함수 작성
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
 					break;
 			}
 		}
-		return true;
 	}
 
-	private static boolean showEmployeeMenu(BufferedReader inputReader) throws IOException {
+	private static void printNormalCustomerMenu() {
+		System.out.println("1.");
+		System.out.println("x. 로그아웃");
+		System.out.print("\nChoice: ");
+	}
+
+	private static void showInsuredCustomerMenu(BufferedReader inputReader) throws IOException {
+		while(true) {
+			printInsuredCustomerMenu();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "1":
+					// 사고 접수
+					reportAccident(inputReader);
+					break;
+				case "2":
+					// 사고 조회
+					getAccident(inputReader);
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+					break;
+			}
+		}
+	}
+
+	private static void printInsuredCustomerMenu() {
+		System.out.println("1. 사고 접수");
+		System.out.println("2. 사고 조회");
+		System.out.println("x. 로그아웃");
+		System.out.print("\nChoice: ");
+	}
+
+	private static void reportAccident(BufferedReader inputReader) throws IOException {
+		HashMap<String, String> accidentInfo = null;
+		try {
+			accidentInfo = sendReception(inputReader);
+		} catch (BaseException e) {
+			System.out.println(e.getMessage());
+		}
+		if (accidentInfo != null) receiveReception(accidentInfo, inputReader);
+	}
+
+	private static void showEmployeeMenu(BufferedReader inputReader) throws IOException {
 		//Exception:7초이상의 로딩//
 //		try {
 //			loadingEmployee();
@@ -210,72 +236,129 @@ public class Main {
 //			return false;
 //		}
 		////////////////////////
-		boolean isRemain = true;
-		String userChoiceValue;
-		while (isRemain) {
+		while (true) {
 			System.out.println("\n************************ " + currentEmployee.getName() + " 사원님의 MENU ************************");
-			System.out.println("x. 로그아웃하기");
-			//사고접수 직원
-			if (currentEmployee instanceof AccidentReceptionTeam) {
-				System.out.println("1. 사고 조회");
-				userChoiceValue = inputReader.readLine().trim();
-				switch (userChoiceValue) {
-					case "1":
-						showAccidentsForReceptionEmployee(inputReader);
-						break;
-					case "x":
-						isRemain = false;
-						break;
-					default:
-						System.out.println("Please select from the menu");
-						break;
-				}
-			} else if (currentEmployee instanceof InvestigationTeam) {
-				System.out.println("1. 사고 조회");
-				userChoiceValue = inputReader.readLine().trim();
-				switch (userChoiceValue) {
-					case "1":
-						showAccidentsForInvestigationEmployee(inputReader);
-						break;
-					case "x":
-						isRemain = false;
-						break;
-					default:
-						System.out.println("Please select from the menu");
-						break;
-				}
-			} else if (currentEmployee instanceof CompensationTeam) {
-				System.out.println("1. 보상 여부 결정하기");
-				System.out.println("2. 보상금 책정하기");
-				System.out.println("3. 보상금 지급하기");
-				System.out.println("4. 구상 신청하기");
-				System.out.println("5. 구상 소송 요청하기");
-				System.out.println("6. 사건 종결하기.");
-				System.out.print("Choice: ");
-				userChoiceValue = inputReader.readLine().trim();
-				switch (userChoiceValue) {
-					case "1":
-						showAccidentsForDecideCompensation(inputReader);
-						break;
-					case "2":
-						showAccidentsForCalculateCompensation(inputReader);
-						break;
-					case "3":
-						showAccidentsForPayCompensation(inputReader);
-						break;
-					case "x":
-						isRemain = false;
-						break;
-					default:
-						System.out.println("Please select from the menu");
-						break;
-				}
-			} else if (currentEmployee instanceof UWTeam) {
-				UWMain uwMain = new UWMain(currentEmployee);
-				isRemain = uwMain.showEmployeeMenu(inputReader);
+			System.out.println(currentEmployee.getType());
+			switch (currentEmployee.getType()) {
+				case "AccidentReception":
+					showAccidentReceptionTeamMenu(inputReader);
+					return;
+				case "Investigation":
+					showInvestigationTeamMenu(inputReader);
+					return;
+				case "Compensation":
+					showCompensationTeamMenu(inputReader);
+					return;
+				case "UW":
+					showUWTeamMenu(inputReader);
+					return;
+				case "ContractManagement":
+					// TODO: 계약관리팀 메뉴 보여주기
+					return;
+				default:
+					System.out.println("잘못된 접근입니다.");
+					return;
 			}
 		}
-		return true;
+	}
+
+	private static void showAccidentReceptionTeamMenu(BufferedReader inputReader) throws IOException {
+		while(true) {
+			printAccidentReceptionTeamMenu();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "1":
+					// 사고 조회
+					showAccidentsForReceptionEmployee(inputReader);
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+					break;
+			}
+		}
+	}
+
+	private static void printAccidentReceptionTeamMenu() {
+		System.out.println("1. 사고 조회");
+		System.out.println("x. 로그아웃");
+		System.out.print("\nChoice: ");
+	}
+
+	private static void showInvestigationTeamMenu(BufferedReader inputReader) throws IOException {
+		while(true) {
+			printInvestigationTeamMenu();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "1":
+					// 사고 조회
+					showAccidentsForInvestigationEmployee(inputReader);
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+					break;
+			}
+		}
+	}
+
+	private static void printInvestigationTeamMenu() {
+		System.out.println("1. 사고 조회");
+		System.out.println("x. 로그아웃");
+		System.out.print("\nChoice: ");
+	}
+
+	private static void showCompensationTeamMenu(BufferedReader inputReader) throws IOException {
+		while(true) {
+			printCompensationTeamMenu();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "1":
+					// 보상 여부 결정하기
+					showAccidentsForDecideCompensation(inputReader);
+					break;
+				case "2":
+					// 보상금 책정하기
+					showAccidentsForCalculateCompensation(inputReader);
+					break;
+				case "3":
+					// 보상금 지급하기
+					showAccidentsForPayCompensation(inputReader);
+					break;
+				case "4":
+					// 구상 신청하기
+					break;
+				case "5":
+					// 구상 소송 요청하기
+					break;
+				case "6":
+					// 사건 종결하기
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+					break;
+			}
+		}
+	}
+
+	private static void printCompensationTeamMenu() {
+		System.out.println("1. 보상 여부 결정하기");
+		System.out.println("2. 보상금 책정하기");
+		System.out.println("3. 보상금 지급하기");
+		System.out.println("4. 구상 신청하기");
+		System.out.println("5. 구상 소송 요청하기");
+		System.out.println("6. 사건 종결하기");
+		System.out.println("x. 로그아웃");
+		System.out.print("\nChoice: ");
+	}
+
+	private static void showUWTeamMenu(BufferedReader inputReader) throws IOException {
+		UWMain uwMain = new UWMain(currentEmployee);
+		uwMain.showEmployeeMenu(inputReader);
 	}
 
 	public static boolean showMessageForCustomer(Customer customer, String message) {
