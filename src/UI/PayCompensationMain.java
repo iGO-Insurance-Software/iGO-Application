@@ -2,6 +2,8 @@ package UI;
 import Accident.Accident;
 import Customer.InsuredCustomer;
 import util.BaseException;
+import util.ErrorCode;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.time.LocalTime;
@@ -101,7 +103,7 @@ public class PayCompensationMain {
         LocalTime oneThirty = LocalTime.of(1, 30);
         if ((now.equals(midnight) || now.isAfter(midnight)) && now.isBefore(oneThirty)) {
             try {
-                throw new BaseException("\n[Error!]: 은행 점검 시간입니다.(00:00~01:30) 점검이 끝나면 다시 시도해주세요");
+                throw new BaseException(ErrorCode.IS_BANK_INSPECTION_TIME);
             } catch (BaseException e) {
                 System.out.println(e.getMessage());
                 return false;
