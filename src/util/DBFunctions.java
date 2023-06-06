@@ -4,6 +4,7 @@ import Customer.Customer;
 import Dao.CustomerDao;
 import Employee.*;
 import Customer.InsuredCustomer;
+import Insurance.Insurance;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -25,6 +26,14 @@ public class DBFunctions {
                 case "1":
                     /*CREATE Tables*/
                     //Products
+                    dao.execute("CREATE TABLE Insurance(" +
+                            "id VARCHAR(20) PRIMARY KEY," +
+                            "description VARCHAR(200)," +
+                            "name VARCHAR(200)," +
+                            "price DOUBLE," +
+                            "detailedCategory VARCHAR(200)," +
+                            "paymentTerm int" +
+                            ");");
                     dao.execute("CREATE TABLE Accident (" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "customerID VARCHAR(20) NOT NULL," +
@@ -94,16 +103,24 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
+                    dao.execute("CREATE TABLE SalesTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
                     dao.execute("CREATE TABLE UWTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "ffsContact VARCHAR(50)," +
                             "bankClerkContact VARCHAR(50)," +
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
+                    dao.execute("CREATE TABLE MarketingTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
                     dao.execute("CREATE TABLE Contract(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "contractorId VARCHAR(20),"+
-//                            "insuranceId VARCHAR(20),"+
+                            "insuranceId VARCHAR(20),"+
                             "insuredCustomerId VARCHAR(20),"+
                             "employeeId VARCHAR(20),"+
                             "fee DOUBLE," +
@@ -141,10 +158,13 @@ public class DBFunctions {
                     registerProductData();
                     break;
                 case "2":
+                    dao.execute("DROP TABLE Insurance;");
                     dao.execute("DROP TABLE CompensationTeam;");
                     dao.execute("DROP TABLE InvestigationTeam;");
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
+                    dao.execute("DROP TABLE SalesTeam;");
                     dao.execute("DROP TABLE UWTeam;");
+                    dao.execute("DROP TABLE MarketingTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
                     dao.execute("DROP TABLE Contract;");
                     dao.execute("DROP TABLE Employee;");
@@ -263,6 +283,21 @@ public class DBFunctions {
                 "compman@naver.com", "사원"
         );
         employeeDao.create(compensationEmployee);
+        //Sales
+        SalesTeam salesEmployee1 = new SalesTeam();
+        salesEmployee1 = (SalesTeam) setEmployeeBasicInfo(
+                salesEmployee1, "se2023", "Sales",
+                "김영업", 30, "남", "01043219876",
+                "salesman@naver.com", "대리"
+        );
+        employeeDao.create(salesEmployee1);
+        SalesTeam salesEmployee2 = new SalesTeam();
+        salesEmployee2 = (SalesTeam) setEmployeeBasicInfo(
+                salesEmployee2, "se2024", "Sales",
+                "나발품", 26, "여", "01022113548",
+                "salessales@gmail.com", "사원"
+        );
+        employeeDao.create(salesEmployee2);
         //UW
         UWTeam uwEmployee = new UWTeam();
         uwEmployee = (UWTeam) setEmployeeBasicInfo(
@@ -281,7 +316,14 @@ public class DBFunctions {
                 "igo_cm@gmail.com", "사원"
         );
         employeeDao.create(contractManagementEmployee);
-
+        //Marketing
+        MarketingTeam marketingEmployee1 = new MarketingTeam();
+        marketingEmployee1 = (MarketingTeam) setEmployeeBasicInfo(
+                marketingEmployee1, "mk2023", "Marketing",
+                "최홍보", 29, "여", "01049853246",
+                "marketing@naver.com", "대리"
+        );
+        employeeDao.create(marketingEmployee1);
         return true;
     }
 
@@ -349,6 +391,17 @@ public class DBFunctions {
     }
 
     private static boolean registerProductData(){
+        ///////////////////////////////////////////////////////////////////////////////
+        /////////////////////////////// TEST CODE /////////////////////////////////////
+        ///////////////////////////////////////////////////////////////////////////////
+        Insurance insurance = new Insurance();
+        insurance.setId("insurance1");
+        insurance.setDescription("만 7세부터 만 21세까지 갱신 없이 든든한 어린이 보험");
+        insurance.setName("oo 어린이 보험");
+        insurance.setPrice(12000);
+        insurance.setDetailedCategory("savingInsurance");
+        insurance.setPaymentTerm(1);
+        insuranceDao.create(insurance);
         return true;
     }
 }

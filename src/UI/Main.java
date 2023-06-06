@@ -8,11 +8,13 @@ import Dao.AccidentReceptionTeamDao;
 import Dao.InvestigationTeamDao;
 import Dao.CompensationTeamDao;
 import Dao.ContractDao;
+import Dao.InsuranceDao;
 import Customer.Customer;
 import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import Employee.CompensationTeam;
+import Employee.SalesTeam;
 import Employee.UWTeam;
 import util.BaseException;
 import util.ErrorCode;
@@ -37,6 +39,7 @@ public class Main {
 	public static CompensationTeamDao compensationTeamDao = new CompensationTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
 	public static ContractDao contractDao = new ContractDao();
+	public static InsuranceDao insuranceDao = new InsuranceDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
 
@@ -153,20 +156,18 @@ public class Main {
 		String userChoiceValue;
 		while (isRemain) {
 			System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
-			System.out.println("x. 로그아웃하기");
+			insuranceDao.retrieveAll();
+			System.out.println("-------------------------------------");
+			System.out.println("|			oo 어린이 보험			|");
+			System.out.println("|만 7세부터 만 21세까지 보장되는 필수 보험|\n|\"광고\"를 입력하여 자세한 설명을 확인하세요|");
+			System.out.println("-------------------------------------");
+			System.out.println("x. 로그아웃하기\n1. 보험 상품 메뉴");
+			System.out.print("\nChoice: ");
 			switch (currentCustomer.getType()) {
 				case "Customer":
 					//일반고객일 경우 메뉴
-					userChoiceValue = inputReader.readLine().trim();
-					System.out.println();
-					switch (userChoiceValue) {
-						case "x":
-							isRemain = false;
-							break;
-						default:
-							System.out.println("Please select from the menu");
-							break;
-					}
+					CustomerMain customerMain = new CustomerMain(currentCustomer);
+					isRemain = customerMain.showCustomerMenu(inputReader);
 					break;
 				case "InsuredCustomer":
 					//피보험자일 경우 메뉴
@@ -275,6 +276,10 @@ public class Main {
 			} else if (currentEmployee instanceof UWTeam) {
 				UWMain uwMain = new UWMain(currentEmployee);
 				isRemain = uwMain.showEmployeeMenu(inputReader);
+			}
+			else if(currentEmployee instanceof SalesTeam){
+				SalesMain salesMain = new SalesMain(currentEmployee);
+				isRemain = salesMain.showEmployeeMenu(inputReader);
 			}
 		}
 		return true;
