@@ -9,11 +9,9 @@ import Dao.InvestigationTeamDao;
 import Dao.CompensationTeamDao;
 import Dao.ContractDao;
 import Customer.Customer;
+import Customer.UnpaidCustomer;
 import Employee.Employee;
-import Employee.AccidentReceptionTeam;
-import Employee.InvestigationTeam;
-import Employee.CompensationTeam;
-import Employee.UWTeam;
+import Employee.ContractManagementTeam;
 import util.BaseException;
 import util.ErrorCode;
 import java.io.BufferedReader;
@@ -257,7 +255,7 @@ public class Main {
 					showUWTeamMenu(inputReader);
 					return;
 				case "ContractManagement":
-					// TODO: 계약관리팀 메뉴 보여주기
+					showContractManagementTeamMenu(inputReader);
 					return;
 				default:
 					System.out.println("잘못된 접근입니다.");
@@ -363,6 +361,45 @@ public class Main {
 	private static void showUWTeamMenu(BufferedReader inputReader) throws IOException {
 		UWMain uwMain = new UWMain(currentEmployee);
 		uwMain.showEmployeeMenu(inputReader);
+	}
+
+	private static void showContractManagementTeamMenu(BufferedReader inputReader) throws IOException {
+		while(true) {
+			printContractManagementTeamMenu();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "1":
+					// 보험료 미납 고객 조회
+					getUnpaidCustomer(inputReader);
+					break;
+				case "2":
+					// 만기 임박 고객 조회
+//					getContractExpirationCustomer(inputReader);
+					break;
+				case "3":
+					// 부활 신청 고객 조회
+//					getCustomerApplyingInsuranceRevival(inputReader);
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+					break;
+			}
+		}
+	}
+
+	private static void printContractManagementTeamMenu() {
+		System.out.println("1. 보험료 미납 고객 조회");
+		System.out.println("2. 만기 임박 고객 조회");
+		System.out.println("3. 부활 신청 고객 조회");
+		System.out.println("x. 로그아웃");
+		System.out.print("\nChoice: ");
+	}
+
+	private static void getUnpaidCustomer(BufferedReader inputReader) throws IOException {
+		ArrayList<UnpaidCustomer> unpaidCustomerList = ((ContractManagementTeam) currentEmployee).getUnpaidCustomer(inputReader);
+		// TODO: 화면에 미납자 목록 띄우고 미납 안내할 고객 선택/미납 횟수가 3회 이상일 경우 실효 보험으로 처리
 	}
 
 	public static boolean showMessageForCustomer(Customer customer, String message) {
