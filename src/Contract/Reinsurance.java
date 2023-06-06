@@ -118,10 +118,11 @@ public class Reinsurance {
 		double estimatedEarning, estimatedPayment;
 		estimatedEarning = (contract.getPeriod()/contract.getPaymentTerm()) * contract.getPremium();
 		estimatedPayment = (contract.getPaymentRate() * insurance.getPrice() * (1-this.contractRate)) + ((this.period) * this.paymentAmount);
-		this.lossRatio = estimatedPayment/estimatedEarning;
+		double ratio = estimatedPayment/estimatedEarning;
+		this.lossRatio = Math.round(ratio * 100.0) / 100.0;
 		result.put("estimatedEarning", Double.toString(estimatedEarning));
 		result.put("estimatedPayment", Double.toString(estimatedPayment));
-		result.put("lossRatio", Double.toString(this.lossRatio));
+		result.put("lossRatio", (this.lossRatio*100)+"%");
 		result.put("isResult", "true");
 		return result;
 	}

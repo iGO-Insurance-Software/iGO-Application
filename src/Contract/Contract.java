@@ -10,8 +10,8 @@ import java.util.HashMap;
 
 public class Contract {
 	private int id;
-	private int contractorID;
-	private int insuranceID;
+	private String contractorID;
+	private String insuranceID;
 	private String insuredCustomerID;
 	private String employeeID;
 	private double fee;//수수료(약정 위반 시 등)
@@ -36,19 +36,19 @@ public class Contract {
 		this.id = id;
 	}
 
-	public int getContractorID() {
+	public String getContractorID() {
 		return contractorID;
 	}
 
-	public void setContractorID(int contractorID) {
+	public void setContractorID(String contractorID) {
 		this.contractorID = contractorID;
 	}
 
-	public int getInsuranceID() {
+	public String getInsuranceID() {
 		return insuranceID;
 	}
 
-	public void setInsuranceID(int insuranceID) {
+	public void setInsuranceID(String insuranceID) {
 		this.insuranceID = insuranceID;
 	}
 
@@ -185,10 +185,11 @@ public class Contract {
 		double estimatedEarning, estimatedPayment;
 		estimatedEarning = (this.period/this.paymentTerm) * this.premium;
 		estimatedPayment = this.paymentRate * insurance.getPrice();
-		this.lossRatio = estimatedPayment/estimatedEarning;
+		double ratio = estimatedPayment/estimatedEarning;
+		this.lossRatio = Math.round(ratio * 100.0) / 100.0;
 		result.put("estimatedEarning", Double.toString(estimatedEarning));
 		result.put("estimatedPayment", Double.toString(estimatedPayment));
-		result.put("lossRatio", Double.toString(this.lossRatio));
+		result.put("lossRatio", (this.lossRatio*100)+"%");
 		result.put("isResult", "true");
 		return result;
 	}

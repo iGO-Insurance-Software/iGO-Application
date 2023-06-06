@@ -10,6 +10,8 @@ import Dao.CompensationTeamDao;
 import Dao.ContractDao;
 import Dao.ProductDevelopmentTeamDao;
 import Dao.ComplianceTeamDao;
+import Dao.InsuranceDao;
+import Dao.ReinsuranceDao;
 import Customer.Customer;
 import Customer.UnpaidCustomer;
 import Employee.Employee;
@@ -44,6 +46,8 @@ public class Main {
 	public static CompensationTeamDao compensationTeamDao = new CompensationTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
 	public static ContractDao contractDao = new ContractDao();
+	public static InsuranceDao insuranceDao = new InsuranceDao();
+	public static ReinsuranceDao reinsuranceDao = new ReinsuranceDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
 	public static PrototypeDao prototypeDao = new PrototypeDao();

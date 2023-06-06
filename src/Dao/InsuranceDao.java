@@ -27,7 +27,7 @@ public class InsuranceDao extends Dao {
         super.create(query);
     }
 
-    public Insurance retrieveById(int insuranceId) {
+    public Insurance retrieveById(String insuranceId) {
         String query = "SELECT * FROM Insurance WHERE id  = '"+
                 insuranceId+"';";
         Insurance insurance = null;
