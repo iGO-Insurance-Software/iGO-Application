@@ -2,11 +2,8 @@ package util;
 
 import Customer.Customer;
 import Dao.CustomerDao;
-import Employee.AccidentReceptionTeam;
+import Employee.*;
 import Customer.InsuredCustomer;
-import Employee.CompensationTeam;
-import Employee.InvestigationTeam;
-import Employee.UWTeam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -51,6 +48,20 @@ public class DBFunctions {
                             "lawsuitCost DOUBLE, " +
                             "winOrLoseMoney INT" +
                             ") AUTO_INCREMENT = 1;");
+                    dao.execute("CREATE TABLE Prototype (" +
+                            "id VARCHAR(20) PRIMARY KEY," +
+                            " description VARCHAR(255), "+
+                            "feedbacks VARCHAR(255)," +
+                            "requirements VARCHAR(255)," +
+                            " status VARCHAR(50)," +
+                            " name VARCHAR(50)," +
+                            " risks VARCHAR(255)," +
+                            " developerID VARCHAR(20)," +
+                            "detailedCategory VARCHAR(50)," +
+                            "category VARCHAR(50)," +
+                            "price DOUBLE," +
+                            "paymentTerm INT" +
+                            ");");
                     //Customers
                     dao.execute("CREATE TABLE Customer (" +
                             "id VARCHAR(20) PRIMARY KEY," +
@@ -86,6 +97,15 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
+                    dao.execute("CREATE TABLE ProductDevelopmentTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
+                    dao.execute("CREATE TABLE ComplianceTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
+
                     dao.execute("CREATE TABLE InvestigationTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "accidentID INT DEFAULT NULL,"+
@@ -147,12 +167,15 @@ public class DBFunctions {
                     dao.execute("DROP TABLE CompensationTeam;");
                     dao.execute("DROP TABLE InvestigationTeam;");
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
+                    dao.execute("DROP TABLE ProductDevelopmentTeam;");
+                    dao.execute("DROP TABLE ComplianceTeam;");
                     dao.execute("DROP TABLE UWTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
                     dao.execute("DROP TABLE Contract;");
                     dao.execute("DROP TABLE Employee;");
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
+                    dao.execute("DROP TABLE Prototype;");
                     dao.execute("DROP TABLE Accident;");
                     break;
                 default:
@@ -285,6 +308,27 @@ public class DBFunctions {
         compensationEmployee.setEmail("compman@naver.com");
         compensationEmployee.setRank("사원");
         employeeDao.create(compensationEmployee);
+        //productDevelopmentTeam
+        ProductDevelopmentTeam ProductDevelopmentTeamEmployee = new ProductDevelopmentTeam();
+        ProductDevelopmentTeamEmployee.setId("pd2025");
+        ProductDevelopmentTeamEmployee.setType("ProductDevelopment");
+        ProductDevelopmentTeamEmployee.setName("김노아");
+        ProductDevelopmentTeamEmployee.setAge(30);
+        ProductDevelopmentTeamEmployee.setGender("남");
+        ProductDevelopmentTeamEmployee.setPhoneNum("01022223334");
+        ProductDevelopmentTeamEmployee.setEmail("productdevman@naver.com");
+        ProductDevelopmentTeamEmployee.setRank("Manager");
+        employeeDao.create(ProductDevelopmentTeamEmployee);
+        ComplianceTeam ComplianceTeamEmployee = new ComplianceTeam();
+        ComplianceTeamEmployee.setId("ct2026");
+        ComplianceTeamEmployee.setType("Compliance");
+        ComplianceTeamEmployee.setName("김미연");
+        ComplianceTeamEmployee.setAge(30);
+        ComplianceTeamEmployee.setGender("남");
+        ComplianceTeamEmployee.setPhoneNum("01022223335");
+        ComplianceTeamEmployee.setEmail("compliancechiefn@naver.com");
+        ComplianceTeamEmployee.setRank("Chief");
+        employeeDao.create(ComplianceTeamEmployee);
         //UW
         UWTeam uwEmployee = new UWTeam();
         uwEmployee.setId("uw01");
