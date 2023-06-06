@@ -78,6 +78,7 @@ public class InsuranceDao extends Dao {
                 "detailedCategory = '" + insurance.getDetailedCategory() + "', " + "';";
         super.update(query);
     }
+    public void deleteById(String insuranceId)    {
         String query = "DELETE FROM Insurance WHERE id = '"+insuranceId+"';";
         super.delete(query);
     }
