@@ -95,6 +95,38 @@ public class ContractDao extends Dao{
         }
         return contractList;
     }
+    public ArrayList<Contract> retrieveAllWaitStateContract() {
+        String query = "SELECT * FROM Contract WHERE underwritingState='대기';";
+        ArrayList<Contract> contractList = null;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            contractList = new ArrayList<Contract>();
+            while(resultSet.next()) {
+                Contract contract = new Contract();
+                contract.setId(resultSet.getInt("id"));
+                contract.setContractorID(resultSet.getInt("contractorID"));
+                contract.setInsuranceID(resultSet.getInt("insuranceID"));
+                contract.setInsuredCustomerID(resultSet.getString("insuredCustomerID"));
+                contract.setEmployeeID(resultSet.getString("employeeID"));
+                contract.setFee(resultSet.getDouble("fee"));
+                contract.setPremium(resultSet.getDouble("premium"));
+                contract.setPaymentRate(resultSet.getDouble("paymentRate"));
+                contract.setPeriod(resultSet.getInt("period"));
+                contract.setSignedDate(resultSet.getDate("signedDate"));
+                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
+                contract.setLossRatio(resultSet.getDouble("lossRatio"));
+                contract.setUnderwritingState(resultSet.getString("underwritingState"));
+                contract.setRejectionReasons(resultSet.getString("rejectionReasons"));
+                contractList.add(contract);
+
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return contractList;
+    }
     public void update(Contract contract){
         String query = "UPDATE Contract SET " +
                 "contractorID = " + contract.getContractorID() + ", " +

@@ -12,8 +12,10 @@ public class Banker {
     }
 
     public HashMap<String, String> requestInfo(HashMap<String, String> basicCustomerInfo) throws BaseException{
+        // E2 은행담당원이 10분동안 응답이 없을 경우
         int responseTime = (int)Math.random()*10+1;
-        if(responseTime == 10) throw new BaseException("현재 고객 정보 요청에 대한 응답이 없어 재요청 하였습니다.");
+        if(responseTime == 10) throw new BaseException(ErrorCode.NO_RESPONSE_TO_CURRENT_CUSTOMER_INFO_REQ);
+        //////////////////////////////////////////////////////////////////////////
         System.out.println("____________은행원____________\n요청한 고객 정보" +
                 "\n이름: "+basicCustomerInfo.get("name")+"\n주민등록번호: "+basicCustomerInfo.get("ssn")+"\n요청 사유: "+basicCustomerInfo.get("requestReason")+
                 "\n1. 요청 수락, 2. 요청 거절");
@@ -51,7 +53,7 @@ public class Banker {
             System.out.print("\n연체내역: "); responseInfo.put("overdueDetails", inputReader.readLine().trim());
             System.out.print("\n연대보증 내역: "); responseInfo.put("jointWarrantyDetails", inputReader.readLine().trim());
             System.out.println("1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
-            // 고객 정보를 요청하다 E2 test code/////////////////////////////
+            // 고객 정보를 요청하다 E3 test code/////////////////////////////
             int responseTime = (int)Math.random()*10+1;
             if(responseTime == 10) {
                 System.out.println("고객 정보 전송에 실패하였습니다. 잠시 후 다시 시도해주세요.");

@@ -19,12 +19,16 @@ import Employee.ProductDevelopmentTeam;
 import Employee.ComplianceTeam;
 import Employee.UWTeam;
 import Dao.PrototypeDao;
+import util.BaseException;
+import util.ErrorCode;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.file.LinkOption;
 import java.util.*;
 import static UI.AccidentReceptionMain.*;
 import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
+import static UI.PayCompensationMain.showAccidentsForPayCompensation;
 import static util.DBFunctions.setDB;
 import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
@@ -129,7 +133,7 @@ public class Main {
 		return false;
 	}
 
-	static boolean loginEmployee(BufferedReader inputReader) throws IOException {
+	private static boolean loginEmployee(BufferedReader inputReader) throws IOException {
 		System.out.print("ID: ");
 		String id = inputReader.readLine().trim();
 		for (Employee employee : employeeDao.retrieveAllEmployee()) {
@@ -145,12 +149,12 @@ public class Main {
 
 	private static boolean showCustomerMenu(BufferedReader inputReader) throws IOException {
 		//Exception:7초이상의 로딩//
-		/*try {
-			LoadingException.loadingCustomer();
-		} catch (LoadingException e) {
-			System.out.println(e.getMessage());
-			return false;
-		}*/
+//		try {
+//			loadingCustomer();
+//		} catch (BaseException e) {
+//			System.out.println(e.getMessage());
+//			return false;
+//		}
 		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
@@ -179,7 +183,12 @@ public class Main {
 					System.out.println();
 					switch (userChoiceValue) {
 						case "1":
-							HashMap<String, String> accidentInfo = sendReception(inputReader);
+							HashMap<String, String> accidentInfo = null;
+							try {
+								accidentInfo = sendReception(inputReader);
+							} catch (BaseException e) {
+								System.out.println(e.getMessage());
+							}
 							if (accidentInfo != null) receiveReception(accidentInfo, inputReader);
 							break;
 						case "2":
@@ -203,12 +212,12 @@ public class Main {
 
 	private static boolean showEmployeeMenu(BufferedReader inputReader) throws IOException {
 		//Exception:7초이상의 로딩//
-		/*try {
-			LoadingException.loadingEmployee();
-		} catch (LoadingException e) {
-			System.out.println(e.getMessage());
-			return false;
-		}*/
+//		try {
+//			loadingEmployee();
+//		} catch (BaseException e) {
+//			System.out.println(e.getMessage());
+//			return false;
+//		}
 		////////////////////////
 		boolean isRemain = true;
 		String userChoiceValue;
@@ -260,6 +269,9 @@ public class Main {
 					case "2":
 						showAccidentsForCalculateCompensation(inputReader);
 						break;
+					case "3":
+						showAccidentsForPayCompensation(inputReader);
+						break;
 					case "x":
 						isRemain = false;
 						break;
@@ -278,19 +290,46 @@ public class Main {
 				isRemain = complianceTeamMain.showFunctions(inputReader);
 			}
 		}
-			return true;
+		return true;
 	}
 
-		public static boolean showMessageForCustomer (Customer customer, String message){
-			System.out.println("\n----- " + customer.getName() + " 고객님에게 전송된 메세지 -----");
-			System.out.println(message);
-			return true;
+	public static boolean showMessageForCustomer(Customer customer, String message) {
+		System.out.println("\n----- " + customer.getName() + " 고객님에게 전송된 메세지 -----");
+		System.out.println(message);
+		return true;
+	}
+
+	public static boolean showMessageForEmployee(Employee employee, String message) {
+		System.out.println("\n----- " + employee.getName() + " 사원님에게 전송된 메세지 -----");
+		System.out.println(message);
+		return true;
+	}
+
+	public static void loadingCustomer() throws BaseException {
+		//Random random = new Random();
+		//int waitTime = random.nextInt(7000); //랜덤 대기 시간 설정
+		int waitTime = 7000;
+		try {
+			Thread.sleep(waitTime); //지정한 시간 동안 대기
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
 		}
-		public static boolean showMessageForEmployee (Employee employee, String message){
-			System.out.println("\n----- " + employee.getName() + " 사원님에게 전송된 메세지 -----");
-			System.out.println(message);
-			return true;
+		if (waitTime >= 7000) {
+			throw new BaseException(ErrorCode.LOADING_ERROR_CUSTOMER);
 		}
 	}
 
-
+	public static void loadingEmployee() throws BaseException {
+		//Random random = new Random();
+		//int waitTime = random.nextInt(7000); //랜덤 대기 시간 설정
+		int waitTime = 7000;
+		try {
+			Thread.sleep(waitTime); //지정한 시간 동안 대기
+		} catch (InterruptedException e) {
+			Thread.currentThread().interrupt();
+		}
+		if (waitTime >= 7000) {
+			throw new BaseException(ErrorCode.LOADING_ERROR_EMPLOYEE);
+		}
+	}
+}

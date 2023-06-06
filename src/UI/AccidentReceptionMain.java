@@ -9,6 +9,8 @@ import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import util.BaseException;
+import util.ErrorCode;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.text.ParseException;
@@ -22,7 +24,7 @@ import static UI.CalculateCompensationMain.submitDocsForCalculateCompensation;
 
 public class AccidentReceptionMain {
     /*Customer's Functions*/
-    public static HashMap<String,String> sendReception(BufferedReader inputReader) throws IOException {
+    public static HashMap<String,String> sendReception(BufferedReader inputReader) throws IOException, BaseException {
         HashMap accidentInfo = new HashMap<String, String>();
         System.out.println("1. 일반 접수하기\n2. 긴급 접수하기\nx. 뒤로가기 ");
         System.out.print("\nChoice: ");
@@ -57,12 +59,7 @@ public class AccidentReceptionMain {
                 calendar.setTime(accidentDate);
                 calendar.add(Calendar.YEAR, 5);
                 if (calendar.getTime().before(new Date())) {
-                    try {
-                        throw new BaseException("\n발생한지 5년이 넘은 사고는 접수할 수 없습니다.");
-                    } catch (BaseException e) {
-                        System.out.println(e.getMessage());
-                        return null;
-                    }
+                    throw new BaseException(ErrorCode.ACCIDENTS_MORE_THAN_5YEARS_NOT_BE_ACCEPTED);
                 }
                 accidentInfo.put("accidentDate", accidentDateStr);
                 System.out.print("\n사고 장소 (예시: 거북골로 3-2길 횡단보도): ");
@@ -154,6 +151,9 @@ public class AccidentReceptionMain {
                 System.out.println("손괴자 전화번호: " + choicedAccident.getDestroyerPhoneNum());
             }
             System.out.println("처리 상태: " + choicedAccident.getStatus());
+            if (choicedAccident.getCompensationMoney()!=0){
+                System.out.println("보상금: "+choicedAccident.getCompensationMoney());
+            }
             System.out.println("\nx. 나가기");
             if (choicedAccident.getStatus().contains("접수") || choicedAccident.getStatus().equals("할당 대기중")) {
                 System.out.println("1. 접수 취소하기");
