@@ -8,12 +8,17 @@ import Dao.AccidentReceptionTeamDao;
 import Dao.InvestigationTeamDao;
 import Dao.CompensationTeamDao;
 import Dao.ContractDao;
+import Dao.ProductDevelopmentTeamDao;
+import Dao.ComplianceTeamDao;
 import Customer.Customer;
 import Employee.Employee;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import Employee.CompensationTeam;
+import Employee.ProductDevelopmentTeam;
+import Employee.ComplianceTeam;
 import Employee.UWTeam;
+import Dao.PrototypeDao;
 import util.BaseException;
 import util.ErrorCode;
 import java.io.BufferedReader;
@@ -39,7 +44,9 @@ public class Main {
 	public static ContractDao contractDao = new ContractDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
-
+	public static PrototypeDao prototypeDao = new PrototypeDao();
+	public static ComplianceTeamDao complianceTeamDao = new ComplianceTeamDao();
+	public static ProductDevelopmentTeamDao productDevelopmentTeamDao = new ProductDevelopmentTeamDao();
 
 	public static void main(String[] args) throws IOException {
 		//link DB
@@ -275,6 +282,12 @@ public class Main {
 			} else if (currentEmployee instanceof UWTeam) {
 				UWMain uwMain = new UWMain(currentEmployee);
 				isRemain = uwMain.showEmployeeMenu(inputReader);
+			} else if (currentEmployee instanceof ProductDevelopmentTeam) {
+				ProductTeamMain productTeamMain = new ProductTeamMain();
+				isRemain = productTeamMain.showFunctions(inputReader);
+			} else if (currentEmployee instanceof ComplianceTeam) {
+				ComplianceTeamMain complianceTeamMain = new ComplianceTeamMain();
+				isRemain = complianceTeamMain.showFunctions(inputReader);
 			}
 		}
 		return true;
