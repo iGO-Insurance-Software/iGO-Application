@@ -2,11 +2,8 @@ package util;
 
 import Customer.Customer;
 import Dao.CustomerDao;
-import Employee.AccidentReceptionTeam;
+import Employee.*;
 import Customer.InsuredCustomer;
-import Employee.CompensationTeam;
-import Employee.InvestigationTeam;
-import Employee.UWTeam;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -234,71 +231,75 @@ public class DBFunctions {
     private static boolean registerEmployeeData(){
         //AccidentReception
         AccidentReceptionTeam accidentReceiptionEmployee1 = new AccidentReceptionTeam();
-        accidentReceiptionEmployee1.setId("re2023");
-        accidentReceiptionEmployee1.setType("AccidentReception");
-        accidentReceiptionEmployee1.setName("김접수");
-        accidentReceiptionEmployee1.setAge(30);
-        accidentReceiptionEmployee1.setGender("남");
-        accidentReceiptionEmployee1.setPhoneNum("01022223333");
-        accidentReceiptionEmployee1.setEmail("receiptionman@naver.com");
-        accidentReceiptionEmployee1.setRank("주임");
+        accidentReceiptionEmployee1 = (AccidentReceptionTeam) setEmployeeBasicInfo(
+                accidentReceiptionEmployee1, "re2023", "AccidentReception",
+                "김접수", 30, "남", "01022223333",
+                "receiptionman@naver.com", "주임"
+        );
         employeeDao.create(accidentReceiptionEmployee1);
         AccidentReceptionTeam accidentReceiptionEmployee2 = new AccidentReceptionTeam();
-        accidentReceiptionEmployee2.setId("re2024");
-        accidentReceiptionEmployee2.setType("AccidentReception");
-        accidentReceiptionEmployee2.setName("박사접");
-        accidentReceiptionEmployee2.setAge(35);
-        accidentReceiptionEmployee2.setGender("남");
-        accidentReceiptionEmployee2.setPhoneNum("01055553333");
-        accidentReceiptionEmployee2.setEmail("receiption99@naver.com");
-        accidentReceiptionEmployee2.setRank("대리");
+        accidentReceiptionEmployee2 = (AccidentReceptionTeam) setEmployeeBasicInfo(
+                accidentReceiptionEmployee2, "re2024", "AccidentReception",
+                "박사접", 35, "남", "01055553333",
+                "receiption99@naver.com", "대리")
+        ;
         employeeDao.create(accidentReceiptionEmployee2);
         //Investigation
         InvestigationTeam investigationEmployee1 = new InvestigationTeam();
-        investigationEmployee1.setId("ie2023");
-        investigationEmployee1.setType("Investigation");
-        investigationEmployee1.setName("이조사");
-        investigationEmployee1.setAge(27);
-        investigationEmployee1.setGender("여");
-        investigationEmployee1.setPhoneNum("01029478382");
-        investigationEmployee1.setEmail("investigate13@gmail.com");
-        investigationEmployee1.setRank("사원");
+        investigationEmployee1 = (InvestigationTeam) setEmployeeBasicInfo(
+                investigationEmployee1, "ie2023", "Investigation",
+                "이조사", 27, "여", "01029478382",
+                "investigate13@gmail.com", "사원"
+        );
         employeeDao.create(investigationEmployee1);
         InvestigationTeam investigationEmployee2 = new InvestigationTeam();
-        investigationEmployee2.setId("ie2024");
-        investigationEmployee2.setType("Investigation");
-        investigationEmployee2.setName("김출동");
-        investigationEmployee2.setAge(28);
-        investigationEmployee2.setGender("남");
-        investigationEmployee2.setPhoneNum("01033458111");
-        investigationEmployee2.setEmail("ig30@gmail.com");
-        investigationEmployee2.setRank("사원");
+        investigationEmployee2 = (InvestigationTeam) setEmployeeBasicInfo(
+                investigationEmployee2, "ie2024", "Investigation",
+                "김출동", 28, "남", "01033458111",
+                "ig30@gmail.com", "사원"
+        );
         employeeDao.create(investigationEmployee2);
         //Compensation
         CompensationTeam compensationEmployee = new CompensationTeam();
-        compensationEmployee.setId("ce2023");
-        compensationEmployee.setType("Compensation");
-        compensationEmployee.setName("최보상");
-        compensationEmployee.setAge(26);
-        compensationEmployee.setGender("여");
-        compensationEmployee.setPhoneNum("01015571557");
-        compensationEmployee.setEmail("compman@naver.com");
-        compensationEmployee.setRank("사원");
+        compensationEmployee = (CompensationTeam) setEmployeeBasicInfo(
+                compensationEmployee, "ce2023", "Compensation",
+                "최보상", 26, "여", "01015571557",
+                "compman@naver.com", "사원"
+        );
         employeeDao.create(compensationEmployee);
         //UW
         UWTeam uwEmployee = new UWTeam();
-        uwEmployee.setId("uw01");
-        uwEmployee.setType("UW");
-        uwEmployee.setName("홍길동");
-        uwEmployee.setAge(35);
-        uwEmployee.setGender("남");
-        uwEmployee.setPhoneNum("01012345678");
-        uwEmployee.setEmail("uwuwwuwu@naver.com");
-        uwEmployee.setRank("주임");
+        uwEmployee = (UWTeam) setEmployeeBasicInfo(
+                uwEmployee, "uw01", "UW",
+                "홍길동", 35, "남", "01012345678",
+                "uwuwwuwu@naver.com", "주임"
+        );
         uwEmployee.setFfsContact("1234");
         uwEmployee.setBankClerkContact("2345");
         employeeDao.create(uwEmployee);
+        //ContractManagement
+        ContractManagementTeam contractManagementEmployee = new ContractManagementTeam();
+        contractManagementEmployee = (ContractManagementTeam) setEmployeeBasicInfo(
+                contractManagementEmployee, "cm2023", "ContractManagement",
+                "김계약", 25, "여", "01012123434",
+                "igo_cm@gmail.com", "사원"
+        );
+        employeeDao.create(contractManagementEmployee);
+
         return true;
+    }
+
+    private static Employee setEmployeeBasicInfo(Employee employee, String id, String type, String name, int age, String gender, String phoneNum, String email, String rank) {
+        employee.setId(id);
+        employee.setType(type);
+        employee.setName(name);
+        employee.setAge(age);
+        employee.setGender(gender);
+        employee.setPhoneNum(phoneNum);
+        employee.setEmail(email);
+        employee.setRank(rank);
+
+        return employee;
     }
 
     private static boolean registerProductData(){
