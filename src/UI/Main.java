@@ -98,7 +98,9 @@ public class Main {
 	private static boolean loginCustomer(BufferedReader inputReader) throws IOException {
 		System.out.println("---------회원 로그인---------");
 		while(true) {
+			System.out.println("x. 뒤로가기");
 			System.out.print("고객 ID: "); String id = inputReader.readLine().trim();
+			if (id.equals("x")) return false;
 			try {
 				// 로그인 정보 확인
 				for (Customer customer : customerDao.retrieveAllCustomer()) {
@@ -119,7 +121,9 @@ public class Main {
 	private static boolean loginEmployee(BufferedReader inputReader) throws IOException {
 		System.out.println("---------직원 로그인---------");
 		while(true) {
+			System.out.println("x. 뒤로가기");
 			System.out.print("직원 ID: "); String id = inputReader.readLine().trim();
+			if (id.equals("x")) return false;
 			try {
 				// 로그인 정보 확인
 				for (Employee employee : employeeDao.retrieveAllEmployee()) {
