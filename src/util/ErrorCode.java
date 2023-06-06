@@ -8,6 +8,11 @@ public enum ErrorCode {
     EMPTY_PASSWORD(false, 201, "비밀번호를 입력해주세요."),
     NOT_EXIST_ID(false, 202, "존재하지 않는 아이디입니다."),
     WRONG_TOKEN(false, 203, "잘못된 토큰입니다."),
+    LOADING_ERROR_CUSTOMER(false,204,"[Error!] 현재 시스템의 성능 저하로 서비스가 원할하게 진행되지 못하고 있습니다. 잠시후 다시 시도해 주세요." +
+            "\n고객센터 번호: 02-8282-7575"),
+    LOADING_ERROR_EMPLOYEE(false,205,"[Error!] 현재 시스템의 성능 저하로 서비스가 원할하게 진행되지 못하고 있습니다. 잠시후 다시 시도해 주세요." +
+            "\n전산팀 사내 유선번호: 047"),
+
 
     // DATA
     NULL_DATA(false, 300, "데이터가 존재하지 않습니다."),
