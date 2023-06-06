@@ -132,6 +132,7 @@ public class DBFunctions {
                             "fee DOUBLE," +
                             "premium DOUBLE," +
                             "paymentRate DOUBLE," +
+                            "numberOfNonPayments INT," +
                             "period INT," +
                             "signedDate DATE," +
                             "expirationDate DATE," +
