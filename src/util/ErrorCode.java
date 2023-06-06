@@ -12,7 +12,6 @@ public enum ErrorCode {
     LOADING_ERROR_EMPLOYEE(false,205,"[Error!] 현재 시스템의 성능 저하로 서비스가 원할하게 진행되지 못하고 있습니다. 잠시후 다시 시도해 주세요." +
             "\n전산팀 사내 유선번호: 047"),
 
-
     // DATA
     NULL_DATA(false, 300, "데이터가 존재하지 않습니다."),
 
@@ -22,7 +21,12 @@ public enum ErrorCode {
     // 은행원
     NO_RESPONSE_TO_CURRENT_CUSTOMER_INFO_REQ(false, 500, "현재 고객 정보 요청에 대한 응답이 없어 재요청하였습니다."),
     NO_RESPONSE_TO_REGISTER_REINSURANCE_INFO_REQ(false, 501, "현재 재보험 등록 요청에 대한 응답이 없어 재요청 하였습니다."),
+
+    // 보상지급팀
+    IS_BANK_INSPECTION_TIME(false,600,"[Error!]: 은행 점검 시간입니다.(00:00~01:30) 점검이 끝나면 다시 시도해주세요")
     ;
+
+
 
     private final boolean isSuccess;
     private final int code;
