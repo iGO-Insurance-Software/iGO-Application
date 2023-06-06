@@ -48,6 +48,14 @@ public class DBFunctions {
                             "lawsuitCost DOUBLE, " +
                             "winOrLoseMoney INT" +
                             ") AUTO_INCREMENT = 1;");
+                    dao.create("CREATE TABLE Insurance("+
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "name VARCHAR(50),"+
+                            "type VARCHAR(20),"+
+                            "description VARCHAR(255),"+
+                            "price DOUBLE,"+
+                            "detailedCategory VARCHAR(50)"+
+                            ");");
                     dao.execute("CREATE TABLE Prototype (" +
                             "id VARCHAR(20) PRIMARY KEY," +
                             " description VARCHAR(255), "+
@@ -178,6 +186,7 @@ public class DBFunctions {
                     dao.execute("DROP TABLE Customer;");
                     dao.execute("DROP TABLE Prototype;");
                     dao.execute("DROP TABLE Accident;");
+                    dao.execute("DROP TABLE Insurance;");
                     break;
                 default:
                     System.out.println("Please select from the menu");
@@ -291,26 +300,21 @@ public class DBFunctions {
         );
         employeeDao.create(compensationEmployee);
         //productDevelopmentTeam
-        ProductDevelopmentTeam ProductDevelopmentTeamEmployee = new ProductDevelopmentTeam();
-        ProductDevelopmentTeamEmployee.setId("pd2025");
-        ProductDevelopmentTeamEmployee.setType("ProductDevelopment");
-        ProductDevelopmentTeamEmployee.setName("김노아");
-        ProductDevelopmentTeamEmployee.setAge(30);
-        ProductDevelopmentTeamEmployee.setGender("남");
-        ProductDevelopmentTeamEmployee.setPhoneNum("01022223334");
-        ProductDevelopmentTeamEmployee.setEmail("productdevman@naver.com");
-        ProductDevelopmentTeamEmployee.setRank("Manager");
-        employeeDao.create(ProductDevelopmentTeamEmployee);
-        ComplianceTeam ComplianceTeamEmployee = new ComplianceTeam();
-        ComplianceTeamEmployee.setId("ct2026");
-        ComplianceTeamEmployee.setType("Compliance");
-        ComplianceTeamEmployee.setName("김미연");
-        ComplianceTeamEmployee.setAge(30);
-        ComplianceTeamEmployee.setGender("남");
-        ComplianceTeamEmployee.setPhoneNum("01022223335");
-        ComplianceTeamEmployee.setEmail("compliancechiefn@naver.com");
-        ComplianceTeamEmployee.setRank("Chief");
-        employeeDao.create(ComplianceTeamEmployee);
+        ProductDevelopmentTeam productDevelopmentTeamEmployee = new ProductDevelopmentTeam();
+        productDevelopmentTeamEmployee = (ProductDevelopmentTeam) setEmployeeBasicInfo(
+                productDevelopmentTeamEmployee, "pd2025", "ProductDevelopment",
+                "김노아", 30, "남", "01022223334",
+                "productdevman@naver.com", "Manager"
+        );
+        employeeDao.create(productDevelopmentTeamEmployee);
+        //ComplianceTeam
+        ComplianceTeam complianceTeamEmployee = new ComplianceTeam();
+        complianceTeamEmployee = (ComplianceTeam) setEmployeeBasicInfo(
+                complianceTeamEmployee, "ct2026", "Compliance",
+                "김미연", 30, "남", "01022223335",
+                "compliancechiefn@naver.com", "Chief"
+        );
+        employeeDao.create(complianceTeamEmployee);
         //UW
         UWTeam uwEmployee = new UWTeam();
         uwEmployee = (UWTeam) setEmployeeBasicInfo(

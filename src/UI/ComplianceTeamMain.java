@@ -142,27 +142,6 @@ public class ComplianceTeamMain {
                     System.out.print("Set up price for this prototype: ");
                     String priceInput = inputReader.readLine().trim();
                     choicedPrototype.setPrice(Double.parseDouble(priceInput));
-                    System.out.print("Set up payment term for this prototype");
-                    priceInput = inputReader.readLine().trim();
-                    System.out.println("1.Weekly");
-                    System.out.println("2.Monthly");
-                    System.out.println("3.Yearly");
-                    System.out.println("Other.One sum");
-                    String userChoice = inputReader.readLine().trim();
-                    switch(userChoice){
-                        case "1":
-                            choicedPrototype.setPaymentTerm(7);
-                            break;
-                        case "2":
-                            choicedPrototype.setPaymentTerm(30);
-                            break;
-                        case "3":
-                            choicedPrototype.setPaymentTerm(365);
-                            break;
-                        default:
-                            choicedPrototype.setPaymentTerm(0);
-                            break;
-                    }
                     choicedPrototype.setStatus("Approved");
                     prototypeDao.update(choicedPrototype);
                     System.out.println("Prototype approved successfully!");

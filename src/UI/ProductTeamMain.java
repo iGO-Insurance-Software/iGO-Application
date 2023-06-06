@@ -4,6 +4,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
+
+import Dao.InsuranceDao;
 import Insurance.Insurance;
 import Dao.ComplianceTeamDao;
 import Dao.PrototypeDao;
@@ -416,20 +418,18 @@ public class ProductTeamMain {
                 System.out.println("Insurance's description: " + newInsurance.getDescription());
                 newInsurance.setPrice(choicedPrototype.getPrice());
                 System.out.println("Insurance's price: " + newInsurance.getPrice());
-              //  newInsurance.setPaymentTerm(choicedPrototype.getPaymentTerm());
-             //   System.out.println("Insurance's Payment Term: " + newInsurance.getPaymentTerm());
                 String text = choicedPrototype.getStatus();
                 int startIndex = text.indexOf(":") + 2; // Add 2 to skip the ": "
                 int endIndex = text.length() - 1; // Subtract 1 to exclude the closing parenthesis
                 //Create insuranceDao
-                //     InsuranceDao insuranceDao = new InsuranceDao();
-                //     insuranceDao.create(newInsurance);
+                InsuranceDao insuranceDao = new InsuranceDao();
+                insuranceDao.create(newInsurance);
                 System.out.println("New Insurance created!");
                 //send message to All compliance employees
                 for (Employee compilanceEmployee : complianceTeamDao.retrieveAll()) {
                     showMessageForEmployee(compilanceEmployee, "new insurance (Id :"+ newInsurance.getId() + ") is created");
                 }
-                //prototypeDao.deleteById(choicedPrototype.getId());
+                prototypeDao.deleteById(choicedPrototype.getId());
                 return true; // Return true indicating that the prototype creation was successful
             } else {
                 System.out.println("Prototype creation cancelled.");

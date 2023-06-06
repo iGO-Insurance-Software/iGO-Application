@@ -14,6 +14,7 @@ import Customer.Customer;
 import Customer.UnpaidCustomer;
 import Employee.Employee;
 import Employee.ContractManagementTeam;
+import Employee.ComplianceTeam;
 import Employee.AccidentReceptionTeam;
 import Employee.InvestigationTeam;
 import Employee.CompensationTeam;
@@ -268,10 +269,12 @@ public class Main {
 				case "ContractManagement":
 					showContractManagementTeamMenu(inputReader);
 					return;
-        case "ProductDevelopment":
-          showProductDevelopmentTeamMenu(inputReader);
-        case "Compliance":
-          showComplianceTeamMenu(inputReader);
+				case "ProductDevelopment":
+					showProductDevelopmentTeamMenu(inputReader);
+				  	return;
+				case "Compliance":
+					showComplianceTeamMenu(inputReader);
+					  return;
 				default:
 					System.out.println("잘못된 접근입니다.");
 					return;
@@ -358,6 +361,7 @@ public class Main {
 				default:
 					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
 					break;
+			}
 		}
 	}
 
@@ -416,14 +420,14 @@ public class Main {
 		// TODO: 화면에 미납자 목록 띄우고 미납 안내할 고객 선택/미납 횟수가 3회 이상일 경우 실효 보험으로 처리
 	}
   
-  private static void showProductDevelopmentTeamMenu(BufferedReader inputReader) throws IOException {
+  	private static void showProductDevelopmentTeamMenu(BufferedReader inputReader) throws IOException {
 		ProductTeamMain productTeamMain = new ProductTeamMain();
-    productTeamMain.showFunctions(inputReader);
+    	productTeamMain.showFunctions(inputReader);
 	}
   
-  private static void showComplianceTeamMenu(BufferedReader inputReader) throws IOException {
-		PComplianceTeamMain complianceTeamMain = new ComplianceTeamMain();
-	  complianceTeamMain.showFunctions(inputReader);
+  	private static void showComplianceTeamMenu(BufferedReader inputReader) throws IOException {
+		ComplianceTeamMain complianceTeamMain = new ComplianceTeamMain();
+	  	complianceTeamMain.showFunctions(inputReader);
 	}
 
 	public static boolean showMessageForCustomer(Customer customer, String message) {
