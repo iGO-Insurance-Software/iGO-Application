@@ -170,7 +170,12 @@ public class Main {
 					System.out.println();
 					switch (userChoiceValue) {
 						case "1":
-							HashMap<String,String> accidentInfo = sendReception(inputReader);
+							HashMap<String,String> accidentInfo = null;
+							try {
+								accidentInfo = sendReception(inputReader);
+							} catch (BaseException e) {
+								System.out.println(e.getMessage());
+							}
 							if (accidentInfo != null) receiveReception(accidentInfo,inputReader);
 							break;
 						case "2":
