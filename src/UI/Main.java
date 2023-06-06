@@ -8,10 +8,19 @@ import Dao.AccidentReceptionTeamDao;
 import Dao.InvestigationTeamDao;
 import Dao.CompensationTeamDao;
 import Dao.ContractDao;
+import Dao.ProductDevelopmentTeamDao;
+import Dao.ComplianceTeamDao;
 import Customer.Customer;
 import Customer.UnpaidCustomer;
 import Employee.Employee;
 import Employee.ContractManagementTeam;
+import Employee.AccidentReceptionTeam;
+import Employee.InvestigationTeam;
+import Employee.CompensationTeam;
+import Employee.ProductDevelopmentTeam;
+import Employee.ComplianceTeam;
+import Employee.UWTeam;
+import Dao.PrototypeDao;
 import util.BaseException;
 import util.ErrorCode;
 import java.io.BufferedReader;
@@ -36,7 +45,9 @@ public class Main {
 	public static ContractDao contractDao = new ContractDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
-
+	public static PrototypeDao prototypeDao = new PrototypeDao();
+	public static ComplianceTeamDao complianceTeamDao = new ComplianceTeamDao();
+	public static ProductDevelopmentTeamDao productDevelopmentTeamDao = new ProductDevelopmentTeamDao();
 
 	public static void main(String[] args) throws IOException {
 		//link DB
@@ -257,6 +268,10 @@ public class Main {
 				case "ContractManagement":
 					showContractManagementTeamMenu(inputReader);
 					return;
+        case "ProductDevelopment":
+          showProductDevelopmentTeamMenu(inputReader);
+        case "Compliance":
+          showComplianceTeamMenu(inputReader);
 				default:
 					System.out.println("잘못된 접근입니다.");
 					return;
@@ -343,7 +358,6 @@ public class Main {
 				default:
 					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
 					break;
-			}
 		}
 	}
 
@@ -400,6 +414,16 @@ public class Main {
 	private static void getUnpaidCustomer(BufferedReader inputReader) throws IOException {
 		ArrayList<UnpaidCustomer> unpaidCustomerList = ((ContractManagementTeam) currentEmployee).getUnpaidCustomer(inputReader);
 		// TODO: 화면에 미납자 목록 띄우고 미납 안내할 고객 선택/미납 횟수가 3회 이상일 경우 실효 보험으로 처리
+	}
+  
+  private static void showProductDevelopmentTeamMenu(BufferedReader inputReader) throws IOException {
+		ProductTeamMain productTeamMain = new ProductTeamMain();
+    productTeamMain.showFunctions(inputReader);
+	}
+  
+  private static void showComplianceTeamMenu(BufferedReader inputReader) throws IOException {
+		PComplianceTeamMain complianceTeamMain = new ComplianceTeamMain();
+	  complianceTeamMain.showFunctions(inputReader);
 	}
 
 	public static boolean showMessageForCustomer(Customer customer, String message) {

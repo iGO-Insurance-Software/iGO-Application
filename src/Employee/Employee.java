@@ -14,23 +14,17 @@ public class Employee {
 	protected String phoneNum;
 	protected String email;
 	protected String rank;
-
-	public Employee(){
-
-	}
+	public Employee(){}
 
 	public int getAge() {
 		return age;
 	}
-
 	public void setAge(int age) {
 		this.age = age;
 	}
-
 	public String getEmail() {
 		return email;
 	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -43,7 +37,6 @@ public class Employee {
 	public String getType() {
 		return type;
 	}
-
 	public void setType(String type) {
 		this.type = type;
 	}
@@ -76,5 +69,4 @@ public class Employee {
 		System.out.println(message);
 		return true;
 	}
-
 }

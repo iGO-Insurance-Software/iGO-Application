@@ -42,9 +42,11 @@ public class UWMain {
         String userChoiceValue;
         while (isRemain) {
             System.out.println("\n************************ UW Team MENU ************************");
-            System.out.println("x. 로그아웃하기 logout");
-            System.out.println("1. 고객 정보 요청하기 require customer info");
-            System.out.println("2. 손해율 분석하기 calculate loss ratio");
+            System.out.println("x. 로그아웃하기");
+            System.out.println("1. 고객 정보 요청");
+            System.out.println("2. 손해율 분석");
+            System.out.println("3. 인수심사");
+            System.out.println("4. 재보험 등록");
             System.out.print("\nChoice: ");
             userChoiceValue=inputReader.readLine().trim();
 
@@ -64,11 +66,14 @@ public class UWMain {
                 case "1":
                     HashMap<String, String> basicCustomerInfo = new HashMap<>();
                     HashMap<String, String> responseInfo = null;
-                    System.out.print("이름: "); basicCustomerInfo.put("name", inputReader.readLine().trim());
-                    System.out.print("\n주민등록번호: "); basicCustomerInfo.put("ssn", inputReader.readLine().trim());
+                    System.out.print("고객 이름: "); basicCustomerInfo.put("name", inputReader.readLine().trim());
+                    System.out.print("\n고객 주민등록번호: "); basicCustomerInfo.put("ssn", inputReader.readLine().trim());
                     System.out.print("\n요청 사유: "); basicCustomerInfo.put("requestReason", inputReader.readLine().trim());
+                    System.out.print("\n1. 요청하기");
+                    System.out.print("\nChoice: ");
+                    inputReader.readLine().trim();
                     try {
-                        responseInfo = employee.requestCustomerInformation(basicCustomerInfo, ((UWTeam) employee).getBankClerkContact());
+                        responseInfo = employee.requestCustomerInformation(basicCustomerInfo, employee.getBankClerkContact());
                     } catch (BaseException e) {throw new RuntimeException(e);}
                     if(responseInfo.get("rejectReason") != null) System.out.println("고객 정보 요청이 거절되었습니다\n거절 사유: "+responseInfo.get("rejectReason"));
                     else{
@@ -98,6 +103,10 @@ public class UWMain {
                             userChoiceValue=inputReader.readLine().trim();
                             int contractId = Integer.parseInt(userChoiceValue);
                             Contract contract = contractDao.retrieveById(contractId);
+                            if(contract == null) {
+                                System.out.println("일치하는 계약 ID가 없습니다.");
+                                break;
+                            }
                             Customer insuredCustomer =customerDao.retrieveById(contract.getInsuredCustomerID());
                             HashMap<String, String> reqCustomerInfos = new HashMap<>();
                             HashMap<String, String> insuredCustomerInfo = null;
@@ -105,9 +114,12 @@ public class UWMain {
                             reqCustomerInfos.put("ssn", insuredCustomer.getRrn());
                             reqCustomerInfos.put("requestReason", "보험 계약을 위한 고객 정보 요청");
                             try {
-                                insuredCustomerInfo = ((UWTeam) employee).requestCustomerInformation(reqCustomerInfos, ((UWTeam) employee).getBankClerkContact());
+                                insuredCustomerInfo = employee.requestCustomerInformation(reqCustomerInfos, employee.getBankClerkContact());
                             } catch (BaseException e) {throw new RuntimeException(e);}
-                            if(insuredCustomerInfo.get("rejectReason") != null) System.out.println("고객 정보 요청이 거절되었습니다\n거절 사유: "+insuredCustomerInfo.get("rejectReason"));
+                            if(insuredCustomerInfo.get("rejectReason") != null) {
+                                System.out.println("고객 정보 요청이 거절되었습니다\n거절 사유: "+insuredCustomerInfo.get("rejectReason"));
+                                break;
+                            }
                             else{
                                 System.out.println("--고객 정보--\n고객: "+reqCustomerInfos.get("name")+", "+reqCustomerInfos.get("ssn")+"\n고객의 정보");
                                 System.out.print("이름: "+insuredCustomerInfo.get("name"));
@@ -135,6 +147,7 @@ public class UWMain {
 //                            inputReader.readLine();
 //                            HashMap<String, String> result = contract.calculateLossRatio(insurance, insuredCustomer);
 //                            if(result.get("isResult").equals("true")) {
+//                                contractDao.update(contract);
 //                                System.out.println("손해율 분석이 완료되었습니다.");
 //                                System.out.print("예상 고객 납부금액: "+result.get("estimatedEarning"));
 //                                System.out.print("\n예상 지급금액: "+result.get("estimatedPayment"));
@@ -146,10 +159,14 @@ public class UWMain {
                             break;
                         case "2":
                             System.out.println("손해율을 계산할 재보험 계약 ID를 입력해주세요.");
-                            System.out.print("\nReinsurance Contract ID: ");
+                            System.out.print("\nReinsurance ID: ");
                             userChoiceValue=inputReader.readLine().trim();
                             int reinsuranceId = Integer.parseInt(userChoiceValue);
                             Reinsurance reinsurance = reinsuranceDao.retrieveById(reinsuranceId);
+                            if(reinsurance == null){
+                                System.out.println("일치하는 재보험 ID가 없습니다.");
+                                break;
+                            }
                             System.out.println("--재보험 회사 정보--");
                             System.out.print("재보험 회사 이름: "+reinsurance.getReinsuranceCompanyName());
                             System.out.print("\n재보험 회사 담당자 이름: "+reinsurance.getReinsuranceCompanyManagerName());
@@ -166,6 +183,7 @@ public class UWMain {
 //                            Insurance targetInsurance = insuranceDao.retrieveById(targetContract.getInsuranceID());
 //                            HashMap<String, String> result = reinsurance.calculateLossRatio(targetContract, targetInsurance);
 //                            if(result.get("isResult").equals("true")) {
+//                                reinsuranceDao.update(reinsurance);
 //                                System.out.println("손해율 분석이 완료되었습니다.");
 //                                System.out.print("예상 고객 납부금액: "+result.get("estimatedEarning"));
 //                                System.out.print("\n예상 지급금액: "+result.get("estimatedPayment"));
@@ -180,6 +198,10 @@ public class UWMain {
                 // 3. 인수심사
                 case "3":
                     ArrayList<Contract> waitStateContractList = contractDao.retrieveAllWaitStateContract();
+                    if(waitStateContractList.isEmpty()) {
+                        System.out.println("인수 심사 대기 중인 계약이 없습니다.");
+                        break;
+                    }
                     System.out.println("--인수 심사 대기 리스트--");
                     for(Contract contract : waitStateContractList) {
                         System.out.print("계약 ID: " + contract.getId() +
@@ -196,6 +218,10 @@ public class UWMain {
                     Contract uwTargetContract = null;
                     for(Contract contract : waitStateContractList) {
                         if(contract.getId() == contractId) uwTargetContract = contract;
+                    }
+                    if(uwTargetContract == null){
+                        System.out.println("일치하는 계약 ID가 없습니다.");
+                        break;
                     }
                     // insuranceDao가 생성되면 주석 해제
 //                    Insurance uwTargetInsurance = insuranceDao.retrieveById(uwTargetContract.getInsuranceID());
@@ -218,6 +244,7 @@ public class UWMain {
 //                    inputReader.readLine().trim();
 //                    HashMap<String, String> result = uwTargetContract.calculateLossRatio(uwTargetInsurance, uwTargetInsuredCustomer);
 //                    if(result.get("isResult").equals("true")) {
+//                        contractDao.update(uwTargetContract);
 //                        System.out.println("손해율 분석이 완료되었습니다.");
 //                        System.out.print("예상 고객 납부금액: "+result.get("estimatedEarning"));
 //                        System.out.print("\n예상 지급금액: "+result.get("estimatedPayment"));
