@@ -26,7 +26,7 @@ public class FFS {
             else if(userChoiceValue.equals("2")){
                 uwResult.put("isResult", "false");
                 System.out.print("거절 사유: "); uwResult.put("rejectReason", inputReader.readLine().trim());
-                System.out.println("1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
+                System.out.println("\n1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
             }
             return uwResult;
         } catch (IOException e) {
@@ -44,7 +44,7 @@ public class FFS {
             else if(userChoiceValue.equals("2")){
                 reUWResult.put("isResult", "false");
                 System.out.print("거절 사유: "); reUWResult.put("rejectReason", inputReader.readLine().trim());
-                System.out.println("1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
+                System.out.println("\n1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
             }
             return reUWResult;
         } catch (IOException e) {
@@ -52,15 +52,15 @@ public class FFS {
         }
     }
     private String printContractInfo(Contract contract, Insurance insurance, InsuredCustomer insuredCustomer, String reUnderwriteReason){
-        System.out.println("____________금융감독원____________");
+        System.out.println("\n____________금융감독원____________");
         System.out.println("-피보험자 정보");
         System.out.println("이름: " + insuredCustomer.getName() +
                 "\n주민등록번호: " + insuredCustomer.getRrn());
-        System.out.println("-보험 정보");
+        System.out.println("\n-보험 정보");
         System.out.println("이름: " + insurance.getName() +
                 "\n지급 금액: " + insurance.getPrice() +
                 "\n보험 설명: " + insurance.getDescription());
-        System.out.println("-계약 내용");
+        System.out.println("\n-계약 내용");
         System.out.println("계약 금액: " + contract.getPremium() +
                 "\n보험료 납부 주기: " + contract.getPaymentTerm() +
                 "\n요율: " + contract.getPaymentRate() +
@@ -69,8 +69,8 @@ public class FFS {
         if(reUnderwriteReason != null){
             System.out.println("재심사 사유: "+reUnderwriteReason);
         }
-        System.out.println("1.승인  2.거절");
-        System.out.print("Choice: ");
+        System.out.println("\n1.승인  2.거절");
+        System.out.print("\nChoice: ");
         try {
             String userChoiceValue = inputReader.readLine().trim();
             return userChoiceValue;
