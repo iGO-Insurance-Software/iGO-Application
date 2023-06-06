@@ -41,7 +41,6 @@ public class Main {
 	public static CompensationTeamDao compensationTeamDao = new CompensationTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
 	public static ContractDao contractDao = new ContractDao();
-	public static InsuranceDao insuranceDao = new InsuranceDao();
 	public static ReinsuranceDao reinsuranceDao = new ReinsuranceDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
