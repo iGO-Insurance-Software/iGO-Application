@@ -1,11 +1,11 @@
 package Insurance;
 
+import javax.management.monitor.StringMonitor;
 import java.util.HashMap;
 
 public class Insurance {
-
-	protected String description;
 	protected String id;
+	protected String description;
 	protected String type;
 	protected String name;
 	protected double price;
