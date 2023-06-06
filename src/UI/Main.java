@@ -20,7 +20,6 @@ import util.ErrorCode;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.nio.file.LinkOption;
 import java.util.*;
 import static UI.AccidentReceptionMain.*;
 import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
@@ -63,68 +62,67 @@ public class Main {
 				} else break;
 			}
 		}
-		boolean isLogin = true;
-		while (isLogin) {
-			printMenu();
-			String userChoiceValue = inputReader.readLine().trim();
-			switch (userChoiceValue) {
-				case "1":
-					login(inputReader);
-					break;
-				case "x":
-					return;
-				default:
-					System.out.println("Please select from the menu");
-			}
+
+		// 로그인
+		login(inputReader);
+	}
+
+	private static void login(BufferedReader inputReader) throws IOException {
+		boolean isLoginMode = true;
+		while (isLoginMode) {
+
+				printLoginMenu();
+				String userChoiceValue = inputReader.readLine().trim();
+				switch (userChoiceValue) {
+					case "1":
+						if (loginCustomer(inputReader)) {
+							showCustomerMenu(inputReader);
+							isLoginMode = false;
+						}
+						break;
+					case "2":
+						if (loginEmployee(inputReader)) {
+							showEmployeeMenu(inputReader);
+							isLoginMode = false;
+						}
+						break;
+					case "x":
+						System.out.println("프로그램을 종료합니다.");
+						return;
+					default:
+						System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+						break;
+				}
 		}
 	}
 
-	private static void printMenu() {
-		System.out.println("************************ MAIN MENU ************************");
-		System.out.println("1. 로그인하기");
-		//System.out.println("2. 회원가입하기");
-		System.out.println("x. Exit");
+	private static void printLoginMenu() {
+		System.out.println("____________Login____________");
+		System.out.println("1.회원 로그인");
+		System.out.println("2.직원 로그인");
+		System.out.println("x. 종료");
 		System.out.print("\nChoice: ");
 	}
 
-	private static boolean login(BufferedReader inputReader) throws IOException {
-		boolean isRemain = true;
-		while (isRemain) {
-			System.out.println("____________Login____________");
-			System.out.println("1.회원 로그인, 2.직원 로그인 x.이전으로 돌아가기");
-			System.out.print("\nChoice: ");
-			String userChoiceValue = inputReader.readLine().trim();
-			switch (userChoiceValue) {
-				case "1":
-					if (loginCustomer(inputReader)) showCustomerMenu(inputReader);
-					break;
-				case "2":
-					if (loginEmployee(inputReader)) showEmployeeMenu(inputReader);
-					break;
-				case "x":
-					isRemain = false;
-					break;
-				default:
-					System.out.println("Please select from the menu");
-					break;
-			}
-		}
-		return true;
-	}
-
 	private static boolean loginCustomer(BufferedReader inputReader) throws IOException {
-		System.out.print("ID: ");
-		String id = inputReader.readLine().trim();
-		//System.out.print("Password: "); String password = inputReader.readLine().trim();
-		for (Customer customer : customerDao.retrieveAllCustomer()) {
-			if (customer.getId().equals(id)) {
-				currentCustomer = customer; //현재 접속중인 고객을 cust로 설정
-				System.out.println("# 로그인 성공. 환영합니다 " + currentCustomer.getName() + " 고객님\n");
-				return true;
+		System.out.println("---------회원 로그인---------");
+		while(true) {
+			System.out.print("고객 ID: "); String id = inputReader.readLine().trim();
+			try {
+				// 로그인 정보 확인
+				for (Customer customer : customerDao.retrieveAllCustomer()) {
+					if (customer.getId().equals(id)) {
+						currentCustomer = customer; // 현재 접속 고객 설정
+						System.out.println("# 로그인 성공!" + currentCustomer.getName() + " 고객님 환영합니다.");
+						return true;
+					}
+				}
+				// 해당하는 ID가 없을 경우 예외 처리
+				throw new BaseException(ErrorCode.NOT_EXIST_ID);
+			} catch (BaseException e) {
+				System.out.println(e.getMessage());
 			}
 		}
-		System.out.println("# 로그인 실패. ID를 확인하고 다시 로그인 해주세요");
-		return false;
 	}
 
 	private static boolean loginEmployee(BufferedReader inputReader) throws IOException {
