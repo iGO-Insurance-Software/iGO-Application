@@ -1,16 +1,15 @@
 package Insurance;
 
+import javax.management.monitor.StringMonitor;
 import java.util.HashMap;
 
 public class Insurance {
-
+	protected String id;
 	protected String description;
-	protected int id;
-
 	protected String name;
-
 	protected double price;
 	private String detailedCategory;
+	private int paymentTerm;
 
 	public Insurance(){
 
@@ -24,11 +23,11 @@ public class Insurance {
 		this.description = description;
 	}
 
-	public int getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -54,6 +53,14 @@ public class Insurance {
 
 	public void setDetailedCategory(String detailedCategory) {
 		this.detailedCategory = detailedCategory;
+	}
+
+	public int getPaymentTerm() {
+		return paymentTerm;
+	}
+
+	public void setPaymentTerm(int id) {
+		this.paymentTerm = paymentTerm;
 	}
 
 	public HashMap<String,String> getInfo(){

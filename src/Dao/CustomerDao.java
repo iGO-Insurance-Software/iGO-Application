@@ -78,6 +78,56 @@ public class CustomerDao extends Dao{
         }
         return customerList;
     }
+    public ArrayList<Customer> retrieveAllByAge(String customerAge) {
+        String query = "SELECT * FROM Customer WHERE Customer.age  = '"+
+                customerAge+"';";
+        ArrayList<Customer> customerList = null;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            customerList = new ArrayList<Customer>();
+            while(resultSet.next()) {
+                Customer customer = new Customer();
+                customer.setId(resultSet.getString("id"));
+                customer.setType(resultSet.getString("type"));
+                customer.setName(resultSet.getString("name"));
+                customer.setRrn(resultSet.getString("rrn"));
+                customer.setAge(resultSet.getInt("age"));
+                customer.setGender(resultSet.getString("gender"));
+                customer.setPhoneNum(resultSet.getString("phoneNum"));
+                customer.setOccupation(resultSet.getString("occupation"));
+                customerList.add(customer);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customerList;
+    }
+    public ArrayList<Customer> retrieveAllByGender(String customerGender) {
+        String query = "SELECT * FROM Customer WHERE Customer.gender  = '"+
+                customerGender+"';";
+        ArrayList<Customer> customerList = null;
+        try {
+            ResultSet resultSet = super.retrieve(query);
+            customerList = new ArrayList<Customer>();
+            while(resultSet.next()) {
+                Customer customer = new Customer();
+                customer.setId(resultSet.getString("id"));
+                customer.setType(resultSet.getString("type"));
+                customer.setName(resultSet.getString("name"));
+                customer.setRrn(resultSet.getString("rrn"));
+                customer.setAge(resultSet.getInt("age"));
+                customer.setGender(resultSet.getString("gender"));
+                customer.setPhoneNum(resultSet.getString("phoneNum"));
+                customer.setOccupation(resultSet.getString("occupation"));
+                customerList.add(customer);
+            }
+            resultSet.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return customerList;
+    }
     public ArrayList<Customer> retrieveAllCustomer() {
         String query = "SELECT * FROM Customer;";
         ArrayList<Customer> customerList = null;
