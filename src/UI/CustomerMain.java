@@ -104,46 +104,6 @@ public class CustomerMain {
                             break;
                     }
                     break;
-                // 2. 고객 정보 검색
-                case "2":
-                    System.out.println("1. 나이 검색 2. 성별 검색 x. 뒤로가기");
-                    System.out.print("\nChoice: ");
-                    userChoiceValue=inputReader.readLine().trim();
-                    switch (userChoiceValue){
-                        case "1":
-                            System.out.println("나이를 입력해 주세요");
-                            System.out.print("\nAge: ");
-                            userChoiceValue=inputReader.readLine().trim();
-                            int age = Integer.parseInt(userChoiceValue);
-                            ArrayList<Customer> ageTargetCustomer = customerDao.retrieveAllByAge(age);
-                            if (ageTargetCustomer.size() == 0)   {
-                                System.out.println("해당 나이의 고객이 없습니다.");
-                                break;
-                            }
-                            for (int i = 0; i < ageTargetCustomer.size(); i++)    {
-                                System.out.println(ageTargetCustomer.get(i).getName());
-                                System.out.println(ageTargetCustomer.get(i).getPhoneNum());
-                            }
-                            break;
-                        case "2":
-                            System.out.println("성별을 입력해 주세요 ex) \"남\" \"여\"");
-                            System.out.print("\nGender: ");
-                            userChoiceValue=inputReader.readLine().trim();
-                            String gender = userChoiceValue;
-                            ArrayList<Customer> genderTargetCustomer = customerDao.retrieveAllByGender(gender);
-                            if (genderTargetCustomer.size() == 0)   {
-                                System.out.println("해당 성별의 고객이 없습니다.");
-                                break;
-                            }
-                            for (int i = 0; i < genderTargetCustomer.size(); i++)    {
-                                System.out.println(genderTargetCustomer.get(i).getName());
-                                System.out.println(genderTargetCustomer.get(i).getPhoneNum());
-                        }
-                            break;
-                        case "x":
-                            isRemain = false;
-                            break;
-                    }
                 case "x":
                     isRemain = false;
                     break;

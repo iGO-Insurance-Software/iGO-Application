@@ -78,7 +78,7 @@ public class CustomerDao extends Dao{
         }
         return customerList;
     }
-    public ArrayList<Customer> retrieveAllByAge(String customerAge) {
+    public ArrayList<Customer> retrieveAllByAge(int customerAge) {
         String query = "SELECT * FROM Customer WHERE Customer.age  = '"+
                 customerAge+"';";
         ArrayList<Customer> customerList = null;

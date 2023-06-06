@@ -15,15 +15,6 @@ import Customer.Customer;
 import Customer.UnpaidCustomer;
 import Employee.Employee;
 import Employee.ContractManagementTeam;
-import Employee.ComplianceTeam;
-import Employee.AccidentReceptionTeam;
-import Employee.InvestigationTeam;
-import Employee.CompensationTeam;
-import Employee.SalesTeam;
-import Employee.MarketingTeam;
-import Employee.ProductDevelopmentTeam;
-import Employee.ComplianceTeam;
-import Employee.UWTeam;
 import Dao.PrototypeDao;
 import util.BaseException;
 import util.ErrorCode;
@@ -166,8 +157,8 @@ public class Main {
 //		}
 		////////////////////////
 		while (true) {
+			showAdForCustomer(inputReader);
 			System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
-      showAdForCustomer();
 			switch (currentCustomer.getType()) {
 				case "Customer":
 					// 일반 고객 메뉴
@@ -185,22 +176,22 @@ public class Main {
 	}
 
 	private static void showNormalCustomerMenu(BufferedReader inputReader) throws IOException {
-		while(true) {
-			printNormalCustomerMenu();
-			String userChoiceValue = inputReader.readLine().trim();
-			switch (userChoiceValue) {
-				case "1":
-					// TODO: 일반고객 1번 메뉴에 해당하는 함수 작성
-					break;
-				case "x":
-					return;
-				default:
-					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
-					break;
-			}
-		}
-//    CustomerMain customerMain = new CustomerMain(currentCustomer);
-// 		customerMain.showCustomerMenu(inputReader);
+//		while(true) {
+//			printNormalCustomerMenu();
+//			String userChoiceValue = inputReader.readLine().trim();
+//			switch (userChoiceValue) {
+//				case "1":
+//					// TODO: 일반고객 1번 메뉴에 해당하는 함수 작성
+//					break;
+//				case "x":
+//					return;
+//				default:
+//					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+//					break;
+//			}
+//		}
+    CustomerMain customerMain = new CustomerMain(currentCustomer);
+ 		customerMain.showCustomerMenu(inputReader);
 	}
 
 	private static void printNormalCustomerMenu() {
@@ -248,21 +239,21 @@ public class Main {
 		if (accidentInfo != null) receiveReception(accidentInfo, inputReader);
 	}
   
-  private static void showAdForCustomer(BufferReader inputReader) throws IOException {
-		String userChoiceValue;
-		while (true) {
-			printAd();
-			String userChoiceValue = inputReader.readLine().trim();
-			switch (userChoiceValue) {
-				case "o":
-	        // 자세히 보기
-					break;
-				case "x":
-					return;
-				default:
-					System.out.println("번호를 정확하게 입력해주세요.");
-					break;
-			}
+  private static void showAdForCustomer(BufferedReader inputReader) throws IOException {
+	  while (true) {
+		  printAd();
+		  String userChoiceValue = inputReader.readLine().trim();
+		  switch (userChoiceValue) {
+			  case "o":
+				  // 자세히 보기
+				  break;
+			  case "x":
+				  return;
+			  default:
+				  System.out.println("번호를 정확하게 입력해주세요.");
+				  break;
+		  }
+	  }
   }
     
   private static void printAd() {
@@ -309,6 +300,8 @@ public class Main {
 				case "Compliance":
 					showComplianceTeamMenu(inputReader);
 					  return;
+				case "Sales":
+					showSalesTeamMenu(inputReader);
 				default:
 					System.out.println("잘못된 접근입니다.");
 					return;
@@ -438,10 +431,6 @@ public class Main {
 					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
 					break;
 			}
-			else if(currentEmployee instanceof SalesTeam){
-				SalesMain salesMain = new SalesMain(currentEmployee);
-				isRemain = salesMain.showEmployeeMenu(inputReader);
-			}
 		}
 	}
 
@@ -456,6 +445,11 @@ public class Main {
 	private static void getUnpaidCustomer(BufferedReader inputReader) throws IOException {
 		ArrayList<UnpaidCustomer> unpaidCustomerList = ((ContractManagementTeam) currentEmployee).getUnpaidCustomer(inputReader);
 		// TODO: 화면에 미납자 목록 띄우고 미납 안내할 고객 선택/미납 횟수가 3회 이상일 경우 실효 보험으로 처리
+	}
+
+	private static void showSalesTeamMenu(BufferedReader inputReader) throws IOException {
+		SalesMain salesMain = new SalesMain(currentEmployee);
+		salesMain.showEmployeeMenu(inputReader);
 	}
   
   	private static void showProductDevelopmentTeamMenu(BufferedReader inputReader) throws IOException {

@@ -113,7 +113,6 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
-
                     dao.execute("CREATE TABLE InvestigationTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "accidentID INT DEFAULT NULL,"+
@@ -122,6 +121,14 @@ public class DBFunctions {
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
                     dao.execute("CREATE TABLE CompensationTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
+                    dao.execute("CREATE TABLE SalesTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
+                    dao.execute("CREATE TABLE MarketingTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
@@ -134,7 +141,7 @@ public class DBFunctions {
                     dao.execute("CREATE TABLE Contract(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "contractorId VARCHAR(20),"+
-//                            "insuranceId VARCHAR(20),"+
+                            "insuranceId VARCHAR(20),"+
                             "insuredCustomerId VARCHAR(20),"+
                             "employeeId VARCHAR(20),"+
                             "fee DOUBLE," +
@@ -178,6 +185,8 @@ public class DBFunctions {
                     dao.execute("DROP TABLE AccidentReceptionTeam;");
                     dao.execute("DROP TABLE ProductDevelopmentTeam;");
                     dao.execute("DROP TABLE ComplianceTeam;");
+                    dao.execute("DROP TABLE SalesTeam;");
+                    dao.execute("DROP TABLE MarketingTeam;");
                     dao.execute("DROP TABLE UWTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
                     dao.execute("DROP TABLE Contract;");
