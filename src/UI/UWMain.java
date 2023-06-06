@@ -103,6 +103,10 @@ public class UWMain {
                             userChoiceValue=inputReader.readLine().trim();
                             int contractId = Integer.parseInt(userChoiceValue);
                             Contract contract = contractDao.retrieveById(contractId);
+                            if(contract == null) {
+                                System.out.println("일치하는 계약 ID가 없습니다.");
+                                break;
+                            }
                             Customer insuredCustomer =customerDao.retrieveById(contract.getInsuredCustomerID());
                             HashMap<String, String> reqCustomerInfos = new HashMap<>();
                             HashMap<String, String> insuredCustomerInfo = null;
@@ -159,6 +163,10 @@ public class UWMain {
                             userChoiceValue=inputReader.readLine().trim();
                             int reinsuranceId = Integer.parseInt(userChoiceValue);
                             Reinsurance reinsurance = reinsuranceDao.retrieveById(reinsuranceId);
+                            if(reinsurance == null){
+                                System.out.println("일치하는 재보험 ID가 없습니다.");
+                                break;
+                            }
                             System.out.println("--재보험 회사 정보--");
                             System.out.print("재보험 회사 이름: "+reinsurance.getReinsuranceCompanyName());
                             System.out.print("\n재보험 회사 담당자 이름: "+reinsurance.getReinsuranceCompanyManagerName());
@@ -190,6 +198,10 @@ public class UWMain {
                 // 3. 인수심사
                 case "3":
                     ArrayList<Contract> waitStateContractList = contractDao.retrieveAllWaitStateContract();
+                    if(waitStateContractList.isEmpty()) {
+                        System.out.println("인수 심사 대기 중인 계약이 없습니다.");
+                        break;
+                    }
                     System.out.println("--인수 심사 대기 리스트--");
                     for(Contract contract : waitStateContractList) {
                         System.out.print("계약 ID: " + contract.getId() +
@@ -206,6 +218,10 @@ public class UWMain {
                     Contract uwTargetContract = null;
                     for(Contract contract : waitStateContractList) {
                         if(contract.getId() == contractId) uwTargetContract = contract;
+                    }
+                    if(uwTargetContract == null){
+                        System.out.println("일치하는 계약 ID가 없습니다.");
+                        break;
                     }
                     // insuranceDao가 생성되면 주석 해제
 //                    Insurance uwTargetInsurance = insuranceDao.retrieveById(uwTargetContract.getInsuranceID());
