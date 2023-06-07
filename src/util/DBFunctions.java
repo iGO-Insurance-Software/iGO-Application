@@ -155,9 +155,9 @@ public class DBFunctions {
                             "period INT," +
                             "signedDate VARCHAR(30) DEFAULT NULL," +
                             "expirationDate VARCHAR(30) DEFAULT NULL," +
-                            "paymentTerm INT," +
+                            "paymentTerm INT DEFAULT 30," +
                             "lossRatio DOUBLE DEFAULT 0," +
-                            "underwritingState VARCHAR(50) DEFAULT '대기'," +
+                            "underwritingState VARCHAR(50) DEFAULT '가입신청'," +
                             "rejectionReasons VARCHAR(200)," +
                             "FOREIGN KEY (contractorId) REFERENCES Customer (id)," +
                             "FOREIGN KEY (insuranceId) REFERENCES Insurance (id)," +
@@ -490,18 +490,18 @@ public class DBFunctions {
         insurance.setDetailedCategory("몰라");
         insuranceDao.create(insurance);
 
-        Contract contract = new Contract();
-        contract.setContractorID("cs2023");
-        contract.setInsuranceID("202020");
-        contract.setInsuredCustomerID("ics2023");
-        contract.setEmployeeID("uw01");
-        contract.setFee(0.1);
-        contract.setPremium(50000);
-        contract.setPaymentRate(0.2);
-        contract.setNumberOfNonPayments(0);
-        contract.setPeriod(365);
-        contract.setPaymentTerm(30);
-        contractDao.create(contract);
+//        Contract contract = new Contract();
+//        contract.setContractorID("cs2023");
+//        contract.setInsuranceID("202020");
+//        contract.setInsuredCustomerID("ics2023");
+//        contract.setEmployeeID("uw01");
+//        contract.setFee(0.1);
+//        contract.setPremium(50000);
+//        contract.setPaymentRate(0.2);
+//        contract.setNumberOfNonPayments(0);
+//        contract.setPeriod(365);
+//        contract.setPaymentTerm(30);
+//        contractDao.create(contract);
 
         return true;
     }

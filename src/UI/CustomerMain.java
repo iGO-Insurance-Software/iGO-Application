@@ -71,7 +71,7 @@ public class CustomerMain {
                             Contract createContract = new Contract();
                             createContract.setContractorID(currentCustomer.getId());
                             createContract.setInsuranceID(selectedInsurance.getId());
-                            createContract.setInsuredCustomerID(currentCustomer.getId());
+//                            createContract.setInsuredCustomerID(currentCustomer.getId());
                             SalesTeamDao salesTeamDao = new SalesTeamDao();
                             int randomIndex = ThreadLocalRandom.current().nextInt(0, salesTeamDao.retrieveAll().size());
                             String salesEmployee = salesTeamDao.retrieveAll().get(randomIndex).getId();

@@ -99,6 +99,8 @@ public class SalesMain {
                             System.out.print("해당 계약의 계약기간을 입력하세요: ");
                             String contractPeriod = inputReader.readLine().trim();
                             contractToSend.setPeriod(Integer.parseInt(contractPeriod));
+                            // 여기 임의로 수정
+                            contractToSend.setPaymentTerm(30);
                             contractToSend.setEmployeeID(currentEmployee.getId());
                             contractToSend.setUnderwritingState("대기");
                             contractDao.update(contractToSend);
