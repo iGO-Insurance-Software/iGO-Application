@@ -183,10 +183,11 @@ public class Contract {
 		double estimatedEarning, estimatedPayment;
 		estimatedEarning = (this.period/this.paymentTerm) * this.premium;
 		estimatedPayment = this.paymentRate * insurance.getPrice();
-		this.lossRatio = estimatedPayment/estimatedEarning;
+		double ratio = estimatedPayment/estimatedEarning;
+		this.lossRatio = Math.round(ratio * 100.0) / 100.0;
 		result.put("estimatedEarning", Double.toString(estimatedEarning));
 		result.put("estimatedPayment", Double.toString(estimatedPayment));
-		result.put("lossRatio", Double.toString(this.lossRatio));
+		result.put("lossRatio", (this.lossRatio*100)+"%");
 		result.put("isResult", "true");
 		return result;
 	}

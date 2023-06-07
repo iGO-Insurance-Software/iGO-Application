@@ -16,7 +16,7 @@ public class Banker {
         int responseTime = (int)Math.random()*10+1;
         if(responseTime == 10) throw new BaseException(ErrorCode.NO_RESPONSE_TO_CURRENT_CUSTOMER_INFO_REQ);
         //////////////////////////////////////////////////////////////////////////
-        System.out.println("____________은행원____________\n요청한 고객 정보" +
+        System.out.println("\n____________은행원____________\n요청한 고객 정보" +
                 "\n이름: "+basicCustomerInfo.get("name")+"\n주민등록번호: "+basicCustomerInfo.get("ssn")+"\n요청 사유: "+basicCustomerInfo.get("requestReason")+
                 "\n1. 요청 수락, 2. 요청 거절");
         System.out.print("\nChoice: ");
@@ -36,7 +36,7 @@ public class Banker {
     }
     private HashMap<String, String> inputCustomerInfo(HashMap<String, String> basicCustomerInfo) throws IOException {
         HashMap<String, String> responseInfo = new HashMap<>();
-        System.out.println("1. 고객 정보 입력하기, 2. 고객 정보가 존재하지 않음");
+        System.out.println("\n1. 고객 정보 입력하기, 2. 고객 정보가 존재하지 않음");
         System.out.print("\nChoice: ");
         String bankerChoiceValue = inputReader.readLine().trim();
         if(bankerChoiceValue.equals("2")) return inputRejectReason();
@@ -57,7 +57,7 @@ public class Banker {
             int responseTime = (int)Math.random()*10+1;
             if(responseTime == 10) {
                 System.out.println("고객 정보 전송에 실패하였습니다. 잠시 후 다시 시도해주세요.");
-                System.out.println("1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
+                System.out.println("\n1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
             }
             /////////////////////////////////////////////////////////////
             return responseInfo;
@@ -66,7 +66,7 @@ public class Banker {
     private HashMap<String, String> inputRejectReason() throws IOException {
         HashMap<String, String> responseInfo = new HashMap<>();
         System.out.print("거절 사유: "); responseInfo.put("rejectReason", inputReader.readLine().trim());
-        System.out.println("1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
+        System.out.println("\n1. 전송하기"); System.out.print("\nChoice: "); inputReader.readLine().trim();
         return responseInfo;
     }
 

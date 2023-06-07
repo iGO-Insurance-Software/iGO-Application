@@ -16,8 +16,8 @@ public class ContractDao extends Dao{
         }
     }
     public void create(Contract contract){
-        String query = "INSERT INTO Contract VALUES(" +
-                "NULL,"+
+        String query = "INSERT INTO Contract(contractorId, insuranceId, insuredCustomerId, employeeId, " +
+                "fee, premium, paymentRate, period, paymentTerm) VALUES(" +
                 "'"+contract.getContractorID()+"'," +
                 "'"+contract.getInsuranceID()+"'," +
                 "'"+contract.getInsuredCustomerID()+"'," +
@@ -27,18 +27,13 @@ public class ContractDao extends Dao{
                 contract.getPaymentRate()+"," +
                 contract.getNumberOfNonPayments()+","+
                 contract.getPeriod()+"," +
-                "'"+contract.getSignedDate()+"'," +
-                "'"+contract.getExpirationDate()+"'," +
-                contract.getPaymentTerm()+"," +
-                contract.getLossRatio()+"," +
-                "'"+contract.getUnderwritingState()+"'," +
-                "'"+contract.getRejectionReasons()+"'" +
+                contract.getPaymentTerm() +
                 ");";
         super.create(query);
     }
     public Contract retrieveById(int contractID) {
-        String query = "SELECT * FROM Contract WHERE id  = '"+
-                contractID+"';";
+        String query = "SELECT * FROM Contract WHERE id  = "+
+                contractID+";";
         Contract contract = null;
         try {
             ResultSet resultSet = super.retrieve(query);
@@ -234,6 +229,65 @@ public class ContractDao extends Dao{
                 "rejectionReasons = '" + contract.getRejectionReasons() + "' " +
                 "WHERE id = " + contract.getId() + ";";
         super.update(query);
+
+        if(contract.getSignedDate() == null && contract.getExpirationDate() == null){
+            String query = "UPDATE Contract SET " +
+                    "contractorID = '" + contract.getContractorID() + "', " +
+                    "insuranceID = '" + contract.getInsuranceID() + "', " +
+                    "insuredCustomerID = '" + contract.getInsuredCustomerID() + "', " +
+                    "employeeID = '" + contract.getEmployeeID() + "', " +
+                    "fee = " + contract.getFee() + ", " +
+                    "premium = " + contract.getPremium() + ", " +
+                    "paymentRate = " + contract.getPaymentRate() + ", " +
+                    "period = " + contract.getPeriod() + ", " +
+                    "signedDate = " + contract.getSignedDate() + ", " +
+                    "expirationDate = " + contract.getExpirationDate() + ", " +
+                    "paymentTerm = " + contract.getPaymentTerm() + ", " +
+                    "lossRatio = " + contract.getLossRatio() + ", " +
+                    "underwritingState = '" + contract.getUnderwritingState() + "', " +
+                    "rejectionReasons = '" + contract.getRejectionReasons() + "'" +
+                    "WHERE id = " + contract.getId() + ";";
+            super.update(query);
+        }
+        else if(contract.getSignedDate() == null){
+            String query = "UPDATE Contract SET " +
+                    "contractorID = '" + contract.getContractorID() + "', " +
+                    "insuranceID = '" + contract.getInsuranceID() + "', " +
+                    "insuredCustomerID = '" + contract.getInsuredCustomerID() + "', " +
+                    "employeeID = '" + contract.getEmployeeID() + "', " +
+                    "fee = " + contract.getFee() + ", " +
+                    "premium = " + contract.getPremium() + ", " +
+                    "paymentRate = " + contract.getPaymentRate() + ", " +
+                    "period = " + contract.getPeriod() + ", " +
+                    "signedDate = " + contract.getSignedDate() + ", " +
+                    "expirationDate = '" + contract.getExpirationDate() + "', " +
+                    "paymentTerm = " + contract.getPaymentTerm() + ", " +
+                    "lossRatio = " + contract.getLossRatio() + ", " +
+                    "underwritingState = '" + contract.getUnderwritingState() + "', " +
+                    "rejectionReasons = '" + contract.getRejectionReasons() + "'" +
+                    "WHERE id = " + contract.getId() + ";";
+            super.update(query);
+        }
+        else if(contract.getExpirationDate() == null){
+            String query = "UPDATE Contract SET " +
+                    "contractorID = '" + contract.getContractorID() + "', " +
+                    "insuranceID = '" + contract.getInsuranceID() + "', " +
+                    "insuredCustomerID = '" + contract.getInsuredCustomerID() + "', " +
+                    "employeeID = '" + contract.getEmployeeID() + "', " +
+                    "fee = " + contract.getFee() + ", " +
+                    "premium = " + contract.getPremium() + ", " +
+                    "paymentRate = " + contract.getPaymentRate() + ", " +
+                    "period = " + contract.getPeriod() + ", " +
+                    "signedDate = '" + contract.getSignedDate() + "', " +
+                    "expirationDate = " + contract.getExpirationDate() + ", " +
+                    "paymentTerm = " + contract.getPaymentTerm() + ", " +
+                    "lossRatio = " + contract.getLossRatio() + ", " +
+                    "underwritingState = '" + contract.getUnderwritingState() + "', " +
+                    "rejectionReasons = '" + contract.getRejectionReasons() + "'" +
+                    "WHERE id = " + contract.getId() + ";";
+            super.update(query);
+        }
+
     }
     public void deleteById(int contractID){
         String query = "DELETE FROM Contract WHERE id = "+contractID+";";

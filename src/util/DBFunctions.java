@@ -1,5 +1,6 @@
 package util;
 
+import Contract.Contract;
 import Customer.Customer;
 import Dao.CustomerDao;
 import Employee.*;
@@ -8,6 +9,8 @@ import Insurance.Insurance;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.sql.Date;
+
 import static UI.Main.*;
 
 
@@ -148,17 +151,17 @@ public class DBFunctions {
                             "fee DOUBLE," +
                             "premium DOUBLE," +
                             "paymentRate DOUBLE," +
-                            "numberOfNonPayments INT," +
+                            "numberOfNonPayments INT DEFAULT 0," +
                             "period INT," +
                             "signedDate VARCHAR(30) DEFAULT NULL," +
                             "expirationDate VARCHAR(30) DEFAULT NULL," +
                             "paymentTerm INT," +
-                            "lossRatio DOUBLE," +
-                            "underwritingState VARCHAR(50)," +
-                            "rejectionReasons VARCHAR(200), " +
+                            "lossRatio DOUBLE DEFAULT 0," +
+                            "underwritingState VARCHAR(50) DEFAULT '대기'," +
+                            "rejectionReasons VARCHAR(200)," +
                             "FOREIGN KEY (contractorId) REFERENCES Customer (id)," +
                             "FOREIGN KEY (insuranceId) REFERENCES Insurance (id)," +
-                            "FOREIGN KEY (insuredCustomerId) REFERENCES Customer (id)," +
+                            "FOREIGN KEY (insuredCustomerId) REFERENCES InsuredCustomer (id)," +
                             "FOREIGN KEY (employeeId) REFERENCES Employee (id)" +
                             ");");
                     dao.execute("CREATE TABLE Reinsurance(" +
@@ -167,7 +170,7 @@ public class DBFunctions {
                             "period INT," +
                             "paymentAmount DOUBLE," +
                             "contractRate DOUBLE," +
-                            "lossRatio DOUBLE," +
+                            "lossRatio DOUBLE DEFAULT 0," +
                             "reinsuranceCompanyName VARCHAR(200)," +
                             "reinsuranceCompanyManagerName VARCHAR(200)," +
                             "reinsuranceCompanyManagerContract VARCHAR(200)," +
@@ -434,6 +437,7 @@ public class DBFunctions {
     }
 
     private static boolean registerProductData(){
+
         Insurance insurance1 = new Insurance();
         insurance1.setId("di01");
         insurance1.setDescription("만 7세부터 만 21세까지 갱신 없이 간편한 어린이 보험");
@@ -476,6 +480,29 @@ public class DBFunctions {
         insurance6.setPrice(60000);
         insurance6.setDetailedCategory("savingInsurance");
         insuranceDao.create(insurance6);
+
+        Insurance insurance = new Insurance();
+        insurance.setId("202020");
+        insurance.setName("자동차 보험");
+        insurance.setType("차");
+        insurance.setDescription("자동차 보험입니다. 사고나면 보상해줍니다.");
+        insurance.setPrice(10000000);
+        insurance.setDetailedCategory("몰라");
+        insuranceDao.create(insurance);
+
+        Contract contract = new Contract();
+        contract.setContractorID("cs2023");
+        contract.setInsuranceID("202020");
+        contract.setInsuredCustomerID("ics2023");
+        contract.setEmployeeID("uw01");
+        contract.setFee(0.1);
+        contract.setPremium(50000);
+        contract.setPaymentRate(0.2);
+        contract.setNumberOfNonPayments(0);
+        contract.setPeriod(365);
+        contract.setPaymentTerm(30);
+        contractDao.create(contract);
+
         return true;
     }
 }

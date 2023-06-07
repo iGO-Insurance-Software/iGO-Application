@@ -60,8 +60,10 @@ public class CustomerMain {
                             System.out.println("가입하고자 하는 보험의 Id를 입력하세요");
                             System.out.print("\nId: ");
                             userChoiceValue=inputReader.readLine().trim();
+
                             String id = userChoiceValue;
                             Insurance selectedInsurance = insuranceDao.retrieveById(id);
+
                             if (selectedInsurance == null) {
                                 System.out.println("해당 Id의 상품이 없습니다.");
                                 break;

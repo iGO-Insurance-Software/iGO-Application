@@ -15,7 +15,11 @@ public class ReinsuranceDao extends Dao{
         }
     }
     public void create(Reinsurance reinsurance){
-        String query = "INSERT INTO Reinsurance VALUES(" +
+        String query = "INSERT INTO Reinsurance(contractId, period, paymentAmount, " +
+                "contractRate, lossRatio, " +
+                "reinsuranceCompanyName, reinsuranceCompanyManagerName, reinsuranceCompanyManagerContract," +
+                "contractResult, rejectionReasons) VALUES(" +
+                reinsurance.getContractID()+"," +
                 reinsurance.getPeriod()+"," +
                 reinsurance.getPaymentAmount()+"," +
                 reinsurance.getContractRate()+"," +
@@ -24,20 +28,20 @@ public class ReinsuranceDao extends Dao{
                 "'"+reinsurance.getReinsuranceCompanyManagerName()+"'," +
                 "'"+reinsurance.getReinsuranceCompanyManagerContract()+"'," +
                 "'"+reinsurance.getContractResult()+"'," +
-                "'"+reinsurance.getRejectionReasons()+"'," +
-                reinsurance.getContractID()+"," +
+                "'"+reinsurance.getRejectionReasons()+"'" +
                 ");";
         super.create(query);
     }
     public Reinsurance retrieveById(int reinsuranceID) {
-        String query = "SELECT * FROM Reinsurance WHERE id  = '"+
-                reinsuranceID+"';";
+        String query = "SELECT * FROM Reinsurance WHERE id  = "+
+                reinsuranceID+";";
         Reinsurance reinsurance = null;
         try {
             ResultSet resultSet = super.retrieve(query);
             while(resultSet.next()) {
                 reinsurance = new Reinsurance();
                 reinsurance.setId(resultSet.getInt("id"));
+                reinsurance.setContractID(resultSet.getInt("contractID"));
                 reinsurance.setPeriod(resultSet.getInt("period"));
                 reinsurance.setPaymentAmount(resultSet.getDouble("paymentAmount"));
                 reinsurance.setContractRate(resultSet.getDouble("contractRate"));
@@ -47,7 +51,6 @@ public class ReinsuranceDao extends Dao{
                 reinsurance.setReinsuranceCompanyManagerContract(resultSet.getString("reinsuranceCompanyManagerContract"));
                 reinsurance.setContractResult(resultSet.getString("contractResult"));
                 reinsurance.setRejectionReasons(resultSet.getString("rejectionReasons"));
-                reinsurance.setContractID(resultSet.getInt("contractID"));
             }
             resultSet.close();
         } catch (SQLException e) {
