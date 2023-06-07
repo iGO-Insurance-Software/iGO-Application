@@ -17,6 +17,7 @@ import Customer.Customer;
 import Customer.UnpaidCustomer;
 import Employee.Employee;
 import Employee.ContractManagementTeam;
+import Insurance.Insurance;
 import Dao.PrototypeDao;
 import util.BaseException;
 import util.ErrorCode;
@@ -24,11 +25,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+
 import static UI.AccidentReceptionMain.*;
 import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
 import static UI.PayCompensationMain.showAccidentsForPayCompensation;
 import static util.DBFunctions.setDB;
 import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
+
 
 public class Main {
 	public static Dao dao = new Dao();
@@ -47,6 +51,7 @@ public class Main {
 	public static PrototypeDao prototypeDao = new PrototypeDao();
 	public static ComplianceTeamDao complianceTeamDao = new ComplianceTeamDao();
 	public static ProductDevelopmentTeamDao productDevelopmentTeamDao = new ProductDevelopmentTeamDao();
+	public static boolean isAdClosed = false;
 
 	public static void main(String[] args) throws IOException {
 		//link DB
@@ -159,7 +164,8 @@ public class Main {
 //			return false;
 //		}
 		////////////////////////
-		while (true) {
+		boolean isRemain=true;
+		while (isRemain) {
 			showAdForCustomer(inputReader);
 			System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
 			switch (currentCustomer.getType()) {
@@ -173,34 +179,15 @@ public class Main {
 					return;
 				case "Contractor":
 					// 보험 계약자 메뉴
+					showContractorMenu(inputReader);
 					return;
 			}
 		}
 	}
 
-	private static void showNormalCustomerMenu(BufferedReader inputReader) throws IOException {
-//		while(true) {
-//			printNormalCustomerMenu();
-//			String userChoiceValue = inputReader.readLine().trim();
-//			switch (userChoiceValue) {
-//				case "1":
-//					// TODO: 일반고객 1번 메뉴에 해당하는 함수 작성
-//					break;
-//				case "x":
-//					return;
-//				default:
-//					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
-//					break;
-//			}
-//		}
-    CustomerMain customerMain = new CustomerMain(currentCustomer);
- 		customerMain.showCustomerMenu(inputReader);
-	}
-
-	private static void printNormalCustomerMenu() {
-		System.out.println("1.");
-		System.out.println("x. 로그아웃");
-		System.out.print("\nChoice: ");
+	private static boolean showNormalCustomerMenu(BufferedReader inputReader) throws IOException {
+    	CustomerMain customerMain = new CustomerMain(currentCustomer);
+ 		return customerMain.showCustomerMenu(inputReader);
 	}
 
 	private static void showInsuredCustomerMenu(BufferedReader inputReader) throws IOException {
@@ -208,6 +195,11 @@ public class Main {
 			printInsuredCustomerMenu();
 			String userChoiceValue = inputReader.readLine().trim();
 			switch (userChoiceValue) {
+				case "0":
+					//보험 메뉴 확인
+					CustomerMain customerMain =  new CustomerMain(currentCustomer);
+					customerMain.showInsurancesForInsuredCustomer(inputReader);
+					break;
 				case "1":
 					// 사고 접수
 					reportAccident(inputReader);
@@ -226,6 +218,7 @@ public class Main {
 	}
 
 	private static void printInsuredCustomerMenu() {
+		System.out.println("\n\n0. 보험 메뉴 확인");
 		System.out.println("1. 사고 접수");
 		System.out.println("2. 사고 조회");
 		System.out.println("x. 로그아웃");
@@ -241,15 +234,37 @@ public class Main {
 		}
 		if (accidentInfo != null) receiveReception(accidentInfo, inputReader);
 	}
+	private static void showContractorMenu(BufferedReader inputReader) throws IOException {
+		while(true) {
+			printContractorMenu();
+			String userChoiceValue = inputReader.readLine().trim();
+			switch (userChoiceValue) {
+				case "0":
+					//보험 메뉴 확인
+					CustomerMain customerMain =  new CustomerMain(currentCustomer);
+					customerMain.showInsurancesForInsuredCustomer(inputReader);
+					break;
+				case "x":
+					return;
+				default:
+					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+					break;
+			}
+		}
+	}
+	private static void printContractorMenu() {
+		System.out.println("\n\n0. 보험 메뉴 확인");
+		System.out.print("\nChoice: ");
+	}
   
   private static void showAdForCustomer(BufferedReader inputReader) throws IOException {
 	  while (true) {
-		  printAd();
+		  if(!isAdClosed) printAd();
 		  String userChoiceValue = inputReader.readLine().trim();
 		  switch (userChoiceValue) {
 			  case "o":
-				  // 자세히 보기
-				  break;
+				  isAdClosed = true;
+				  return;
 			  case "x":
 				  return;
 			  default:
@@ -261,14 +276,30 @@ public class Main {
     
   private static void printAd() {
 		System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
-			System.out.println("-------------------------------------");
-			System.out.println("|			oo 어린이 보험			|");
-			System.out.println("|만 7세부터 만 21세까지 보장되는 필수 보험의 자세한 설명을 확인하세요|");
-			System.out.println("-------------------------------------");
-			System.out.println("x. 닫기 O. 자세히 보기");
-			System.out.print("\nChoice: ");
+				try{
+					Insurance insurance = loadInsuranceForAd();
+					if(insurance!=null) {
+						//광고 로딩 성공
+						System.out.println("-----------------------------광고----------------------------");
+						System.out.println("|			              " + insurance.getName() + "			              |");
+						System.out.println("|" + insurance.getDescription() + "|");
+						System.out.println("-------------------------------------------------------------");
+						System.out.println("x. 닫기 o. 접어두기");
+						System.out.print("\nChoice: ");
+						return;
+					} 	//광고 로드 실패
+						throw new BaseException(ErrorCode.LOADING_ERROR_AD);
+				}catch(BaseException e){
+					System.out.println(e.getMessage());
+				}
 	}
-
+	private static Insurance loadInsuranceForAd(){
+		//랜덤한 보험 호출해서 광고
+		int randomIndex = ThreadLocalRandom.current().nextInt(0, insuranceDao.retrieveAll().size());
+		Insurance randomInsurance = insuranceDao.retrieveAll().get(randomIndex);
+		if(randomInsurance!=null) return randomInsurance;
+		else return null;
+	}
 	private static void showEmployeeMenu(BufferedReader inputReader) throws IOException {
 		//Exception:7초이상의 로딩//
 //		try {
@@ -280,7 +311,7 @@ public class Main {
 		////////////////////////
 		while (true) {
 			System.out.println("\n************************ " + currentEmployee.getName() + " 사원님의 MENU ************************");
-			System.out.println(currentEmployee.getType());
+
 			switch (currentEmployee.getType()) {
 				case "AccidentReception":
 					showAccidentReceptionTeamMenu(inputReader);
@@ -302,9 +333,10 @@ public class Main {
 				  	return;
 				case "Compliance":
 					showComplianceTeamMenu(inputReader);
-					  return;
+					return;
 				case "Sales":
 					showSalesTeamMenu(inputReader);
+					return;
 				default:
 					System.out.println("잘못된 접근입니다.");
 					return;
@@ -450,9 +482,19 @@ public class Main {
 		// TODO: 화면에 미납자 목록 띄우고 미납 안내할 고객 선택/미납 횟수가 3회 이상일 경우 실효 보험으로 처리
 	}
 
+//	private static void printSalesTeamMenu() {
+//		System.out.println("1. 가입 신청 현황 확인");
+//		System.out.println("2. 고객 정보 검색");
+//		System.out.println("x. 로그아웃");
+//		System.out.print("\nChoice: ");
+//	}
+
 	private static void showSalesTeamMenu(BufferedReader inputReader) throws IOException {
 		SalesMain salesMain = new SalesMain(currentEmployee);
-		salesMain.showEmployeeMenu(inputReader);
+		boolean isRemain = true;
+		while(isRemain) {
+			isRemain = salesMain.checkCustomerRequest(inputReader);
+		}
 	}
   
   	private static void showProductDevelopmentTeamMenu(BufferedReader inputReader) throws IOException {

@@ -2,16 +2,16 @@ package UI;
 
 import Contract.Contract;
 import Customer.Customer;
-import Dao.ContractDao;
-import Dao.CustomerDao;
-import Dao.EmployeeDao;
-import Dao.InsuranceDao;
+import Dao.*;
+import Employee.Employee;
 import Insurance.Insurance;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.concurrent.ThreadLocalRandom;
 
+import static UI.Main.accidentReceptionTeamDao;
 import static UI.Main.currentCustomer;
 
 public class CustomerMain {
@@ -32,87 +32,107 @@ public class CustomerMain {
         boolean isRemain = true;
         String userChoiceValue;
         while (isRemain) {
+            System.out.println("1. 보험 상품 확인");
+            System.out.println("x. 로그아웃");
+            System.out.print("\nChoice: ");
             userChoiceValue=inputReader.readLine().trim();
-
-//            // E1(7초동안 화면 못 불러왔을 때) test code////////////////////
-//            int responseTime = (int) Math.random() * 10 +1;
-//            if(responseTime >= 7) {
-//                System.out.println("화면을 불러오지 못하고 있습니다. 같은 현상이 반복되면 고객센터에 신고해 주십시오.\n1. 확인");
-//                System.out.print("\nChoice: ");
-//                inputReader.readLine().trim();
-//                continue;
-//            }
-//            ////////////////////////////////////////////////////
             switch (userChoiceValue){
                 // 1. 보험 메뉴 확인
                 case "1":
                     ArrayList<Insurance> insuranceMenu = insuranceDao.retrieveAll();
+                    if(insuranceMenu.size()==0) {
+                        System.out.println("등록된 보험 상품이 존재하지 없습니다.");
+                        return false;
+                    }
                     for (int i = 0; i < insuranceMenu.size(); i ++)  {
-                        System.out.println(i+1);
-                        System.out.println(insuranceMenu.get(i).getId());
-                        System.out.println(insuranceMenu.get(i).getDescription());
-                        System.out.println(insuranceMenu.get(i).getName());
-                        System.out.println(insuranceMenu.get(i).getPrice());
-                        System.out.println(insuranceMenu.get(i).getDetailedCategory());
+                        System.out.println("보험 Id: " + insuranceMenu.get(i).getId());
+                        System.out.println("보험 설명: " + insuranceMenu.get(i).getDescription());
+                        System.out.println("보험 이름: " + insuranceMenu.get(i).getName());
+                        System.out.println("보험 가격: " + insuranceMenu.get(i).getPrice());
+                        System.out.println("보험 종류: " + insuranceMenu.get(i).getDetailedCategory());
+                        System.out.println("----------------------------------");
                     }
                     System.out.println("1. 가입 신청하기 x. 뒤로가기");
                     System.out.print("\nChoice: ");
                     userChoiceValue=inputReader.readLine().trim();
                     switch (userChoiceValue){
                         case "1":
-                            System.out.println("가입하고자 하는 보험의 id를 입력하세요");
+                            System.out.println("가입하고자 하는 보험의 Id를 입력하세요");
                             System.out.print("\nId: ");
                             userChoiceValue=inputReader.readLine().trim();
-                            // insurance의 id는 String타입이라 변경하였습니다.
-                            //int id = Integer.parseInt(userChoiceValue);
-                            Insurance selectedInsurance = insuranceDao.retrieveById(userChoiceValue);
+
+                            String id = userChoiceValue;
+                            Insurance selectedInsurance = insuranceDao.retrieveById(id);
+
                             if (selectedInsurance == null) {
-                                System.out.println("해당 ID의 상품이 없습니다.");
+                                System.out.println("해당 Id의 상품이 없습니다.");
                                 break;
                             }
                             Contract createContract = new Contract();
                             createContract.setContractorID(currentCustomer.getId());
                             createContract.setInsuranceID(selectedInsurance.getId());
-                            createContract.setInsuredCustomerID(null);
-                            createContract.setEmployeeID(null);
+                            createContract.setInsuredCustomerID(currentCustomer.getId());
+                            SalesTeamDao salesTeamDao = new SalesTeamDao();
+                            int randomIndex = ThreadLocalRandom.current().nextInt(0, salesTeamDao.retrieveAll().size());
+                            String salesEmployee = salesTeamDao.retrieveAll().get(randomIndex).getId();
+                            createContract.setEmployeeID(salesEmployee);
                             createContract.setPremium(selectedInsurance.getPrice());
                             createContract.setUnderwritingState("가입신청");
                             contractDao.create(createContract);
                             break;
-                        case "2":
-//                            ArrayList<Contract> finishedContract = contractDao.retrieveAllByState("가입신청");
-//                            for (int i = 0; i < finishedContract.size(); i ++)  {
-//                                System.out.println(i);
-//                                System.out.println(finishedContract.get(i).getId());
-//                                System.out.println(finishedContract.get(i).getContractorID());
-//                                System.out.println(finishedContract.get(i).getInsuranceID());
-//                                System.out.println(finishedContract.get(i).getInsuredCustomerID());
-//                                System.out.println(finishedContract.get(i).getEmployeeID());
-//                                System.out.println(finishedContract.get(i).getFee());
-//                                System.out.println(finishedContract.get(i).getPremium());
-//                                System.out.println(finishedContract.get(i).getPaymentRate());
-//                                System.out.println(finishedContract.get(i).getPeriod());
-//                                System.out.println(finishedContract.get(i).getSignedDate());
-//                                System.out.println(finishedContract.get(i).getExpirationDate());
-//                                System.out.println(finishedContract.get(i).getPaymentTerm());
-//                                System.out.println(finishedContract.get(i).getLossRatio());
-//                                System.out.println(finishedContract.get(i).getUnderwritingState());
-//                                System.out.println(finishedContract.get(i).getRejectionReasons());
-//                            }
-                            break;
                         case "x":
-                            isRemain = false;
                             break;
                     }
                     break;
                 case "x":
-                    isRemain = false;
-                    break;
+                    return false;
             }
         }
         return true;
     }
-    public boolean showInsuredCustomerMenu(BufferedReader inputReader) throws IOException {
+    public boolean showInsurancesForInsuredCustomer(BufferedReader inputReader) throws IOException {
+        ArrayList<Insurance> insuranceMenu = insuranceDao.retrieveAll();
+        if(insuranceMenu.size()==0) {
+            System.out.println("등록된 보험 상품이 존재하지 없습니다.");
+            return false;
+        }
+        for (int i = 0; i < insuranceMenu.size(); i ++)  {
+            System.out.println("보험 Id: " + insuranceMenu.get(i).getId());
+            System.out.println("보험 설명: " + insuranceMenu.get(i).getDescription());
+            System.out.println("보험 이름: " + insuranceMenu.get(i).getName());
+            System.out.println("보험 가격: " + insuranceMenu.get(i).getPrice());
+            System.out.println("보험 종류: " + insuranceMenu.get(i).getDetailedCategory());
+            System.out.println("----------------------------------");
+        }
+        System.out.println("1. 가입 신청하기 x. 뒤로가기");
+        System.out.print("\nChoice: ");
+        String userChoiceValue=inputReader.readLine().trim();
+        switch (userChoiceValue) {
+            case "1":
+                System.out.println("가입하고자 하는 보험의 Id를 입력하세요");
+                System.out.print("\nId: ");
+                userChoiceValue = inputReader.readLine().trim();
+                String id = userChoiceValue;
+                Insurance selectedInsurance = insuranceDao.retrieveById(id);
+                if (selectedInsurance == null) {
+                    System.out.println("해당 Id의 상품이 없습니다.");
+                    break;
+                }
+                Contract createContract = new Contract();
+                createContract.setContractorID(currentCustomer.getId());
+                createContract.setInsuranceID(selectedInsurance.getId());
+                createContract.setInsuredCustomerID(currentCustomer.getId());
+                SalesTeamDao salesTeamDao = new SalesTeamDao();
+                int randomIndex = ThreadLocalRandom.current().nextInt(0, salesTeamDao.retrieveAll().size());
+                String salesEmployee = salesTeamDao.retrieveAll().get(randomIndex).getId();
+                createContract.setEmployeeID(salesEmployee);
+                createContract.setPremium(selectedInsurance.getPrice());
+                createContract.setUnderwritingState("가입신청");
+                contractDao.create(createContract);
+                break;
+            case "x":
+                break;
+        }
         return true;
     }
 }

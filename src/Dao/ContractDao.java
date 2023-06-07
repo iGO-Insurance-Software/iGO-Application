@@ -25,6 +25,7 @@ public class ContractDao extends Dao{
                 contract.getFee()+"," +
                 contract.getPremium()+"," +
                 contract.getPaymentRate()+"," +
+                contract.getNumberOfNonPayments()+","+
                 contract.getPeriod()+"," +
                 contract.getPaymentTerm() +
                 ");";
@@ -47,8 +48,8 @@ public class ContractDao extends Dao{
                 contract.setPremium(resultSet.getDouble("premium"));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
-                contract.setSignedDate(resultSet.getDate("signedDate"));
-                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setSignedDate(resultSet.getString("signedDate"));
+                contract.setExpirationDate(resultSet.getString("expirationDate"));
                 contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
                 contract.setLossRatio(resultSet.getDouble("lossRatio"));
                 contract.setUnderwritingState(resultSet.getString("underwritingState"));
@@ -77,8 +78,8 @@ public class ContractDao extends Dao{
                 contract.setPremium(resultSet.getDouble("premium"));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
-                contract.setSignedDate(resultSet.getDate("signedDate"));
-                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setSignedDate(resultSet.getString("signedDate"));
+                contract.setExpirationDate(resultSet.getString("expirationDate"));
                 contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
                 contract.setLossRatio(resultSet.getDouble("lossRatio"));
                 contract.setUnderwritingState(resultSet.getString("underwritingState"));
@@ -93,7 +94,7 @@ public class ContractDao extends Dao{
         return contractList;
     }
     public ArrayList<Contract> retrieveAllCustomerWait() {
-        String query = "SELECT * FROM Contract WHERE underwritingState = '대기';";
+        String query = "SELECT * FROM Contract WHERE underwritingState = '가입신청';";
         ArrayList<Contract> contractList = null;
         try {
             ResultSet resultSet = super.retrieve(query);
@@ -109,8 +110,8 @@ public class ContractDao extends Dao{
                 contract.setPremium(resultSet.getDouble("premium"));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
-                contract.setSignedDate(resultSet.getDate("signedDate"));
-                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setSignedDate(resultSet.getString("signedDate"));
+                contract.setExpirationDate(resultSet.getString("expirationDate"));
                 contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
                 contract.setLossRatio(resultSet.getDouble("lossRatio"));
                 contract.setUnderwritingState(resultSet.getString("underwritingState"));
@@ -124,7 +125,7 @@ public class ContractDao extends Dao{
         return contractList;
     }
     public ArrayList<Contract> retrieveAllCompleteJudge() {
-        String query = "SELECT * FROM Contract WHERE underwritingState = '승인' AND '재심사 가능' AND '재심사 거절';";
+        String query = "SELECT * FROM Contract WHERE underwritingState = '승인' OR underwritingState = '재심사 가능' OR underwritingState = '재심사 거절';";
         ArrayList<Contract> contractList = null;
         try {
             ResultSet resultSet = super.retrieve(query);
@@ -140,8 +141,8 @@ public class ContractDao extends Dao{
                 contract.setPremium(resultSet.getDouble("premium"));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
-                contract.setSignedDate(resultSet.getDate("signedDate"));
-                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setSignedDate(resultSet.getString("signedDate"));
+                contract.setExpirationDate(resultSet.getString("expirationDate"));
                 contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
                 contract.setLossRatio(resultSet.getDouble("lossRatio"));
                 contract.setUnderwritingState(resultSet.getString("underwritingState"));
@@ -171,8 +172,8 @@ public class ContractDao extends Dao{
                 contract.setPremium(resultSet.getDouble("premium"));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
-                contract.setSignedDate(resultSet.getDate("signedDate"));
-                contract.setExpirationDate(resultSet.getDate("expirationDate"));
+                contract.setSignedDate(resultSet.getString("signedDate"));
+                contract.setExpirationDate(resultSet.getString("expirationDate"));
                 contract.setPaymentTerm(resultSet.getInt("paymentTerm"));
                 contract.setLossRatio(resultSet.getDouble("lossRatio"));
                 contract.setUnderwritingState(resultSet.getString("underwritingState"));
@@ -211,6 +212,24 @@ public class ContractDao extends Dao{
     }
 
     public void update(Contract contract){
+        String query = "UPDATE Contract SET " +
+                "contractorID = '" + contract.getContractorID() + "', " +
+                "insuranceID = '" + contract.getInsuranceID() + "', " +
+                "insuredCustomerID = '" + contract.getInsuredCustomerID() + "', " +
+                "employeeID = '" + contract.getEmployeeID() + "', " +
+                "fee = " + contract.getFee() + ", " +
+                "premium = " + contract.getPremium() + ", " +
+                "paymentRate = " + contract.getPaymentRate() + ", " +
+                "period = " + contract.getPeriod() + ", " +
+                "signedDate = '" + contract.getSignedDate() + "', " +
+                "expirationDate = '" + contract.getExpirationDate() + "', " +
+                "paymentTerm = " + contract.getPaymentTerm() + ", " +
+                "lossRatio = " + contract.getLossRatio() + ", " +
+                "underwritingState = '" + contract.getUnderwritingState() + "', " +
+                "rejectionReasons = '" + contract.getRejectionReasons() + "' " +
+                "WHERE id = " + contract.getId() + ";";
+        super.update(query);
+
         if(contract.getSignedDate() == null && contract.getExpirationDate() == null){
             String query = "UPDATE Contract SET " +
                     "contractorID = '" + contract.getContractorID() + "', " +
@@ -268,6 +287,7 @@ public class ContractDao extends Dao{
                     "WHERE id = " + contract.getId() + ";";
             super.update(query);
         }
+
     }
     public void deleteById(int contractID){
         String query = "DELETE FROM Contract WHERE id = "+contractID+";";

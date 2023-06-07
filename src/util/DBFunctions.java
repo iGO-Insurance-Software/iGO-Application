@@ -146,15 +146,15 @@ public class DBFunctions {
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
                             "contractorId VARCHAR(20),"+
                             "insuranceId VARCHAR(20),"+
-                            "insuredCustomerId VARCHAR(20),"+
-                            "employeeId VARCHAR(20),"+
+                            "insuredCustomerId VARCHAR(20) DEFAULT NULL,"+
+                            "employeeId VARCHAR(20) DEFAULT NULL,"+
                             "fee DOUBLE," +
                             "premium DOUBLE," +
                             "paymentRate DOUBLE," +
                             "numberOfNonPayments INT DEFAULT 0," +
                             "period INT," +
-                            "signedDate DATE NULL," +
-                            "expirationDate DATE DEFAULT (current_date)," +
+                            "signedDate VARCHAR(30) DEFAULT NULL," +
+                            "expirationDate VARCHAR(30) DEFAULT NULL," +
                             "paymentTerm INT," +
                             "lossRatio DOUBLE DEFAULT 0," +
                             "underwritingState VARCHAR(50) DEFAULT '대기'," +
@@ -328,6 +328,29 @@ public class DBFunctions {
                 "compliancechiefn@naver.com", "Chief"
         );
         employeeDao.create(complianceTeamEmployee);
+        //SalesTeam
+        SalesTeam SalesTeamEmployee1 = new SalesTeam();
+        SalesTeamEmployee1 = (SalesTeam) setEmployeeBasicInfo(
+                SalesTeamEmployee1, "se2023", "Sales",
+                "김영업", 32, "남", "01012349876",
+                "salesman@naver.com", "대리"
+        );
+        employeeDao.create(SalesTeamEmployee1);
+        SalesTeam SalesTeamEmployee2 = new SalesTeam();
+        SalesTeamEmployee2 = (SalesTeam) setEmployeeBasicInfo(
+                SalesTeamEmployee2, "se2024", "Sales",
+                "이발품", 26, "여", "01054686357",
+                "salessales@gmail.com", "사원"
+        );
+        employeeDao.create(SalesTeamEmployee2);
+        //MarketingTeam
+        MarketingTeam MarketingTeamEmployee1 = new MarketingTeam();
+        MarketingTeamEmployee1 = (MarketingTeam) setEmployeeBasicInfo(
+                MarketingTeamEmployee1, "me2023", "Marketing",
+                "최홍보", 31, "여", "01024578965",
+                "marketing11@naver.com", "대리"
+        );
+        employeeDao.create(MarketingTeamEmployee1);
         //UW
         UWTeam uwEmployee = new UWTeam();
         uwEmployee = (UWTeam) setEmployeeBasicInfo(
@@ -414,6 +437,50 @@ public class DBFunctions {
     }
 
     private static boolean registerProductData(){
+
+        Insurance insurance1 = new Insurance();
+        insurance1.setId("di01");
+        insurance1.setDescription("만 7세부터 만 21세까지 갱신 없이 간편한 어린이 보험");
+        insurance1.setName("oo 어린이 보험");
+        insurance1.setPrice(12000);
+        insurance1.setDetailedCategory("damageInsurance");
+        insuranceDao.create(insurance1);
+        Insurance insurance2 = new Insurance();
+        insurance2.setId("di02");
+        insurance2.setDescription("만19세부터 안전한 자동차 운전을 할 수 있도록 도와주는 착한 자동차 보험");
+        insurance2.setName("xx 자동차 보험");
+        insurance2.setPrice(50000);
+        insurance2.setDetailedCategory("damageInsurance");
+        insuranceDao.create(insurance2);
+        Insurance insurance3 = new Insurance();
+        insurance3.setId("di03");
+        insurance3.setDescription("내가 생활하는 어느 곳이든 화재로 인한 피해에 돈 걱정 할 필요 없는 화재 보험 ");
+        insurance3.setName("uu 화재 보험");
+        insurance3.setPrice(30000);
+        insurance3.setDetailedCategory("damageInsurance");
+        insuranceDao.create(insurance3);
+        Insurance insurance4 = new Insurance();
+        insurance4.setId("li01");
+        insurance4.setDescription("내가 죽으면 우리 자녀들 어떡하지.. 적어도 돈 걱정은 없는 빵빵한 사망 보험");
+        insurance4.setName("$$ 사망 보험");
+        insurance4.setPrice(80000);
+        insurance4.setDetailedCategory("lifeInsurance");
+        insuranceDao.create(insurance4);
+        Insurance insurance5 = new Insurance();
+        insurance5.setId("si01");
+        insurance5.setDescription("우리 아이 대학교 갈 때 돈 걱정 덜어주는 돈 많은 친구 학비 저축 보험");
+        insurance5.setName("qp 저축 보험");
+        insurance5.setPrice(100000);
+        insurance5.setDetailedCategory("savingInsurance");
+        insuranceDao.create(insurance5);
+        Insurance insurance6 = new Insurance();
+        insurance6.setId("si02");
+        insurance6.setDescription("벌써부터 걱정되는 퇴직의 두려움.. 언제 잘려도 노후 자금 걱정 없도록 도와주는 든든한 노후 자금 저축 보험");
+        insurance6.setName("TT 저축 보험");
+        insurance6.setPrice(60000);
+        insurance6.setDetailedCategory("savingInsurance");
+        insuranceDao.create(insurance6);
+
         Insurance insurance = new Insurance();
         insurance.setId("202020");
         insurance.setName("자동차 보험");
@@ -435,6 +502,7 @@ public class DBFunctions {
         contract.setPeriod(365);
         contract.setPaymentTerm(30);
         contractDao.create(contract);
+
         return true;
     }
 }
