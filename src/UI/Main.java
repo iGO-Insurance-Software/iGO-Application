@@ -15,6 +15,7 @@ import Customer.Customer;
 import Customer.UnpaidCustomer;
 import Employee.Employee;
 import Employee.ContractManagementTeam;
+import Insurance.Insurance;
 import Dao.PrototypeDao;
 import util.BaseException;
 import util.ErrorCode;
@@ -22,6 +23,8 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
+
 import static UI.AccidentReceptionMain.*;
 import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
 import static UI.PayCompensationMain.showAccidentsForPayCompensation;
@@ -45,6 +48,7 @@ public class Main {
 	public static PrototypeDao prototypeDao = new PrototypeDao();
 	public static ComplianceTeamDao complianceTeamDao = new ComplianceTeamDao();
 	public static ProductDevelopmentTeamDao productDevelopmentTeamDao = new ProductDevelopmentTeamDao();
+	public static boolean isAdClosed = false;
 
 	public static void main(String[] args) throws IOException {
 		//link DB
@@ -252,12 +256,12 @@ public class Main {
   
   private static void showAdForCustomer(BufferedReader inputReader) throws IOException {
 	  while (true) {
-		  printAd();
+		  if(!isAdClosed) printAd();
 		  String userChoiceValue = inputReader.readLine().trim();
 		  switch (userChoiceValue) {
 			  case "o":
-
-				  break;
+				  isAdClosed = true;
+				  return;
 			  case "x":
 				  return;
 			  default:
@@ -269,14 +273,30 @@ public class Main {
     
   private static void printAd() {
 		System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
-			System.out.println("-------------------------------------");
-			System.out.println("|			oo 어린이 보험			|");
-			System.out.println("|만 7세부터 만 21세까지 보장되는 필수 보험|");
-			System.out.println("-------------------------------------");
-			System.out.println("x. 닫기 O. 자세히 보기");
-			System.out.print("\nChoice: ");
+				try{
+					Insurance insurance = loadInsuranceForAd();
+					if(insurance!=null) {
+						//광고 로딩 성공
+						System.out.println("-----------------------------광고----------------------------");
+						System.out.println("|			              " + insurance.getName() + "			              |");
+						System.out.println("|" + insurance.getDescription() + "|");
+						System.out.println("-------------------------------------------------------------");
+						System.out.println("x. 닫기 o. 접어두기");
+						System.out.print("\nChoice: ");
+						return;
+					} 	//광고 로드 실패
+						throw new BaseException(ErrorCode.LOADING_ERROR_AD);
+				}catch(BaseException e){
+					System.out.println(e.getMessage());
+				}
 	}
-
+	private static Insurance loadInsuranceForAd(){
+		//랜덤한 보험 호출해서 광고
+		int randomIndex = ThreadLocalRandom.current().nextInt(0, insuranceDao.retrieveAll().size());
+		Insurance randomInsurance = insuranceDao.retrieveAll().get(randomIndex);
+		if(randomInsurance!=null) return randomInsurance;
+		else return null;
+	}
 	private static void showEmployeeMenu(BufferedReader inputReader) throws IOException {
 		//Exception:7초이상의 로딩//
 //		try {
