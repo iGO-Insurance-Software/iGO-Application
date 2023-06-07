@@ -4,8 +4,6 @@ import Customer.Customer;
 import Customer.InsuredCustomer;
 import Insurance.Insurance;
 import util.FFS;
-
-import java.util.Date;
 import java.util.HashMap;
 
 public class Contract {
@@ -18,8 +16,8 @@ public class Contract {
 	private double premium;//보험료
 	private double paymentRate;
 	private int period;
-	private Date signedDate;
-	private Date expirationDate;
+	private String signedDate;
+	private String expirationDate;
 	private int paymentTerm;
 	private int numberOfNonPayments;
 	private double lossRatio;
@@ -100,19 +98,19 @@ public class Contract {
 		this.period = period;
 	}
 
-	public Date getSignedDate() {
+	public String getSignedDate() {
 		return signedDate;
 	}
 
-	public void setSignedDate(Date signedDate) {
+	public void setSignedDate(String signedDate) {
 		this.signedDate = signedDate;
 	}
 
-	public Date getExpirationDate() {
+	public String getExpirationDate() {
 		return expirationDate;
 	}
 
-	public void setExpirationDate(Date expirationDate) {
+	public void setExpirationDate(String expirationDate) {
 		this.expirationDate = expirationDate;
 	}
 
