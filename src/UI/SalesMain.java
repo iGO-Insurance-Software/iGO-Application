@@ -101,6 +101,8 @@ public class SalesMain {
                             contractToSend.setPeriod(Integer.parseInt(contractPeriod));
                             // 여기 임의로 수정
                             contractToSend.setPaymentTerm(30);
+                            contractToSend.setPaymentRate(0.1);
+                            //
                             contractToSend.setEmployeeID(currentEmployee.getId());
                             contractToSend.setUnderwritingState("대기");
                             contractDao.update(contractToSend);
