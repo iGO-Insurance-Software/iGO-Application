@@ -3,7 +3,8 @@
 <img width="410" alt="image" src="https://github.com/iGO-Insurance-Software/iGO/assets/96376539/09287056-9a3e-47e7-8450-379c8adcddd3">
 
 <br>
-사용한 언어, 프레임워크 및 기술 : JAVA, MySQL, JDBC
+사용한 언어, 프레임워크 및 기술 : JAVA, MySQL, JDBC <br>
+<br>
 테스트 가이드
 1. mysql 실행
 2. mysql -u root -p 로 접속
