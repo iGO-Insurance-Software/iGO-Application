@@ -5,7 +5,8 @@
 <br>
 사용한 언어, 프레임워크 및 기술 : JAVA, MySQL, JDBC <br>
 <br>
-### 테스트 가이드 <br>
+### 테스트 가이드
+<br>
 1. mysql 실행 <br> 
 2. mysql -u root -p 로 접속 <br>
 3. CREATE DATABASE insurance; 로 데이터베이스 생성 <br>
