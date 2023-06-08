@@ -4,7 +4,7 @@
 1. mysql 실행
 2. mysql -u root -p 로 접속
 3. CREATE DATABASE insurance; 로 데이터베이스 생성
-4. 프로젝트 내 Dao 패키지의 dao.java 내 password 필드의 값을 자신의 mysql 접속 비밀번호로 설정.
+4. 프로젝트 내 Dao 패키지의 dao.java -> password 필드의 값을 자신의 mysql 접속 비밀번호로 설정.
 5. 프로젝트 실행
 6. 7초 내에 'mngmode' 입력 후 1번을 눌러 테이블 & 더미 데이터 세팅
 7. 이후 진행
