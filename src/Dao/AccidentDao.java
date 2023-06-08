@@ -14,13 +14,19 @@ public class AccidentDao extends Dao{
         }
     }
     public void create(Accident accident){
+        String compensationEmployeeQuery;
+        if(accident.getCompensationEmployeeID()==null){
+            //null일경우 'null'이 아닌 null로 insert되어야함 => 외래키 제약조건에 의해 employee에 없는 id는 들어갈 수 없음
+            compensationEmployeeQuery = ""+accident.getCompensationEmployeeID();
+        }
+        else compensationEmployeeQuery = "'"+accident.getCompensationEmployeeID()+"'";
         String query = "INSERT INTO Accident " +
                 "(customerID, receptionEmployeeID, compensationEmployeeID, accidentDate, accidentPlace, accidentType, accidentOutline, " +
                 "existOfDestroyer, destroyerName, destroyerPhoneNum, isUrgent, status, medicalBill, damageBill, compensationMoney, indemnityMoney, " +
                 "indemnityDueDate, isWinLawsuit, lawsuitCost, winOrLoseMoney) VALUES (" +
                 "'"+accident.getCustomerID()+"'," +
                 "'"+accident.getReceptionEmployeeID()+"'," +
-                "'"+accident.getCompensationEmployeeID()+"'," +
+                compensationEmployeeQuery+", "+
                 "'"+accident.getAccidentDateToString()+"'," +
                 "'"+accident.getAccidentPlace()+"'," +
                 "'"+accident.getAccidentType()+"'," +
@@ -153,10 +159,16 @@ public class AccidentDao extends Dao{
         return accidentList;
     }
     public void update(Accident accident){
+        String compensationEmployeeQuery;
+        if(accident.getCompensationEmployeeID()==null){
+            //null일경우 'null'이 아닌 null로 insert되어야함 => 외래키 제약조건에 의해 employee에 없는 id는 들어갈 수 없음
+            compensationEmployeeQuery = ""+accident.getCompensationEmployeeID();
+        }
+        else compensationEmployeeQuery = "'"+accident.getCompensationEmployeeID()+"'";
         String query = "UPDATE Accident SET " +
                 "customerID = '" + accident.getCustomerID() + "', " +
                 "receptionEmployeeID = '" + accident.getReceptionEmployeeID() + "', " +
-                "compensationEmployeeID = '" + accident.getCompensationEmployeeID() + "', " +
+                "compensationEmployeeID = " + compensationEmployeeQuery + ", " +
                 "accidentDate = '" + accident.getAccidentDateToString() + "', " +
                 "accidentPlace = '" + accident.getAccidentPlace() + "', " +
                 "accidentType = '" + accident.getAccidentType() + "', " +

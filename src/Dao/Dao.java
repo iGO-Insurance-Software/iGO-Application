@@ -34,7 +34,7 @@ public class Dao {
         try {
             statement = connect.createStatement();
             if (!statement.execute(query))
-                System.out.println("insert completed");
+                System.out.println("DATABASE CRUD : insert completed");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -53,7 +53,7 @@ public class Dao {
         try {
             statement = connect.createStatement();
             if(!statement.execute(query))
-                System.out.println("update completed");
+                System.out.println("DATABASE CRUD : update completed");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -62,7 +62,7 @@ public class Dao {
         try {
             statement = connect.createStatement();
             if(!statement.execute(query))
-                System.out.println("delete completed");
+                System.out.println("DATABASE CRUD : delete completed");
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -71,7 +71,7 @@ public class Dao {
         try {
         statement = connect.createStatement();
         if (!statement.execute(query))
-            System.out.println("deleteAll completed");
+            System.out.println("DATABASE CRUD : deleteAll completed");
         } catch(SQLException e) {
          e.printStackTrace();
         }

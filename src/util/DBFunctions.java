@@ -28,30 +28,6 @@ public class DBFunctions {
                     break;
                 case "1":
                     /*CREATE Tables*/
-                    //Products
-                    dao.execute("CREATE TABLE Accident (" +
-                            "id INT AUTO_INCREMENT PRIMARY KEY," +
-                            "customerID VARCHAR(20) NOT NULL," +
-                            "receptionEmployeeID VARCHAR(20) NOT NULL," +
-                            "compensationEmployeeID VARCHAR(20)," +
-                            "accidentDate VARCHAR(20)," +
-                            "accidentPlace VARCHAR(50)," +
-                            "accidentType VARCHAR(30)," +
-                            "accidentOutline VARCHAR(300)," +
-                            "existOfDestroyer BOOLEAN NOT NULL," +
-                            "destroyerName VARCHAR(20)," +
-                            "destroyerPhoneNum VARCHAR(11)," +
-                            "isUrgent BOOLEAN NOT NULL," +
-                            "status VARCHAR(100) NOT NULL," +
-                            "medicalBill VARCHAR(500) DEFAULT NULL," +
-                            "damageBill VARCHAR(500) DEFAULT NULL," +
-                            "compensationMoney DOUBLE," +
-                            "indemnityMoney DOUBLE," +
-                            "indemnityDueDate VARCHAR(20)," +
-                            "isWinLawsuit BOOLEAN," +
-                            "lawsuitCost DOUBLE, " +
-                            "winOrLoseMoney INT" +
-                            ") AUTO_INCREMENT = 1;");
                     dao.create("CREATE TABLE Insurance("+
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "name VARCHAR(50),"+
@@ -60,21 +36,6 @@ public class DBFunctions {
                             "price DOUBLE,"+
                             "detailedCategory VARCHAR(50)"+
                             ");");
-                    dao.execute("CREATE TABLE Prototype (" +
-                            "id VARCHAR(20) PRIMARY KEY," +
-                            " description VARCHAR(255), "+
-                            "feedbacks VARCHAR(255)," +
-                            "requirements VARCHAR(255)," +
-                            " status VARCHAR(50)," +
-                            " name VARCHAR(50)," +
-                            " risks VARCHAR(255)," +
-                            " developerID VARCHAR(20)," +
-                            "detailedCategory VARCHAR(50)," +
-                            "category VARCHAR(50)," +
-                            "price DOUBLE," +
-                            "paymentTerm INT" +
-                            ");");
-                    //Customers
                     dao.execute("CREATE TABLE Customer (" +
                             "id VARCHAR(20) PRIMARY KEY," +
                             "type VARCHAR(20) NOT NULL," +
@@ -94,7 +55,6 @@ public class DBFunctions {
                             "inheritanceCertificate VARCHAR(300)," +
                             "FOREIGN KEY (id) REFERENCES Customer (id) ON DELETE CASCADE ON UPDATE CASCADE" +
                             ");");
-                    //Employees
                     dao.execute("CREATE TABLE Employee(" +
                             "id VARCHAR(20) PRIMARY KEY," +
                             "type VARCHAR(20) NOT NULL," +
@@ -117,13 +77,6 @@ public class DBFunctions {
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
-                    dao.execute("CREATE TABLE InvestigationTeam(" +
-                            "id VARCHAR(20) PRIMARY KEY,"+
-                            "accidentID INT DEFAULT NULL,"+
-                            "isDispatching BOOLEAN DEFAULT FALSE,"+
-                            "FOREIGN KEY (accidentID) REFERENCES Accident (id) ON DELETE SET NULL,"+
-                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
-                            ");");
                     dao.execute("CREATE TABLE CompensationTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
@@ -141,6 +94,21 @@ public class DBFunctions {
                             "ffsContact VARCHAR(50)," +
                             "bankClerkContact VARCHAR(50)," +
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
+                    dao.execute("CREATE TABLE Prototype (" +
+                            "id VARCHAR(20) PRIMARY KEY," +
+                            "description VARCHAR(255), "+
+                            "feedbacks VARCHAR(255)," +
+                            "requirements VARCHAR(255)," +
+                            "status VARCHAR(50)," +
+                            "name VARCHAR(50)," +
+                            "risks VARCHAR(255)," +
+                            "developerID VARCHAR(20)," +
+                            "detailedCategory VARCHAR(50)," +
+                            "category VARCHAR(50)," +
+                            "price DOUBLE," +
+                            "paymentTerm INT," +
+                            "FOREIGN KEY (developerID) REFERENCES Employee(id)" +
                             ");");
                     dao.execute("CREATE TABLE Contract(" +
                             "id INT AUTO_INCREMENT PRIMARY KEY," +
@@ -178,6 +146,40 @@ public class DBFunctions {
                             "rejectionReasons VARCHAR(200)," +
                             "FOREIGN KEY (contractId) REFERENCES Contract (id)" +
                             ");");
+                    dao.execute("CREATE TABLE Accident (" +
+                            "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "customerID VARCHAR(20) NOT NULL," +
+                            "receptionEmployeeID VARCHAR(20) NOT NULL," +
+                            "compensationEmployeeID VARCHAR(20)," +
+                            "accidentDate VARCHAR(20)," +
+                            "accidentPlace VARCHAR(50)," +
+                            "accidentType VARCHAR(30)," +
+                            "accidentOutline VARCHAR(300)," +
+                            "existOfDestroyer BOOLEAN NOT NULL," +
+                            "destroyerName VARCHAR(20)," +
+                            "destroyerPhoneNum VARCHAR(11)," +
+                            "isUrgent BOOLEAN NOT NULL," +
+                            "status VARCHAR(100) NOT NULL," +
+                            "medicalBill VARCHAR(500) DEFAULT NULL," +
+                            "damageBill VARCHAR(500) DEFAULT NULL," +
+                            "compensationMoney DOUBLE," +
+                            "indemnityMoney DOUBLE," +
+                            "indemnityDueDate VARCHAR(20)," +
+                            "isWinLawsuit BOOLEAN," +
+                            "lawsuitCost DOUBLE, " +
+                            "winOrLoseMoney INT, " +
+                            "FOREIGN KEY (customerID) REFERENCES Customer(id), " +
+                            "FOREIGN KEY (receptionEmployeeID) REFERENCES Employee(id), "+
+                            "FOREIGN KEY (compensationEmployeeID) REFERENCES Employee(id) " +
+                            ") AUTO_INCREMENT = 1" +
+                            ";");
+                    dao.execute("CREATE TABLE InvestigationTeam(" +
+                            "id VARCHAR(20) PRIMARY KEY,"+
+                            "accidentID INT DEFAULT NULL,"+
+                            "isDispatching BOOLEAN DEFAULT FALSE,"+
+                            "FOREIGN KEY (accidentID) REFERENCES Accident (id) ON DELETE SET NULL,"+
+                            "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
+                            ");");
                     /*Insert Values*/
                     registerEmployeeData();
                     registerCustomerData();
@@ -194,11 +196,11 @@ public class DBFunctions {
                     dao.execute("DROP TABLE UWTeam;");
                     dao.execute("DROP TABLE Reinsurance;");
                     dao.execute("DROP TABLE Contract;");
+                    dao.execute("DROP TABLE Prototype;");
+                    dao.execute("DROP TABLE Accident;");
                     dao.execute("DROP TABLE Employee;");
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
-                    dao.execute("DROP TABLE Prototype;");
-                    dao.execute("DROP TABLE Accident;");
                     dao.execute("DROP TABLE Insurance;");
                     break;
                 default:

@@ -231,7 +231,7 @@ public class ProductTeamMain {
         // Confirmation to create a new prototype
         System.out.println("Would you like to create the prototype? (yes/no)");
         String createPrototypeChoice = inputReader.readLine().trim().toLowerCase();
-        if (createPrototypeChoice.equals("yes")) {
+        if (createPrototypeChoice.equals("yes")&&productID!=null) {
             // Perform actions to create the prototype
             Prototype newPrototype = new Prototype();
             newPrototype.setRequirements(requirements);
@@ -243,6 +243,7 @@ public class ProductTeamMain {
             newPrototype.setDeveloperID(currentEmployee.getId());
             newPrototype.setStatus("pending"); // Set the status to "pending"
             prototypeDao.create(newPrototype);
+            productID=null;
             // Print confirmation message
             System.out.println("New prototype created!");
             //send message to All compliance employees
@@ -251,7 +252,7 @@ public class ProductTeamMain {
             }
             return true; // Return true indicating that the prototype creation was successful
         } else {
-            System.out.println("Prototype creation cancelled.");
+            System.out.println("There is no defined prototype. Please define prototype first.");
             return false; // Return false indicating that the prototype creation was cancelled
         }
     }
