@@ -21,8 +21,10 @@ public enum ErrorCode {
     NO_RESPONSE_TO_CURRENT_CUSTOMER_INFO_REQ(false, 500, "현재 고객 정보 요청에 대한 응답이 없어 재요청하였습니다."),
     NO_RESPONSE_TO_REGISTER_REINSURANCE_INFO_REQ(false, 501, "현재 재보험 등록 요청에 대한 응답이 없어 재요청 하였습니다."),
 
-    // 보상지급팀
-    IS_BANK_INSPECTION_TIME(false,600,"[Error!]: 은행 점검 시간입니다.(00:00~01:30) 점검이 끝나면 다시 시도해주세요")
+    // 보상팀
+    IS_BANK_INSPECTION_TIME(false,600,"[Error!] 은행 점검 시간입니다.(00:00~01:30) 점검이 끝나면 다시 시도해주세요"),
+    IS_TOO_LONG_DATE(false,601,"[Error!] 구상채권은 5년이 넘을 경우 시효가 소멸됩니다. 5년 이내에서 연장해주세요.")
+
     ;
 
 

@@ -1,6 +1,7 @@
 package UI;
 import Accident.Accident;
 import Contract.Contract;
+import Insurance.Insurance;
 import Customer.InsuredCustomer;
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -95,11 +96,10 @@ public class DecideCompensationMain {
         if(contracts.size()!=0){
             for(int i=0; i < contracts.size(); i++){
                 System.out.println("계약 id: "+contracts.get(i).getId());
-                System.out.println("계약 만료일: "+contracts.get(i).getExpirationDate().toString());
-//                Insurance insurance = insuranceDao.retrieveById(contracts.get(i).getInsuranceID());
-//                System.out.println("보험 id: "+insurance.getId);
-//                System.out.println("보험 상품명: "+insurance.getName());
-//                System.out.println("보험 설명: "+insurance.getDescription());
+                Insurance insurance = insuranceDao.retrieveById(contracts.get(i).getInsuranceID());
+                System.out.println("보험 id: "+insurance.getId());
+                System.out.println("보험 상품명: "+insurance.getName());
+                System.out.println("보험 설명: "+insurance.getDescription());
             }
         }
         System.out.println("--------------------");

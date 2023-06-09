@@ -29,6 +29,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static UI.AccidentReceptionMain.*;
 import static UI.CalculateCompensationMain.showAccidentsForCalculateCompensation;
+import static UI.IndemnityMain.showAccidentsForIndemnity;
 import static UI.PayCompensationMain.showAccidentsForPayCompensation;
 import static util.DBFunctions.setDB;
 import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
@@ -411,6 +412,7 @@ public class Main {
 					break;
 				case "4":
 					// 구상 신청하기
+					showAccidentsForIndemnity(inputReader);
 					break;
 				case "5":
 					// 구상 소송 요청하기
@@ -431,7 +433,7 @@ public class Main {
 		System.out.println("1. 보상 여부 결정하기");
 		System.out.println("2. 보상금 책정하기");
 		System.out.println("3. 보상금 지급하기");
-//		System.out.println("4. 구상 신청하기");
+		System.out.println("4. 구상 신청하기");
 //		System.out.println("5. 구상 소송 요청하기");
 //		System.out.println("6. 사건 종결하기");
 		System.out.println("x. 로그아웃");

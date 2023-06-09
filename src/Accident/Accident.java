@@ -195,14 +195,14 @@ public class Accident {
 	}
 	public String getIndemnityDueDateToString(){
 		if(this.indemnityDueDate!=null) {
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			return formatter.format(this.indemnityDueDate);
 		}
 		else return null;
 	}
 	public void setIndemnityDueDateStringToDate(String indemnityDueDate){
 		if(!indemnityDueDate.equals("null")&&indemnityDueDate!=null){
-			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+			SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
 			try {
 				this.indemnityDueDate = formatter.parse(indemnityDueDate);
 			} catch (ParseException e) {
