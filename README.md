@@ -1,5 +1,6 @@
 # 2005년도 '신동아화재' 보험사 시스템 구축 제안서(RFP) 내용에 기반한 보험사 소프트웨어 설계 &amp; 구축 프로젝트
-<img width="410" alt="image" src="https://github.com/iGO-Insurance-Software/iGO/assets/96376539/09287056-9a3e-47e7-8450-379c8adcddd3">
+![image](https://github.com/iGO-Insurance-Software/iGO-Application/assets/96376539/45faa7f1-9c89-4402-94ac-ea31966104b4)
+
 
 <br><br><br><br>
 사용한 언어, 프레임워크 및 기술 : JAVA, MySQL, JDBC <br><br>
