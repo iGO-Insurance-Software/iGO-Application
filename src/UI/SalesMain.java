@@ -99,7 +99,7 @@ public class SalesMain {
                             contractToSend.setPaymentRate(0.1);
                             //
                             contractToSend.setEmployeeID(currentEmployee.getId());
-                            contractToSend.setUnderwritingState("재심사 거절");
+                            contractToSend.setUnderwritingState("대기");
                             contractDao.update(contractToSend);
                             System.out.println("심사 요청이 완료되었습니다.");
                             break;
