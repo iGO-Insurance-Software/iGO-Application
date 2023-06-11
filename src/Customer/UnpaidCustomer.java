@@ -1,7 +1,7 @@
 package Customer;
 
 public class UnpaidCustomer extends Customer {
-    // 이름, 전화번호, 미납 횟수, 월 보험료, 보험상품명
+    // 이름, 전화번호, 미납 횟수, 보험료, 보험상품명
     private String name;
     private String phoneNum;
     private int numberOfNonPayments;

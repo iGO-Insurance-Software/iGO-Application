@@ -107,17 +107,19 @@ public class EmployeeDao extends Dao {
             employeeList = new ArrayList<Employee>();
             while(resultSet.next()) {
                 String type = resultSet.getString("type");
-                if(!type.equals("Employee")) continue;//하위 테이블일 경우 여기서 조회하지 않고 하위 Dao로 넘김
-                Employee employee = new Employee();
-                employee.setId(resultSet.getString("id"));
-                employee.setType(resultSet.getString("type"));
-                employee.setName(resultSet.getString("name"));
-                employee.setAge(Integer.parseInt(resultSet.getString("age")));
-                employee.setGender(resultSet.getString("gender"));
-                employee.setPhoneNum(resultSet.getString("phoneNum"));
-                employee.setEmail(resultSet.getString("email"));
-                employee.setRank(resultSet.getString("rank"));
-                employeeList.add(employee);
+                //하위 테이블일 경우 여기서 조회하지 않고 하위 Dao로 넘김
+                if(type.equals("Employee") || type.equals("ContractManagement")) {
+                    Employee employee = new Employee();
+                    employee.setId(resultSet.getString("id"));
+                    employee.setType(resultSet.getString("type"));
+                    employee.setName(resultSet.getString("name"));
+                    employee.setAge(Integer.parseInt(resultSet.getString("age")));
+                    employee.setGender(resultSet.getString("gender"));
+                    employee.setPhoneNum(resultSet.getString("phoneNum"));
+                    employee.setEmail(resultSet.getString("email"));
+                    employee.setRank(resultSet.getString("rank"));
+                    employeeList.add(employee);
+                }
             }
             resultSet.close();
             employeeList.addAll(accidentReceptionTeamDao.retrieveAll());

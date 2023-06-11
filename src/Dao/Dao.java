@@ -7,7 +7,7 @@ public class Dao {
     private Connection connect = null;
     private Statement statement = null;
     private ResultSet resultSet = null;
-    private String password = "";
+    private String password = "8817";
 
     public void connect() throws Exception {
         try {
@@ -15,7 +15,6 @@ public class Dao {
             connect = DriverManager.getConnection(
                     "jdbc:mysql://localhost:3306/insurance?serverTimezone=UTC&useSSL=false&allowPublicKeyRetrieval=true", "root", password);
         } catch (Exception e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
     }

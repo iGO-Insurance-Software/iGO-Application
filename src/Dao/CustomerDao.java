@@ -136,18 +136,20 @@ public class CustomerDao extends Dao{
             customerList = new ArrayList<Customer>();
             while(resultSet.next()) {
                 String type = resultSet.getString("type");
-                if(!type.equals("Customer")) continue;//하위 테이블일 경우 여기서 조회 하지 않고 하위Dao로 넘김
-                Customer customer = new Customer();
-                customer.setId(resultSet.getString("id"));
-                customer.setType(resultSet.getString("type"));
-                customer.setName(resultSet.getString("name"));
-                customer.setRrn(resultSet.getString("rrn"));
-                customer.setAge(resultSet.getInt("age"));
-                customer.setGender(resultSet.getString("gender"));
-                customer.setPhoneNum(resultSet.getString("phoneNum"));
-                customer.setOccupation(resultSet.getString("occupation"));
-                customer.setBankAccount(resultSet.getString("bankAccount"));
-                customerList.add(customer);
+                //하위 테이블일 경우 여기서 조회 하지 않고 하위Dao로 넘김
+                if(type.equals("Customer") || type.equals("Contractor")) {
+                    Customer customer = new Customer();
+                    customer.setId(resultSet.getString("id"));
+                    customer.setType(resultSet.getString("type"));
+                    customer.setName(resultSet.getString("name"));
+                    customer.setRrn(resultSet.getString("rrn"));
+                    customer.setAge(resultSet.getInt("age"));
+                    customer.setGender(resultSet.getString("gender"));
+                    customer.setPhoneNum(resultSet.getString("phoneNum"));
+                    customer.setOccupation(resultSet.getString("occupation"));
+                    customer.setBankAccount(resultSet.getString("bankAccount"));
+                    customerList.add(customer);
+                }
             }
             resultSet.close();
             customerList.addAll(insuredCustomerDao.retrieveAll());

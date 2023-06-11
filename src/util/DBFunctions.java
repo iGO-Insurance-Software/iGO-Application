@@ -2,7 +2,6 @@ package util;
 
 import Contract.Contract;
 import Customer.Customer;
-import Dao.CustomerDao;
 import Employee.*;
 import Customer.InsuredCustomer;
 import Insurance.Insurance;
@@ -10,7 +9,6 @@ import Survey.Survey;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.sql.Date;
 
 import static UI.Main.*;
 
@@ -194,6 +192,7 @@ public class DBFunctions {
                     registerEmployeeData();
                     registerCustomerData();
                     registerProductData();
+                    registerContractData();
                     registerSurveyData();
                     break;
                 case "2":
@@ -230,6 +229,21 @@ public class DBFunctions {
                 "01012345678", "대학교수", "3333139229763"
         );
         customerDao.create(customer);
+        //Contractor
+        Customer contractor = new Customer();
+        contractor = setCustomerBasicInfo(
+                contractor, "ct2022", "Contractor",
+                "정계약", "0001014040444", 24, "여",
+                "01035672293", "대학생", "3333134567954"
+        );
+        customerDao.create(contractor);
+        Customer contractor2 = new Customer();
+        contractor2 = setCustomerBasicInfo(
+                contractor2, "ct2023", "Contractor",
+                "이계약", "0001012240444", 23, "여",
+                "01015672293", "디자이너", "3332324567954"
+        );
+        customerDao.create(contractor2);
         //Insured Customer
         InsuredCustomer insuredCustomer1 = new InsuredCustomer();
         insuredCustomer1 = (InsuredCustomer) setCustomerBasicInfo(
@@ -451,7 +465,6 @@ public class DBFunctions {
     }
 
     private static boolean registerProductData(){
-
         Insurance insurance1 = new Insurance();
         insurance1.setId("di01");
         insurance1.setDescription("만 7세부터 만 21세까지 갱신 없이 간편한 어린이 보험");
@@ -510,18 +523,34 @@ public class DBFunctions {
         insurance.setDetailedCategory("Car Insurance");
         insuranceDao.create(insurance);
 
+        return true;
+    }
+
+    private static boolean registerContractData() {
         Contract contract = new Contract();
-        contract.setContractorID("cs2023");
-        contract.setInsuranceID("ci01");
+        contract.setContractorID("ct2023");
+        contract.setInsuranceID("li01");
         contract.setInsuredCustomerID("ics2023");
         contract.setEmployeeID("uw01");
         contract.setFee(0.1);
-        contract.setPremium(50000);
+        contract.setPremium(40000);
         contract.setPaymentRate(0.2);
-        contract.setNumberOfNonPayments(0);
+        contract.setNumberOfNonPayments(3);
         contract.setPeriod(365);
         contract.setPaymentTerm(30);
         contractDao.create(contract);
+        Contract contract2 = new Contract();
+        contract2.setContractorID("ct2022");
+        contract2.setInsuranceID("ci01");
+        contract2.setInsuredCustomerID("ics2023");
+        contract2.setEmployeeID("uw01");
+        contract2.setFee(0.1);
+        contract2.setPremium(50000);
+        contract2.setPaymentRate(0.2);
+        contract2.setNumberOfNonPayments(1);
+        contract2.setPeriod(365);
+        contract2.setPaymentTerm(30);
+        contractDao.create(contract2);
 
         return true;
     }

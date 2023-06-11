@@ -12,7 +12,6 @@ import Dao.ContractDao;
 import Dao.ProductDevelopmentTeamDao;
 import Dao.ComplianceTeamDao;
 import Dao.MarketingTeamDao;
-import Dao.InsuranceDao;
 import Dao.ReinsuranceDao;
 import Dao.SurveyDao;
 import Customer.Customer;
@@ -39,6 +38,8 @@ import static UI.DecideCompensationMain.showAccidentsForDecideCompensation;
 
 
 public class Main {
+	public static Customer currentCustomer;
+	public static Employee currentEmployee;
 	public static Dao dao = new Dao();
 	public static InsuranceDao insuranceDao = new InsuranceDao();
 	public static CustomerDao customerDao = new CustomerDao();
@@ -148,6 +149,7 @@ public class Main {
 			try {
 				// 로그인 정보 확인
 				for (Employee employee : employeeDao.retrieveAllEmployee()) {
+					System.out.println(employee.getId());
 					if (employee.getId().equals(id)) {
 						currentEmployee = employee; // 현재 접속 직원 설정
 						System.out.println("-> 로그인 성공! " + currentEmployee.getName() + " 사원님 환영합니다.");
@@ -319,7 +321,6 @@ public class Main {
 		////////////////////////
 		while (true) {
 			System.out.println("\n************************ " + currentEmployee.getName() + " 사원님의 MENU ************************");
-
 			switch (currentEmployee.getType()) {
 				case "AccidentReception":
 					showAccidentReceptionTeamMenu(inputReader);
@@ -459,39 +460,92 @@ public class Main {
 		while(true) {
 			printContractManagementTeamMenu();
 			String userChoiceValue = inputReader.readLine().trim();
-			switch (userChoiceValue) {
-				case "1":
-					// 보험료 미납 고객 조회
-					getUnpaidCustomer(inputReader);
-					break;
-				case "2":
-					// 만기 임박 고객 조회
-//					getContractExpirationCustomer(inputReader);
-					break;
-				case "3":
-					// 부활 신청 고객 조회
-//					getCustomerApplyingInsuranceRevival(inputReader);
-					break;
-				case "x":
-					return;
-				default:
-					System.out.println("메뉴 번호를 정확하게 입력해주세요.");
-					break;
+			try {
+				switch (userChoiceValue) {
+					case "1":
+						// 보험료 미납 고객 조회
+						getUnpaidCustomer(inputReader);
+						break;
+					case "2":
+						// 만기 임박 고객 조회
+	//					getContractExpirationCustomer(inputReader);
+						break;
+					case "3":
+						// 부활 신청 고객 조회
+	//					getCustomerApplyingInsuranceRevival(inputReader);
+						break;
+					case "x":
+						return;
+					default:
+						System.out.println("메뉴 번호를 정확하게 입력해주세요.");
+						break;
+				}
+			} catch (BaseException e) {
+				System.out.println(e.getMessage());
 			}
 		}
 	}
 
 	private static void printContractManagementTeamMenu() {
 		System.out.println("1. 보험료 미납 고객 조회");
-		System.out.println("2. 만기 임박 고객 조회");
-		System.out.println("3. 부활 신청 고객 조회");
+//		System.out.println("2. 만기 임박 고객 조회");
+//		System.out.println("3. 부활 신청 고객 조회");
 		System.out.println("x. 로그아웃");
 		System.out.print("\nChoice: ");
 	}
 
-	private static void getUnpaidCustomer(BufferedReader inputReader) throws IOException {
-		ArrayList<UnpaidCustomer> unpaidCustomerList = ((ContractManagementTeam) currentEmployee).getUnpaidCustomer(inputReader);
-		// TODO: 화면에 미납자 목록 띄우고 미납 안내할 고객 선택/미납 횟수가 3회 이상일 경우 실효 보험으로 처리
+	private static void getUnpaidCustomer(BufferedReader inputReader) throws IOException, BaseException {
+		ContractManagementTeam employee = new ContractManagementTeam(currentEmployee);
+		ArrayList<UnpaidCustomer> unpaidCustomerList = employee.getUnpaidCustomer(inputReader);
+		System.out.println("이름\t전화번호\t미납횟수\t보험료\t보험명");
+		for(UnpaidCustomer unpaidCustomer: unpaidCustomerList) {
+			System.out.println(unpaidCustomer.getName() +"\t"+ unpaidCustomer.getPhoneNum() +"\t"+ unpaidCustomer.getNumberOfNonPayments()
+								+"\t"+ unpaidCustomer.getPremium() +"\t"+ unpaidCustomer.getInsuranceName());
+		}
+
+		while(true) {
+			System.out.println("x. 뒤로가기");
+			System.out.print("미납 안내할 고객명 입력 >> "); String customerName = inputReader.readLine().trim();
+			if (customerName.equals("x")) return;
+			if(!informNonPayment(employee, unpaidCustomerList, customerName, inputReader)) System.out.println("일치하는 고객이 없습니다. 다시 입력해주세요.\n");
+		}
+	}
+
+	private static boolean informNonPayment(ContractManagementTeam employee, ArrayList<UnpaidCustomer> unpaidCustomerList, String customerName, BufferedReader inputReader) throws IOException {
+		for (UnpaidCustomer unpaidCustomer : unpaidCustomerList) {
+			if(unpaidCustomer.getName().equals(customerName)) {
+				if (unpaidCustomer.getNumberOfNonPayments() < 3) {
+					while(true) {
+						System.out.println("보험료 미납 안내 전화를 하시겠습니까? (y/n)"); String input = inputReader.readLine().trim();
+						switch (input) {
+							case "y":
+								employee.informNonPayment(inputReader, customerName);
+								return true;
+							case "n":
+								return false;
+							default:
+								System.out.println("정확하게 다시 입력해주세요.");
+								break;
+						}
+					}
+				} else {
+					while(true) {
+						System.out.println("실효보험 처리를 하시겠습니까? (y/n)"); String input = inputReader.readLine().trim();
+						switch (input) {
+							case "y":
+								employee.informVoidInsurance(customerName, unpaidCustomer.getInsuranceName());
+								return true;
+							case "n":
+								return false;
+							default:
+								System.out.println("정확하게 다시 입력해주세요.");
+								break;
+						}
+					}
+				}
+			}
+		}
+		return false;
 	}
 
 //	private static void printSalesTeamMenu() {
