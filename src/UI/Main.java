@@ -292,7 +292,7 @@ public class Main {
 						System.out.println("|			      " + marketingTeam.getAdName() + "	               |");
 						System.out.println("|            " + marketingTeam.getAdDescription() + "             |");
 						System.out.println(" ------------------------------------------------");
-						System.out.println("x. 닫기 o. 접어두기\n광고 속 상품의 가입을 원하실 경우 ");
+						System.out.println("x. 닫기 o. 접어두기");
 						System.out.print("\nChoice: ");
 						return;
 					} 	//광고 로드 실패
