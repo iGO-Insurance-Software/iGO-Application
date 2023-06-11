@@ -53,8 +53,6 @@ public class Main {
 	public static ContractDao contractDao = new ContractDao();
 	public static ReinsuranceDao reinsuranceDao = new ReinsuranceDao();
 	public static SurveyDao surveyDao = new SurveyDao();
-	public static Customer currentCustomer;
-	public static Employee currentEmployee;
 	public static MarketingTeam marketingTeam;
 	public static PrototypeDao prototypeDao = new PrototypeDao();
 	public static ComplianceTeamDao complianceTeamDao = new ComplianceTeamDao();
