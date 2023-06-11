@@ -12,7 +12,7 @@ public enum ErrorCode {
             "\n전산팀 사내 유선번호: 047"),
     LOADING_ERROR_AD(false,206,"광고 없음"),
     // DATA
-    NULL_DATA(false, 300, "데이터가 존재하지 않습니다."),
+    NULL_DATA(false, 300, "데이터가 존재하지 않습니다. 현재 메뉴로 다시 돌아갑니다."),
 
     // 사고접수팀
     ACCIDENTS_MORE_THAN_5YEARS_NOT_BE_ACCEPTED(false, 400, "발생한 지 5년이 넘은 사고는 접수할 수 없습니다."),

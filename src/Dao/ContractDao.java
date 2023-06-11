@@ -18,7 +18,7 @@ public class ContractDao extends Dao{
     public void create(Contract contract){
         if(contract.getInsuredCustomerID() == null){
             String query = "INSERT INTO Contract(contractorId, insuranceId, insuredCustomerId, employeeId, " +
-                    "fee, premium, paymentRate, period, paymentTerm) VALUES(" +
+                    "fee, premium, paymentRate, numberOfNonPayments, period, paymentTerm) VALUES(" +
                     "'"+contract.getContractorID()+"'," +
                     "'"+contract.getInsuranceID()+"'," +
                     ""+contract.getInsuredCustomerID()+"," +
@@ -26,6 +26,7 @@ public class ContractDao extends Dao{
                     contract.getFee()+"," +
                     contract.getPremium()+"," +
                     contract.getPaymentRate()+"," +
+                    contract.getNumberOfNonPayments()+"," +
                     contract.getPeriod()+"," +
                     contract.getPaymentTerm() +
                     ");";
@@ -33,7 +34,7 @@ public class ContractDao extends Dao{
         }
         else{
             String query = "INSERT INTO Contract(contractorId, insuranceId, insuredCustomerId, employeeId, " +
-                    "fee, premium, paymentRate, period, paymentTerm) VALUES(" +
+                    "fee, premium, paymentRate, numberOfNonPayments, period, paymentTerm) VALUES(" +
                     "'"+contract.getContractorID()+"'," +
                     "'"+contract.getInsuranceID()+"'," +
                     "'"+contract.getInsuredCustomerID()+"'," +
@@ -41,6 +42,7 @@ public class ContractDao extends Dao{
                     contract.getFee()+"," +
                     contract.getPremium()+"," +
                     contract.getPaymentRate()+"," +
+                    contract.getNumberOfNonPayments()+"," +
                     contract.getPeriod()+"," +
                     contract.getPaymentTerm() +
                     ");";
@@ -63,6 +65,7 @@ public class ContractDao extends Dao{
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
                 contract.setPremium(resultSet.getDouble("premium"));
+                contract.setNumberOfNonPayments((resultSet.getInt(", numberOfNonPayments")));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
                 contract.setSignedDate(resultSet.getString("signedDate"));
@@ -93,6 +96,7 @@ public class ContractDao extends Dao{
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
                 contract.setPremium(resultSet.getDouble("premium"));
+                contract.setNumberOfNonPayments((resultSet.getInt(", numberOfNonPayments")));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
                 contract.setSignedDate(resultSet.getString("signedDate"));
@@ -125,6 +129,7 @@ public class ContractDao extends Dao{
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
                 contract.setPremium(resultSet.getDouble("premium"));
+                contract.setNumberOfNonPayments((resultSet.getInt(", numberOfNonPayments")));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
                 contract.setSignedDate(resultSet.getString("signedDate"));
@@ -156,6 +161,7 @@ public class ContractDao extends Dao{
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
                 contract.setPremium(resultSet.getDouble("premium"));
+                contract.setNumberOfNonPayments((resultSet.getInt(", numberOfNonPayments")));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
                 contract.setSignedDate(resultSet.getString("signedDate"));
@@ -187,6 +193,7 @@ public class ContractDao extends Dao{
                 contract.setEmployeeID(resultSet.getString("employeeID"));
                 contract.setFee(resultSet.getDouble("fee"));
                 contract.setPremium(resultSet.getDouble("premium"));
+                contract.setNumberOfNonPayments((resultSet.getInt(", numberOfNonPayments")));
                 contract.setPaymentRate(resultSet.getDouble("paymentRate"));
                 contract.setPeriod(resultSet.getInt("period"));
                 contract.setSignedDate(resultSet.getString("signedDate"));
@@ -206,19 +213,22 @@ public class ContractDao extends Dao{
     }
 
     public ArrayList<UnpaidCustomer> retrieveNonPaymentInfoList() {
-        String query = "SELECT contractorID, insuranceID, premium, numberOfNonPayments " +
-                "FROM Contract WHERE numberOfNonPayments > 0;";
+        String query = "SELECT Customer.name AS customerName, Customer.phoneNum, numberOfNonPayments, premium, Insurance.name AS insuranceName " +
+                "FROM Contract " +
+                "JOIN Insurance ON insuranceId = Insurance.id " +
+                "JOIN Customer ON contractorId = Customer.id " +
+                "WHERE numberOfNonPayments > 0;";
         ArrayList<UnpaidCustomer> unpaidCustomerList;
         try {
             ResultSet resultSet = super.retrieve(query);
             unpaidCustomerList = new ArrayList<>();
             while(resultSet.next()) {
                 UnpaidCustomer unpaidCustomer = new UnpaidCustomer();
-                unpaidCustomer.setName("");
-                unpaidCustomer.setPhoneNum("");
+                unpaidCustomer.setName(resultSet.getString("customerName"));
+                unpaidCustomer.setPhoneNum(resultSet.getString("phoneNum"));
                 unpaidCustomer.setNumberOfNonPayments(resultSet.getInt("numberOfNonPayments"));
                 unpaidCustomer.setPremium(resultSet.getDouble("premium"));
-                unpaidCustomer.setInsuranceName("");
+                unpaidCustomer.setInsuranceName(resultSet.getString("insuranceName"));
                 unpaidCustomerList.add(unpaidCustomer);
             }
             resultSet.close();
@@ -236,6 +246,7 @@ public class ContractDao extends Dao{
                 "employeeID = '" + contract.getEmployeeID() + "', " +
                 "fee = " + contract.getFee() + ", " +
                 "premium = " + contract.getPremium() + ", " +
+                "numberOfNonPayments = " + contract.getNumberOfNonPayments() + ", " +
                 "paymentRate = " + contract.getPaymentRate() + ", " +
                 "period = " + contract.getPeriod() + ", " +
                 "signedDate = '" + contract.getSignedDate() + "', " +
