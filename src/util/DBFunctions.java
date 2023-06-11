@@ -5,6 +5,7 @@ import Customer.Customer;
 import Employee.*;
 import Customer.InsuredCustomer;
 import Insurance.Insurance;
+import Survey.Survey;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -85,6 +86,8 @@ public class DBFunctions {
                             ");");
                     dao.execute("CREATE TABLE MarketingTeam(" +
                             "id VARCHAR(20) PRIMARY KEY,"+
+                            "adName VARCHAR(50), "+
+                            "adDescription VARCHAR(200), "+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
                     dao.execute("CREATE TABLE UWTeam(" +
@@ -178,11 +181,19 @@ public class DBFunctions {
                             "FOREIGN KEY (accidentID) REFERENCES Accident (id) ON DELETE SET NULL,"+
                             "FOREIGN KEY (id) REFERENCES Employee (id) ON DELETE CASCADE ON UPDATE CASCADE"+
                             ");");
+                    dao.execute("CREATE TABLE Survey(" +
+                            "id INT AUTO_INCREMENT PRIMARY KEY," +
+                            "surveyQuestionNum Int,"+
+                            "customerChoice INT,"+
+                            "surveyQuestionContent VARCHAR(250),"+
+                            "selectedCount INT"+
+                            ");");
                     /*Insert Values*/
                     registerEmployeeData();
                     registerCustomerData();
                     registerProductData();
                     registerContractData();
+                    registerSurveyData();
                     break;
                 case "2":
                     dao.execute("DROP TABLE CompensationTeam;");
@@ -201,6 +212,7 @@ public class DBFunctions {
                     dao.execute("DROP TABLE InsuredCustomer;");
                     dao.execute("DROP TABLE Customer;");
                     dao.execute("DROP TABLE Insurance;");
+                    dao.execute("DROP TABLE Survey;");
                     break;
                 default:
                     System.out.println("Please select from the menu");
@@ -540,6 +552,95 @@ public class DBFunctions {
         contract2.setPaymentTerm(30);
         contractDao.create(contract2);
 
+        return true;
+    }
+    private static boolean registerSurveyData() {
+        Survey survey1 = new Survey();
+        survey1.setSurveyQuestionNum(1);
+        survey1.setCustomerChoice(1);
+        survey1.setSurveyQuestionContent("20~29세");
+        survey1.setSelectedCount(0);
+        surveyDao.create(survey1);
+        Survey survey2 = new Survey();
+        survey2.setSurveyQuestionNum(1);
+        survey2.setCustomerChoice(2);
+        survey2.setSurveyQuestionContent("30~39세");
+        survey2.setSelectedCount(0);
+        surveyDao.create(survey2);
+        Survey survey3 = new Survey();
+        survey3.setSurveyQuestionNum(1);
+        survey3.setCustomerChoice(3);
+        survey3.setSurveyQuestionContent("40~49세");
+        survey3.setSelectedCount(0);
+        surveyDao.create(survey3);
+        Survey survey4 = new Survey();
+        survey4.setSurveyQuestionNum(1);
+        survey4.setCustomerChoice(4);
+        survey4.setSurveyQuestionContent("50~59세");
+        survey4.setSelectedCount(0);
+        surveyDao.create(survey4);
+        Survey survey5 = new Survey();
+        survey5.setSurveyQuestionNum(1);
+        survey5.setCustomerChoice(5);
+        survey5.setSurveyQuestionContent("60~69세");
+        survey5.setSelectedCount(0);
+        surveyDao.create(survey5);
+        Survey survey6 = new Survey();
+        survey6.setSurveyQuestionNum(1);
+        survey6.setCustomerChoice(6);
+        survey6.setSurveyQuestionContent("70세 이상");
+        survey6.setSelectedCount(0);
+        surveyDao.create(survey6);
+
+        Survey survey7 = new Survey();
+        survey7.setSurveyQuestionNum(2);
+        survey7.setCustomerChoice(1);
+        survey7.setSurveyQuestionContent("주변 지인의 추천");
+        survey7.setSelectedCount(0);
+        surveyDao.create(survey7);
+        Survey survey8 = new Survey();
+        survey8.setSurveyQuestionNum(2);
+        survey8.setCustomerChoice(2);
+        survey8.setSurveyQuestionContent("자사 직원의 추천");
+        survey8.setSelectedCount(0);
+        surveyDao.create(survey8);
+        Survey survey9 = new Survey();
+        survey9.setSurveyQuestionNum(2);
+        survey9.setCustomerChoice(3);
+        survey9.setSurveyQuestionContent("광고");
+        survey9.setSelectedCount(0);
+        surveyDao.create(survey9);
+        Survey survey10 = new Survey();
+        survey10.setSurveyQuestionNum(2);
+        survey10.setCustomerChoice(4);
+        survey10.setSurveyQuestionContent("기타");
+        survey10.setSelectedCount(0);
+        surveyDao.create(survey10);
+
+        Survey survey11 = new Survey();
+        survey11.setSurveyQuestionNum(3);
+        survey11.setCustomerChoice(1);
+        survey11.setSurveyQuestionContent("다른 사람들도 보험에 가입해서");
+        survey11.setSelectedCount(0);
+        surveyDao.create(survey11);
+        Survey survey12 = new Survey();
+        survey12.setSurveyQuestionNum(3);
+        survey12.setCustomerChoice(2);
+        survey12.setSurveyQuestionContent("혹시 모를 사고에 대비하고 싶어서");
+        survey12.setSelectedCount(0);
+        surveyDao.create(survey12);
+        Survey survey13 = new Survey();
+        survey13.setSurveyQuestionNum(3);
+        survey13.setCustomerChoice(3);
+        survey13.setSurveyQuestionContent("주변에서 보험에 가입하라고 조언해서");
+        survey13.setSelectedCount(0);
+        surveyDao.create(survey13);
+        Survey survey14 = new Survey();
+        survey14.setSurveyQuestionNum(3);
+        survey14.setCustomerChoice(4);
+        survey14.setSurveyQuestionContent("기타");
+        survey14.setSelectedCount(0);
+        surveyDao.create(survey14);
         return true;
     }
 }

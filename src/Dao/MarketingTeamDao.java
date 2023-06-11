@@ -18,7 +18,9 @@ public class MarketingTeamDao extends Dao{
     public void create(Employee employee)   {
         MarketingTeam marketingEmployee = (MarketingTeam) employee;
         String query = "INSERT INTO MarketingTeam VALUES("+
-                "'"+marketingEmployee.getId()+"'"+
+                "'"+marketingEmployee.getId()+"',"+
+                "'"+marketingEmployee.getAdName()+"',"+
+                "'"+marketingEmployee.getAdDescription()+"'"+
                 ");";
         super.create(query);
     }
@@ -40,6 +42,8 @@ public class MarketingTeamDao extends Dao{
                 employee.setPhoneNum(resultSet.getString("phoneNum"));
                 employee.setEmail(resultSet.getString("email"));
                 employee.setRank(resultSet.getString("rank"));
+                employee.setAdName(resultSet.getString("adName"));
+                employee.setAdDescription(resultSet.getString("adDescription"));
             }
             resultSet.close();
         } catch (SQLException e) {
@@ -75,8 +79,10 @@ public class MarketingTeamDao extends Dao{
     }
     public void update(Employee employee){
         MarketingTeam marketingEmployee = (MarketingTeam) employee;
-        String query = "";
-        //super.update(query);
+        String query = "UPDATE MarketingTeam SET " +
+                "adName = '" + marketingEmployee.getAdName() + "'," +
+                "adDescription = '" + marketingEmployee.getAdDescription() + "'";
+        super.update(query);
     }
     public void deleteById(String marketingEmployeeID){
         String query = "DELETE FROM MarketingTeam WHERE id = '"+marketingEmployeeID+"';";
