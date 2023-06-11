@@ -81,22 +81,17 @@ public class SalesMain {
                             while(true) {
                                 System.out.print("해당 계약의 피보험자 id를 입력하세요: ");
                                 String insuredCustomerId = inputReader.readLine().trim();
-                                //Exception - 존재하지 않는 고객 id일경우
-                                try {
                                     Customer customer = customerDao.retrieveById(insuredCustomerId);
                                     if (customer == null) {
-                                        throw new BaseException(ErrorCode.NOT_EXIST_ID);
+                                        System.out.println("해당하는 ID의 고객정보가 없습니다. ID를 다시 입력하여 주십시오.");
                                     }
                                     else {
                                         //존재할 경우
                                         contractToSend.setInsuredCustomerID(customer.getId());
                                         break;
-                                    }
-                                } catch (BaseException e) {
-                                    e.getMessage();
                                 }
                             }
-                            System.out.print("해당 계약의 계약기간을 입력하세요: ");
+                            System.out.print("해당 계약의 계약기간을 입력하세요 (일 단위 ex) 730): ");
                             String contractPeriod = inputReader.readLine().trim();
                             contractToSend.setPeriod(Integer.parseInt(contractPeriod));
                             // 여기 임의로 수정
@@ -104,7 +99,7 @@ public class SalesMain {
                             contractToSend.setPaymentRate(0.1);
                             //
                             contractToSend.setEmployeeID(currentEmployee.getId());
-                            contractToSend.setUnderwritingState("대기");
+                            contractToSend.setUnderwritingState("재심사 거절");
                             contractDao.update(contractToSend);
                             System.out.println("심사 요청이 완료되었습니다.");
                             break;
@@ -167,7 +162,7 @@ public class SalesMain {
                                     Insurance insuranceContent2 = insuranceDao.retrieveById(judgedContractToSend.getInsuranceID());
                                     String insuranceName2 = insuranceContent2.getName();
                                     showMessageForCustomer(customerTosend2, "고객님의 "+insuranceName2+" 가입 신청의 결과가 도착했습니다." +
-                                            "\n결과: "+judgedContractToSend.getUnderwritingState());
+                                            "\n결과: "+judgedContractToSend.getUnderwritingState() + "\n거절 사유: " + judgedContractToSend.getRejectionReasons());
                                     break;
                             }
                             contractDao.update(judgedContractToSend);

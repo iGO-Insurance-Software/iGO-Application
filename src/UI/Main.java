@@ -11,11 +11,14 @@ import Dao.CompensationTeamDao;
 import Dao.ContractDao;
 import Dao.ProductDevelopmentTeamDao;
 import Dao.ComplianceTeamDao;
+import Dao.MarketingTeamDao;
 import Dao.InsuranceDao;
 import Dao.ReinsuranceDao;
+import Dao.SurveyDao;
 import Customer.Customer;
 import Customer.UnpaidCustomer;
 import Employee.Employee;
+import Employee.MarketingTeam;
 import Employee.ContractManagementTeam;
 import Insurance.Insurance;
 import Dao.PrototypeDao;
@@ -44,11 +47,14 @@ public class Main {
 	public static AccidentReceptionTeamDao accidentReceptionTeamDao = new AccidentReceptionTeamDao();
 	public static InvestigationTeamDao investigationTeamDao = new InvestigationTeamDao();
 	public static CompensationTeamDao compensationTeamDao = new CompensationTeamDao();
+	public static MarketingTeamDao marketingTeamDao = new MarketingTeamDao();
 	public static AccidentDao accidentDao = new AccidentDao();
 	public static ContractDao contractDao = new ContractDao();
 	public static ReinsuranceDao reinsuranceDao = new ReinsuranceDao();
+	public static SurveyDao surveyDao = new SurveyDao();
 	public static Customer currentCustomer;
 	public static Employee currentEmployee;
+	public static MarketingTeam marketingTeam;
 	public static PrototypeDao prototypeDao = new PrototypeDao();
 	public static ComplianceTeamDao complianceTeamDao = new ComplianceTeamDao();
 	public static ProductDevelopmentTeamDao productDevelopmentTeamDao = new ProductDevelopmentTeamDao();
@@ -110,6 +116,7 @@ public class Main {
 	}
 
 	private static boolean loginCustomer(BufferedReader inputReader) throws IOException {
+		isAdClosed = false;
 		System.out.println("---------회원 로그인---------");
 		while(true) {
 			System.out.println("x. 뒤로가기");
@@ -167,7 +174,6 @@ public class Main {
 		////////////////////////
 		boolean isRemain=true;
 		while (isRemain) {
-			showAdForCustomer(inputReader);
 			System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
 			switch (currentCustomer.getType()) {
 				case "Customer":
@@ -193,6 +199,7 @@ public class Main {
 
 	private static void showInsuredCustomerMenu(BufferedReader inputReader) throws IOException {
 		while(true) {
+			if (isAdClosed == false) { showAdForCustomer(inputReader); }
 			printInsuredCustomerMenu();
 			String userChoiceValue = inputReader.readLine().trim();
 			switch (userChoiceValue) {
@@ -237,6 +244,7 @@ public class Main {
 	}
 	private static void showContractorMenu(BufferedReader inputReader) throws IOException {
 		while(true) {
+			if (isAdClosed == false) { showAdForCustomer(inputReader); }
 			printContractorMenu();
 			String userChoiceValue = inputReader.readLine().trim();
 			switch (userChoiceValue) {
@@ -258,7 +266,7 @@ public class Main {
 		System.out.print("\nChoice: ");
 	}
   
-  private static void showAdForCustomer(BufferedReader inputReader) throws IOException {
+  public static void showAdForCustomer(BufferedReader inputReader) throws IOException {
 	  while (true) {
 		  if(!isAdClosed) printAd();
 		  String userChoiceValue = inputReader.readLine().trim();
@@ -276,16 +284,15 @@ public class Main {
   }
     
   private static void printAd() {
-		System.out.println("\n************************ " + currentCustomer.getName() + " 고객님의 MENU ************************");
 				try{
-					Insurance insurance = loadInsuranceForAd();
-					if(insurance!=null) {
+					MarketingTeam marketingTeam = loadMarketingTeamIdForAd();
+					if(marketingTeam!=null) {
 						//광고 로딩 성공
-						System.out.println("-----------------------------광고----------------------------");
-						System.out.println("|			              " + insurance.getName() + "			              |");
-						System.out.println("|" + insurance.getDescription() + "|");
-						System.out.println("-------------------------------------------------------------");
-						System.out.println("x. 닫기 o. 접어두기");
+						System.out.println(" ----------------------광고----------------------");
+						System.out.println("|			      " + marketingTeam.getAdName() + "	               |");
+						System.out.println("|            " + marketingTeam.getAdDescription() + "             |");
+						System.out.println(" ------------------------------------------------");
+						System.out.println("x. 닫기 o. 접어두기\n광고 속 상품의 가입을 원하실 경우 ");
 						System.out.print("\nChoice: ");
 						return;
 					} 	//광고 로드 실패
@@ -294,11 +301,11 @@ public class Main {
 					System.out.println(e.getMessage());
 				}
 	}
-	private static Insurance loadInsuranceForAd(){
-		//랜덤한 보험 호출해서 광고
-		int randomIndex = ThreadLocalRandom.current().nextInt(0, insuranceDao.retrieveAll().size());
-		Insurance randomInsurance = insuranceDao.retrieveAll().get(randomIndex);
-		if(randomInsurance!=null) return randomInsurance;
+	private static MarketingTeam loadMarketingTeamIdForAd(){
+		int randomIndex = ThreadLocalRandom.current().nextInt(0, marketingTeamDao.retrieveAll().size());
+		String randomId = marketingTeamDao.retrieveAll().get(randomIndex).getId();
+		MarketingTeam randomMarketingEmployee = marketingTeamDao.retrieveById(randomId);
+		if(randomMarketingEmployee!=null) return randomMarketingEmployee;
 		else return null;
 	}
 	private static void showEmployeeMenu(BufferedReader inputReader) throws IOException {
@@ -337,6 +344,9 @@ public class Main {
 					return;
 				case "Sales":
 					showSalesTeamMenu(inputReader);
+					return;
+				case "Marketing":
+					showMarketingTeamMenu(inputReader);
 					return;
 				default:
 					System.out.println("잘못된 접근입니다.");
@@ -496,6 +506,14 @@ public class Main {
 		boolean isRemain = true;
 		while(isRemain) {
 			isRemain = salesMain.checkCustomerRequest(inputReader);
+		}
+	}
+
+	private static void showMarketingTeamMenu(BufferedReader inputReader) throws IOException {
+		MarketingMain marketingMain = new MarketingMain(currentEmployee);
+		boolean isRemain = true;
+		while(isRemain) {
+			isRemain = marketingMain.showMarketingMenu(inputReader);
 		}
 	}
   
