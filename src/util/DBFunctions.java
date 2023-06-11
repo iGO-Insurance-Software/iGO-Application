@@ -372,13 +372,25 @@ public class DBFunctions {
         );
         employeeDao.create(SalesTeamEmployee2);
         //MarketingTeam
-        MarketingTeam MarketingTeamEmployee1 = new MarketingTeam();
-        MarketingTeamEmployee1 = (MarketingTeam) setEmployeeBasicInfo(
-                MarketingTeamEmployee1, "me2023", "Marketing",
+        MarketingTeam marketingTeamEmployee1 = new MarketingTeam();
+        marketingTeamEmployee1 = (MarketingTeam) setEmployeeBasicInfo(
+                marketingTeamEmployee1, "me2023", "Marketing",
                 "최홍보", 31, "여", "01024578965",
                 "marketing11@naver.com", "대리"
         );
-        employeeDao.create(MarketingTeamEmployee1);
+        marketingTeamEmployee1.setAdName("6월 설문조사 이벤트");
+        marketingTeamEmployee1.setAdDescription("설문조사에 참여하고 경품 받아가세요!");
+        employeeDao.create(marketingTeamEmployee1);
+        MarketingTeam marketingTeamEmployee2 = new MarketingTeam();
+        marketingTeamEmployee2 = (MarketingTeam) setEmployeeBasicInfo(
+                marketingTeamEmployee2, "me2024", "Marketing",
+                "구홍보", 33, "여", "01025533965",
+                "marketing12@naver.com", "사원"
+        );
+        marketingTeamEmployee2.setAdName("우리아이에게 딱 맞는 보험 출시 임박");
+        marketingTeamEmployee2.setAdDescription("곧 출시됩니다! 많은 성원 바랍니다.");
+        employeeDao.create(marketingTeamEmployee2);
+
         //UW
         UWTeam uwEmployee = new UWTeam();
         uwEmployee = (UWTeam) setEmployeeBasicInfo(

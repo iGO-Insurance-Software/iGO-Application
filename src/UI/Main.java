@@ -290,7 +290,7 @@ public class Main {
 						//광고 로딩 성공
 						System.out.println(" ----------------------광고----------------------");
 						System.out.println("|			      " + marketingTeam.getAdName() + "	               |");
-						System.out.println("|            " + marketingTeam.getAdDescription() + "             |");
+						System.out.println("|            " + marketingTeam.getAdDescription() + "              |");
 						System.out.println(" ------------------------------------------------");
 						System.out.println("x. 닫기 o. 접어두기");
 						System.out.print("\nChoice: ");
